@@ -36,6 +36,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".auth.LoginActivity">
+
+        </activity>
+
+        <activity android:name=".admin.AdminHomeActivity">
+
+        </activity>
+
+        <activity android:name=".user.UserHomeActivity">
+
+        </activity>
+
+        <activity android:name=".user.auth.RegisterActivity">
+
+        </activity>
+
+        <activity android:name=".admin.auth.RegisterUserActivity">
+
+        </activity>
+
+        <activity android:name=".admin.BooksActivity">
+
+        </activity>
+
+        <activity android:name=".admin.AddBookActivity">
+
+        </activity>
+
     </application>
 
 </manifest>
