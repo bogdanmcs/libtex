@@ -24,6 +24,7 @@ public class UserHomeActivity extends AppCompatActivity {
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 break;
 
             default:

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.user.UserHomeActivity;
 import com.ad_victoriam.libtex.user.auth.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             startActivity(new Intent(this, UserHomeActivity.class));
         }
+        finish();
     }
 
     public void onClick(View view) {

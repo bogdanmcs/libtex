@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bookTitle"
+                android:id="@+id/eBookTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/bInputTextLayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bookAuthorName"
+                android:id="@+id/eBookAuthorName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +68,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bookPublisher"
+                android:id="@+id/eBookPublisher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Publisher" />
@@ -90,9 +90,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bookNoOfPages"
+                android:id="@+id/eBookNoOfPages"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -140,6 +141,7 @@
             android:layout_marginEnd="163dp"
             android:layout_marginBottom="16dp"
             android:text="Add"
+            android:onClick="clicked"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.476"

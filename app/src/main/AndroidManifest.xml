@@ -41,7 +41,7 @@
 
         </activity>
 
-        <activity android:name=".admin.AdminHomeActivity">
+        <activity android:name=".admin.activities.AdminHomeActivity">
 
         </activity>
 
@@ -53,15 +53,15 @@
 
         </activity>
 
-        <activity android:name=".admin.auth.RegisterUserActivity">
+        <activity android:name=".admin.activities.auth.RegisterUserActivity">
 
         </activity>
 
-        <activity android:name=".admin.BooksActivity">
+        <activity android:name=".admin.activities.book.BooksActivity">
 
         </activity>
 
-        <activity android:name=".admin.AddBookActivity">
+        <activity android:name=".admin.activities.book.AddBookActivity">
 
         </activity>
 
