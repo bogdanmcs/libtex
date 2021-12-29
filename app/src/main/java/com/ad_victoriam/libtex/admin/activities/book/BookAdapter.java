@@ -10,27 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.model.Book;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
     Context context;
-    private List<String> bookTitle;
-    private List<String> bookAuthorName;
-//    private String[] bookTitle;
-//    private String[] bookAuthorName;
+    private final List<Book> books;
 
-    public BookAdapter(Context context, List<String> bookTitle, List<String> bookAuthorName) {
+    public BookAdapter(Context context, List<Book> books) {
         this.context = context;
-        this.bookTitle = bookTitle;
-        this.bookAuthorName = bookAuthorName;
-    }
-
-    public void addItemsToList(String bookTitle, String bookAuthorName) {
-        this.bookTitle.add(bookTitle);
-        this.bookAuthorName.add(bookAuthorName);
+        this.books = books;
     }
 
     @NonNull
@@ -42,23 +33,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-//        holder.tBookTitle.setText(bookTitle[position]);
-//        holder.tBookAuthorName.setText(bookAuthorName[position]);
-//        System.out.println("Setting text tBookTitle to: " + bookTitle[position]);
-//        System.out.println("Setting text tBookAuthorName to: " + bookAuthorName[position]);
-        holder.tBookTitle.setText(bookTitle.get(position));
-        holder.tBookAuthorName.setText(bookAuthorName.get(position));
+        holder.tBookTitle.setText(books.get(position).getTitle());
+        holder.tBookAuthorName.setText(books.get(position).getAuthorName());
     }
 
     @Override
     public int getItemCount() {
-        return bookTitle.size();
+        return books.size();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
 
         TextView tBookTitle;
         TextView tBookAuthorName;
+//        @todo TextView tBookPublisher;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);

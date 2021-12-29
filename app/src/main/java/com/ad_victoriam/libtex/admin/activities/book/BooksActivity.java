@@ -32,8 +32,7 @@ public class BooksActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private List<String> bookTitleList = new ArrayList<>();
-    private List<String> bookAuthorNameList = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +44,11 @@ public class BooksActivity extends AppCompatActivity {
         final FloatingActionButton bAddBook = findViewById(R.id.bAddBook);
         bAddBook.setOnClickListener(this::addBook);
 
-        //
-//        bookTitleList.add("titlul1");
-//        bookTitleList.add("titlul2");
-//        bookAuthorNameList.add("autorul1");
-//        bookAuthorNameList.add("autorul2");
-
+        bookAdapter = new BookAdapter(this, books);
         recyclerView = findViewById(R.id.recyclerView);
-
-        bookAdapter = new BookAdapter(this, bookTitleList, bookAuthorNameList);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(bookAdapter);
 
-        //
         attachDatabaseBooksListener();
     }
 
@@ -68,18 +58,13 @@ public class BooksActivity extends AppCompatActivity {
         databaseReference.child("books").child(currentUser.getUid()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // default
+
                 Book book = snapshot.getValue(Book.class);
 
                 if (book != null) {
-                    bookAdapter.addItemsToList(book.getTitle(), book.getAuthorName());
-                    bookAdapter.notifyDataSetChanged();
+                    books.add(book);
+                    bookAdapter.notifyItemChanged(books.size() - 1);
                 }
-
-//                if (book != null) {
-//                    booksViewer = booksViewer.concat(book.getTitle() + "\n");
-//                    textViewBooks.setText(booksViewer);
-//                }
             }
 
             @Override
@@ -106,12 +91,6 @@ public class BooksActivity extends AppCompatActivity {
 
 
     public void addBook(View view) {
-        switch (view.getId()) {
-            case R.id.bAddBook:
-                startActivity(new Intent(this, AddBookActivity.class));
-                break;
-
-            default:
-        }
+        startActivity(new Intent(this, AddBookActivity.class));
     }
 }
