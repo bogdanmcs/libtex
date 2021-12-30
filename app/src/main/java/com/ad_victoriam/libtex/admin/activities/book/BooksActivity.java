@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.admin.activities.book;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -63,19 +64,61 @@ public class BooksActivity extends AppCompatActivity {
 
                 if (book != null) {
                     book.setUid(snapshot.getKey());
-                    books.add(book);
+
+                    if (!books.contains(book)) {
+                        books.add(book);
+                    }
+
                     bookAdapter.notifyItemChanged(books.size() - 1);
                 }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //
+
+                Book book = snapshot.getValue(Book.class);
+
+                if (book != null) {
+                    book.setUid(snapshot.getKey());
+
+                    int indexOfChangedBook = -1;
+                    for (Book b: books) {
+                        if (b.getUid().equals(book.getUid())) {
+                            indexOfChangedBook = books.indexOf(b);
+                            books.set(indexOfChangedBook, book);
+                        }
+                    }
+
+                    if (indexOfChangedBook != -1) {
+                        bookAdapter.notifyItemChanged(indexOfChangedBook);
+                    } else {
+                        bookAdapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                //
+
+                Book book = snapshot.getValue(Book.class);
+
+                if (book != null) {
+                    book.setUid(snapshot.getKey());
+
+                    int indexOfRemovedBook = -1;
+                    for (Book b: books) {
+                        if (b.getUid().equals(book.getUid())) {
+                            indexOfRemovedBook = books.indexOf(b);
+                            books.remove(indexOfRemovedBook);
+                        }
+                    }
+
+                    if (indexOfRemovedBook != -1) {
+                        bookAdapter.notifyItemChanged(indexOfRemovedBook);
+                    } else {
+                        bookAdapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
