@@ -2,6 +2,7 @@ package com.ad_victoriam.libtex.admin.activities.book;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ad_victoriam.libtex.MainActivity;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.model.Book;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +46,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         tAvailableQuantity = findViewById(R.id.tAvailableQuantity);
         tTotalQuantity = findViewById(R.id.tTotalQuantity);
 
-        if (getIntent().hasExtra("book")) {
+        if (book == null && getIntent().hasExtra("book")) {
             book = getIntent().getParcelableExtra("book");
 
             tTitle.setText(book.getTitle());
@@ -59,7 +61,9 @@ public class BookDetailsActivity extends AppCompatActivity {
         }
 
         final Button bDeleteBook = findViewById(R.id.bDeleteBook);
+        final FloatingActionButton bEditBook = findViewById(R.id.bEditBook);
         bDeleteBook.setOnClickListener(this::deleteBook);
+        bEditBook.setOnClickListener(this::editBook);
     }
 
     private void deleteBook(View view) {
@@ -74,5 +78,9 @@ public class BookDetailsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .show();
+    }
+
+    private void editBook(View view) {
+        startActivity(new Intent(this, EditBookActivity.class));
     }
 }

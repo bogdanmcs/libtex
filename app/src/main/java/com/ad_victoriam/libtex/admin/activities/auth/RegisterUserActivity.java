@@ -7,7 +7,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.model.User;
+import com.ad_victoriam.libtex.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

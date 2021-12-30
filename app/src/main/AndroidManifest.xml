@@ -67,7 +67,14 @@
 
         <activity
             android:name=".admin.activities.book.BookDetailsActivity"
-            android:parentActivityName=".admin.activities.book.BooksActivity">
+            android:parentActivityName=".admin.activities.book.BooksActivity"
+            android:launchMode="singleTop">
+        </activity>
+
+        <activity
+            android:name=".admin.activities.book.EditBookActivity"
+            android:parentActivityName=".admin.activities.book.BookDetailsActivity">
+
         </activity>
 
     </application>

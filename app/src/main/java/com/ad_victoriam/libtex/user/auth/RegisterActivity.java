@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.auth.LoginActivity;
+import com.ad_victoriam.libtex.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -47,12 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("user-register", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            storeDataIntoDatabase(firebaseUser);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
-                            // ALSO, here u need to create a new id in realtime db for this user
-                            // ...
+                            finish();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -63,6 +62,12 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void storeDataIntoDatabase(FirebaseUser firebaseUser) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        User user = new User(firebaseUser.getEmail());
+        databaseReference.child("users").child(firebaseUser.getUid()).setValue(user);
     }
 
     public void onClick(View view) {
