@@ -26,6 +26,8 @@ public class AddBookActivity extends AppCompatActivity {
     TextInputEditText eBookAuthorName;
     TextInputEditText eBookPublisher;
     TextInputEditText eBookNoOfPages;
+    TextInputEditText eBookDescription;
+    TextInputEditText eBookTotalQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class AddBookActivity extends AppCompatActivity {
         eBookAuthorName = findViewById(R.id.eBookAuthorName);
         eBookPublisher = findViewById(R.id.eBookPublisher);
         eBookNoOfPages = findViewById(R.id.eBookNoOfPages);
+        eBookDescription = findViewById(R.id.eBookDescription);
+        eBookTotalQuantity = findViewById(R.id.eBookTotalQuantity);
 
         final Button bAddBook = findViewById(R.id.bAdd);
 
@@ -51,9 +55,11 @@ public class AddBookActivity extends AppCompatActivity {
         String bookAuthorName = eBookAuthorName.getText().toString();
         String bookPublisher = eBookPublisher.getText().toString();
         String bookNoOfPages = eBookNoOfPages.getText().toString();
+        String bookDescription = eBookDescription.getText().toString();
+        String bookTotalQuantity = eBookTotalQuantity.getText().toString();
 
         if (areBookDetailsValid()) {
-            Book book = new Book(bookTitle, bookAuthorName, bookPublisher, bookNoOfPages);
+            Book book = new Book(bookTitle, bookAuthorName, bookPublisher, bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity));
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference.child("books").child(currentUser.getUid()).push().setValue(book);
             Toast.makeText(getApplicationContext(), "Book added successfully.", Toast.LENGTH_SHORT).show();
@@ -63,6 +69,29 @@ public class AddBookActivity extends AppCompatActivity {
 
     private boolean areBookDetailsValid() {
         boolean errorFlag = false;
+
+        String bookTotalQuantity = eBookTotalQuantity.getText().toString();
+        if (bookTotalQuantity.isEmpty()) {
+            eBookTotalQuantity.setError("Please fill this field.");
+            eBookTotalQuantity.requestFocus();
+            errorFlag = true;
+        } else if (bookTotalQuantity.length() > 4) {
+            eBookTotalQuantity.setError("Maximum length is 4 characters");
+            eBookTotalQuantity.requestFocus();
+            errorFlag = true;
+        } else {
+            try {
+                if (Integer.parseInt(bookTotalQuantity) < 0 ) {
+                    eBookTotalQuantity.setError("Total quantity cannot be negative");
+                    eBookTotalQuantity.requestFocus();
+                    errorFlag = true;
+                }
+            } catch (NumberFormatException e) {
+                eBookTotalQuantity.setError("Total quantity must be a decimal number");
+                eBookTotalQuantity.requestFocus();
+                errorFlag = true;
+            }
+        }
 
         String bookNoOfPages = eBookNoOfPages.getText().toString();
         if (bookNoOfPages.isEmpty()) {
@@ -75,7 +104,11 @@ public class AddBookActivity extends AppCompatActivity {
             errorFlag = true;
         } else {
             try {
-                Integer.parseInt(bookNoOfPages);
+                if (Integer.parseInt(bookNoOfPages) <= 0 ) {
+                    eBookNoOfPages.setError("No. of pages must be positive");
+                    eBookNoOfPages.requestFocus();
+                    errorFlag = true;
+                }
             } catch (NumberFormatException e) {
                 eBookNoOfPages.setError("No of pages must be a decimal number");
                 eBookNoOfPages.requestFocus();
@@ -84,6 +117,7 @@ public class AddBookActivity extends AppCompatActivity {
         }
 
         List<TextInputEditText> bookDetails = new ArrayList<>();
+        bookDetails.add(eBookDescription);
         bookDetails.add(eBookPublisher);
         bookDetails.add(eBookAuthorName);
         bookDetails.add(eBookTitle);

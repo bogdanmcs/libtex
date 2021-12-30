@@ -10,38 +10,24 @@ public class Book implements Parcelable {
     private String authorName;
     private String publisher;
     private String noOfPages;
+    private String description;
+    private int availableQuantity;
+    private int totalQuantity;
 
 
     public Book() {
         // data snapshot
     }
 
-    public Book(String title, String authorName, String publisher, String noOfPages) {
+    public Book(String title, String authorName, String publisher, String noOfPages, String description, int totalQuantity) {
         this.title = title;
         this.authorName = authorName;
         this.publisher = publisher;
         this.noOfPages = noOfPages;
+        this.description = description;
+        this.availableQuantity = totalQuantity;
+        this.totalQuantity = totalQuantity;
     }
-
-    protected Book(Parcel in) {
-        uid = in.readString();
-        title = in.readString();
-        authorName = in.readString();
-        publisher = in.readString();
-        noOfPages = in.readString();
-    }
-
-    public static final Creator<Book> CREATOR = new Creator<Book>() {
-        @Override
-        public Book createFromParcel(Parcel in) {
-            return new Book(in);
-        }
-
-        @Override
-        public Book[] newArray(int size) {
-            return new Book[size];
-        }
-    };
 
     public String getUid() {
         return uid;
@@ -55,16 +41,56 @@ public class Book implements Parcelable {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getAuthorName() {
         return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public String getPublisher() {
         return publisher;
     }
 
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
     public String getNoOfPages() {
         return noOfPages;
+    }
+
+    public void setNoOfPages(String noOfPages) {
+        this.noOfPages = noOfPages;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 
     @Override
@@ -79,5 +105,31 @@ public class Book implements Parcelable {
         parcel.writeString(authorName);
         parcel.writeString(publisher);
         parcel.writeString(noOfPages);
+        parcel.writeString(description);
+        parcel.writeInt(availableQuantity);
+        parcel.writeInt(totalQuantity);
     }
+
+    protected Book(Parcel in) {
+        uid = in.readString();
+        title = in.readString();
+        authorName = in.readString();
+        publisher = in.readString();
+        noOfPages = in.readString();
+        description = in.readString();
+        availableQuantity = in.readInt();
+        totalQuantity = in.readInt();
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }

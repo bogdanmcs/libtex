@@ -27,6 +27,9 @@ public class BookDetailsActivity extends AppCompatActivity {
     private TextView tAuthorName;
     private TextView tPublisher;
     private TextView tNoOfPages;
+    private TextView tDescription;
+    private TextView tAvailableQuantity;
+    private TextView tTotalQuantity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,18 +40,20 @@ public class BookDetailsActivity extends AppCompatActivity {
         tAuthorName = findViewById(R.id.tAuthorName);
         tPublisher = findViewById(R.id.tPublisher);
         tNoOfPages = findViewById(R.id.tNoOfPages);
+        tDescription = findViewById(R.id.tDescription);
+        tAvailableQuantity = findViewById(R.id.tAvailableQuantity);
+        tTotalQuantity = findViewById(R.id.tTotalQuantity);
 
         if (getIntent().hasExtra("book")) {
             book = getIntent().getParcelableExtra("book");
-            System.out.println("WILL SET SHIT TO:");
-            System.out.println("book = {");
-            System.out.println(book.getTitle() + " " + book.getAuthorName());
-            System.out.println("}");
 
             tTitle.setText(book.getTitle());
             tAuthorName.setText(book.getAuthorName());
             tPublisher.setText(book.getPublisher());
             tNoOfPages.setText(book.getNoOfPages());
+            tDescription.setText(book.getDescription());
+            tAvailableQuantity.setText(String.valueOf(book.getAvailableQuantity()));
+            tTotalQuantity.setText(String.valueOf(book.getTotalQuantity()));
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }

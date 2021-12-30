@@ -44,9 +44,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private void clicked(View view, int position) {
         Intent intent = new Intent(context, BookDetailsActivity.class);
         intent.putExtra("book", books.get(position));
-        System.out.println("SEND THIS PARCED BOOK {");
-        System.out.println(books.get(position).getTitle() + " " + books.get(position).getAuthorName());
-        System.out.println("}");
         context.startActivity(intent);
     }
 
