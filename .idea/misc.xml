@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_add_book.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_book_details.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_books.xml" value="0.1" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_home.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_register_customer.xml" value="0.3125" />

@@ -65,6 +65,11 @@
 
         </activity>
 
+        <activity
+            android:name=".admin.activities.book.BookDetailsActivity"
+            android:parentActivityName=".admin.activities.book.BooksActivity">
+        </activity>
+
     </application>
 
 </manifest>
