@@ -62,6 +62,7 @@ public class BooksActivity extends AppCompatActivity {
                 Book book = snapshot.getValue(Book.class);
 
                 if (book != null) {
+                    book.setUid(snapshot.getKey());
                     books.add(book);
                     bookAdapter.notifyItemChanged(books.size() - 1);
                 }

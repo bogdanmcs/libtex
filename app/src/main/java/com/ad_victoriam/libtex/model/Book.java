@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class Book implements Parcelable {
 
+    private String uid;
     private String title;
     private String authorName;
     private String publisher;
@@ -23,6 +24,7 @@ public class Book implements Parcelable {
     }
 
     protected Book(Parcel in) {
+        uid = in.readString();
         title = in.readString();
         authorName = in.readString();
         publisher = in.readString();
@@ -40,6 +42,14 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getTitle() {
         return title;
@@ -64,6 +74,7 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(uid);
         parcel.writeString(title);
         parcel.writeString(authorName);
         parcel.writeString(publisher);
