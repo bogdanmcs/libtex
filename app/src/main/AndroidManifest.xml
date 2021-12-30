@@ -49,7 +49,9 @@
 
         </activity>
 
-        <activity android:name=".user.auth.RegisterActivity">
+        <activity
+            android:name=".user.auth.RegisterActivity"
+            android:parentActivityName=".auth.LoginActivity">
 
         </activity>
 
