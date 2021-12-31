@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            System.out.println(task.getException().toString());
                         }
                     }
                 });
