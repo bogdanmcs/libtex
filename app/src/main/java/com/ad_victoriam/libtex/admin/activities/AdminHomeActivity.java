@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.auth.RegisterUserActivity;
 import com.ad_victoriam.libtex.admin.activities.book.BooksActivity;
 import com.ad_victoriam.libtex.admin.activities.user.UsersActivity;
 import com.ad_victoriam.libtex.auth.LoginActivity;
