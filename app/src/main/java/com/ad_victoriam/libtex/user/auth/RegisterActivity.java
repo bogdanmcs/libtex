@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
-//                            storeDataIntoDatabase(firebaseUser);
+                            storeDataIntoDatabase(firebaseUser);
                             mAuth.signOut();
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             finish();
@@ -116,6 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void storeDataIntoDatabase(FirebaseUser firebaseUser) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         User user = new User(firebaseUser.getEmail());
-        databaseReference.child("users").child(firebaseUser.getUid()).setValue(user);
+        databaseReference.child("unverified-users").child(firebaseUser.getUid()).setValue(user);
     }
 }

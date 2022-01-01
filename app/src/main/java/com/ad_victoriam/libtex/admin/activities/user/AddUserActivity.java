@@ -6,13 +6,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +60,8 @@ public class AddUserActivity extends AppCompatActivity {
 
         if (areUserDetailsValid()) {
             User user = new User(userEmail, userFirstName, userLastName, userIdCardSerialNumber);
-            databaseReference.child("users").push().setValue(user);
-            Toast.makeText(getApplicationContext(), "User added successfully.", Toast.LENGTH_SHORT).show();
+            completeAccountSetup(user);
+            Toast.makeText(getApplicationContext(), "User added successfully", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -70,21 +77,6 @@ public class AddUserActivity extends AppCompatActivity {
         } else if (idCardSerialNumber.length() > 8) {
             eIDCardSerialNumber.setError("Maximum length is 8 characters");
             eIDCardSerialNumber.requestFocus();
-            errorFlag = true;
-        }
-
-        String email = eEmail.getText().toString();
-        if (email.isEmpty()) {
-            eEmail.setError("Please fill this field");
-            eEmail.requestFocus();
-            errorFlag = true;
-        } else if (email.length() > 8) {
-            eEmail.setError("Maximum length is 8 characters");
-            eEmail.requestFocus();
-            errorFlag = true;
-        } else if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            eEmail.setError("Email address is not valid");
-            eEmail.requestFocus();
             errorFlag = true;
         }
 
@@ -105,6 +97,38 @@ public class AddUserActivity extends AppCompatActivity {
             }
         }
 
+        String email = eEmail.getText().toString();
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            eEmail.setError("Email address is not valid");
+            eEmail.requestFocus();
+            errorFlag = true;
+        }
+
         return !errorFlag;
+    }
+
+    private void completeAccountSetup(User updatedUser) {
+        // read list of users !once
+        databaseReference.child("unverified-users").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if (user != null && user.getEmail().equals(updatedUser.getEmail())) {
+                            String userUid = dataSnapshot.getKey();
+                            // move to verified users
+                            // verify completion
+                            databaseReference.child("users").child(userUid).setValue(updatedUser);
+                            databaseReference.child("unverified-users").child(userUid).removeValue();
+                            break;
+                        }
+
+                    }
+                } else {
+                    System.out.println(task.getResult().getValue());
+                }
+            }
+        });
     }
 }

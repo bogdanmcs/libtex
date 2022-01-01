@@ -22,7 +22,7 @@ public class User implements Parcelable {
         this.idCardSerialNumber = null;
     }
 
-    public User(String lastName, String firstName, String idCardSerialNumber, String email) {
+    public User(String email, String firstName, String lastName, String idCardSerialNumber) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
