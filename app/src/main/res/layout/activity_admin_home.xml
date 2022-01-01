@@ -6,14 +6,14 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView"
         android:layout_width="211dp"
         android:layout_height="53dp"
         android:layout_marginTop="80dp"
         android:text="Hello admin!"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/bRegisterUser"
+        app:layout_constraintBottom_toTopOf="@+id/bViewUsers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +23,7 @@
         android:layout_width="124dp"
         android:layout_height="53dp"
         android:layout_marginBottom="160dp"
-        android:onClick="onClick"
+        android:onClick="clicked"
         android:text="Log out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,12 +31,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bRegisterUser"
+        android:id="@+id/bViewUsers"
         android:layout_width="125dp"
         android:layout_height="53dp"
         android:layout_marginBottom="60dp"
-        android:onClick="onClick"
-        android:text="Register user"
+        android:onClick="clicked"
+        android:text="View users"
         app:layout_constraintBottom_toTopOf="@+id/bViewBooks"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -47,8 +47,9 @@
         android:layout_height="56dp"
         android:layout_marginBottom="88dp"
         android:text="View books"
-        android:onClick="onClick"
+        android:onClick="clicked"
         app:layout_constraintBottom_toTopOf="@+id/bLogOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -79,6 +79,20 @@
 
         </activity>
 
+        <activity android:name=".admin.activities.user.UsersActivity">
+
+        </activity>
+
+        <activity android:name=".admin.activities.user.AddUserActivity">
+
+        </activity>
+
+        <activity
+            android:name=".admin.activities.user.UserDetailsActivity"
+            android:parentActivityName=".admin.activities.book.BooksActivity"
+            android:launchMode="singleTop">
+        </activity>
+
     </application>
 
 </manifest>

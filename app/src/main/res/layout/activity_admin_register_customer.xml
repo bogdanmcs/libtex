@@ -53,13 +53,13 @@
         android:ems="10"
         android:hint="Email (optional)"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/bRegisterUser"
+        app:layout_constraintBottom_toTopOf="@+id/bViewUsers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/bRegisterUser"
+        android:id="@+id/bViewUsers"
         android:layout_width="124dp"
         android:layout_height="59dp"
         android:layout_marginBottom="108dp"

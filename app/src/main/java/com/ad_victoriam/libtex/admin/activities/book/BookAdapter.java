@@ -2,7 +2,6 @@ package com.ad_victoriam.libtex.admin.activities.book;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

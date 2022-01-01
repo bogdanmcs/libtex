@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.auth.RegisterUserActivity;
 import com.ad_victoriam.libtex.admin.activities.book.BooksActivity;
+import com.ad_victoriam.libtex.admin.activities.user.UsersActivity;
 import com.ad_victoriam.libtex.auth.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -20,7 +21,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_home);
     }
 
-    public void onClick(View view) {
+    public void clicked(View view) {
         switch (view.getId()) {
             case R.id.bLogOut:
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -29,12 +30,12 @@ public class AdminHomeActivity extends AppCompatActivity {
                 finish();
                 break;
 
-            case R.id.bViewBooks:
-                startActivity(new Intent(this, BooksActivity.class));
+            case R.id.bViewUsers:
+                startActivity(new Intent(this, UsersActivity.class));
                 break;
 
-            case R.id.bRegisterUser:
-                startActivity(new Intent(this, RegisterUserActivity.class));
+            case R.id.bViewBooks:
+                startActivity(new Intent(this, BooksActivity.class));
                 break;
 
             default:

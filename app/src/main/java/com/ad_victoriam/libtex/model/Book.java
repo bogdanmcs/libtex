@@ -16,7 +16,7 @@ public class Book implements Parcelable {
 
 
     public Book() {
-        // data snapshot
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public Book(String title, String authorName, String publisher, String noOfPages, String description, int totalQuantity) {

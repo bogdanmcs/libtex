@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            storeDataIntoDatabase(firebaseUser);
+//                            storeDataIntoDatabase(firebaseUser);
                             mAuth.signOut();
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             finish();
@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
             eEmail.requestFocus();
             errorFlag = true;
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            eEmail.setError("Email is not valid");
+            eEmail.setError("Email address is not valid");
             eEmail.requestFocus();
             errorFlag = true;
         }

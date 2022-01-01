@@ -46,7 +46,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bRegisterUser:
+            case R.id.bViewUsers:
                 String lastName = editTextLastName.getText().toString();
                 String firstName = editTextFirstName.getText().toString();
                 String idCardSeries = editTextIdCardSeries.getText().toString();

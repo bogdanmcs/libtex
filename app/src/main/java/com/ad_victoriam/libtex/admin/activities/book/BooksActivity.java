@@ -41,7 +41,7 @@ public class BooksActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        final FloatingActionButton bAddBook = findViewById(R.id.bAddBook);
+        final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
         bAddBook.setOnClickListener(this::addBook);
 
         bookAdapter = new BookAdapter(this, books);

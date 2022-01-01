@@ -19,7 +19,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
-            android:hint="Title"
+            android:hint="Email"
             app:counterEnabled="true"
             app:counterMaxLength="50"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:hint="Author name"
+            android:hint="First name"
             app:counterEnabled="true"
             app:counterMaxLength="50"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +61,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:hint="Last name"
             app:counterEnabled="true"
             app:counterMaxLength="50"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,8 +71,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eLastName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Publisher" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -82,9 +82,9 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:hint="No of pages"
+            android:hint="ID card serial number"
             app:counterEnabled="true"
-            app:counterMaxLength="4"
+            app:counterMaxLength="8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
@@ -104,6 +104,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:hint="$todo"
             app:counterEnabled="true"
             app:counterMaxLength="50"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,8 +114,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eTodo1"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:hint="Description" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -125,6 +125,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:hint="$todo"
             app:counterEnabled="true"
             app:counterMaxLength="4"
             app:layout_constraintEnd_toEndOf="parent"
@@ -134,21 +135,18 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eTodo2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Total Quantity"
-                android:inputType="numberDecimal" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/bConfirmAddition"
-            android:layout_width="130dp"
-            android:layout_height="59dp"
+            android:layout_width="186dp"
+            android:layout_height="62dp"
             android:layout_marginStart="160dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="163dp"
             android:layout_marginBottom="16dp"
-            android:text="Add"
-            android:onClick="clicked"
+            android:text="Confirm configuration"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.476"

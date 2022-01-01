@@ -37,14 +37,14 @@ public class AddBookActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/");
         databaseReference = database.getReference();
 
-        eBookTitle = findViewById(R.id.eBookTitle);
-        eBookAuthorName = findViewById(R.id.eBookAuthorName);
-        eBookPublisher = findViewById(R.id.eBookPublisher);
-        eBookNoOfPages = findViewById(R.id.eBookNoOfPages);
-        eBookDescription = findViewById(R.id.eBookDescription);
-        eBookTotalQuantity = findViewById(R.id.eBookTotalQuantity);
+        eBookTitle = findViewById(R.id.eEmail);
+        eBookAuthorName = findViewById(R.id.eFirstName);
+        eBookPublisher = findViewById(R.id.eLastName);
+        eBookNoOfPages = findViewById(R.id.eIdCardSerialNumber);
+        eBookDescription = findViewById(R.id.eTodo1);
+        eBookTotalQuantity = findViewById(R.id.eTodo2);
 
-        final Button bAddBook = findViewById(R.id.bAdd);
+        final Button bAddBook = findViewById(R.id.bConfirmAddition);
 
         bAddBook.setOnClickListener(this::addBook);
     }
@@ -137,6 +137,4 @@ public class AddBookActivity extends AppCompatActivity {
 
         return !errorFlag;
     }
-
-
 }

@@ -1,7 +1,6 @@
 package com.ad_victoriam.libtex.admin.activities.book;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ad_victoriam.libtex.MainActivity;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.model.Book;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,13 +36,13 @@ public class BookDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_book_details);
 
-        tTitle = findViewById(R.id.tTitle);
-        tAuthorName = findViewById(R.id.tAuthorName);
-        tPublisher = findViewById(R.id.tPublisher);
-        tNoOfPages = findViewById(R.id.tNoOfPages);
-        tDescription = findViewById(R.id.tDescription);
-        tAvailableQuantity = findViewById(R.id.tAvailableQuantity);
-        tTotalQuantity = findViewById(R.id.tTotalQuantity);
+        tTitle = findViewById(R.id.tBookAuthorName);
+        tAuthorName = findViewById(R.id.tFirstName);
+        tPublisher = findViewById(R.id.tLastName);
+        tNoOfPages = findViewById(R.id.tIDCardSerialNumber);
+        tDescription = findViewById(R.id.tTodo3);
+        tAvailableQuantity = findViewById(R.id.tTodo1);
+        tTotalQuantity = findViewById(R.id.tTodo2);
 
         if (book == null && getIntent().hasExtra("book")) {
             book = getIntent().getParcelableExtra("book");
@@ -60,8 +58,8 @@ public class BookDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
 
-        final Button bDeleteBook = findViewById(R.id.bDeleteBook);
-        final FloatingActionButton bEditBook = findViewById(R.id.bEditBook);
+        final Button bDeleteBook = findViewById(R.id.bDeleteUser);
+        final FloatingActionButton bEditBook = findViewById(R.id.bEditUser);
         bDeleteBook.setOnClickListener(this::deleteBook);
         bEditBook.setOnClickListener(this::editBook);
     }
