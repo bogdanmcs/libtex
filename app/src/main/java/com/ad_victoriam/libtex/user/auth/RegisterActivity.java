@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 eEmail.setError("Email is already in use");
                                 eEmail.requestFocus();
                             } catch (Exception e) {
-                                // do nothing
+                                e.printStackTrace();
                             }
                         }
                     }

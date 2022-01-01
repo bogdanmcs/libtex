@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.auth;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +21,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -95,9 +102,18 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            System.out.println(task.getException().toString());
+                            try {
+                                throw Objects.requireNonNull(task.getException());
+                            } catch (FirebaseAuthInvalidUserException | FirebaseAuthInvalidCredentialsException e) {
+                                new AlertDialog.Builder(LoginActivity.this)
+                                        .setMessage("Invalid credentials.")
+                                        .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                        .show();
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 });
