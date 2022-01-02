@@ -137,11 +137,9 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
 
                 BookLoan bookLoan = snapshot.getValue(BookLoan.class);
 
-                System.out.println("REDUCED TO ATOMS-------------------------");
                 if (bookLoan != null) {
                     bookLoan.setBookLoanUid(snapshot.getKey());
-                    System.out.println("BOOK LOANS before:");
-                    System.out.println(bookLoans);
+
                     int indexOfRemovedBookLoan = -1;
                     for (BookLoan b: bookLoans) {
                         if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
@@ -149,9 +147,6 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                             bookLoans.remove(indexOfRemovedBookLoan);
                         }
                     }
-
-                    System.out.println("BOOK LOANS after:");
-                    System.out.println(bookLoans);
 
                     if (indexOfRemovedBookLoan != -1) {
                         bookLoanAdapter.notifyItemChanged(indexOfRemovedBookLoan);
