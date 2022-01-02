@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.admin.activities.book;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,17 +14,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.model.Book;
+import com.ad_victoriam.libtex.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
-    Context context;
+    private final Context context;
     private final List<Book> books;
 
-    public BookAdapter(Context context, List<Book> books) {
+    private final String intentAction;
+    private User user;
+
+    public BookAdapter(Context context, List<Book> books, String intentAction) {
         this.context = context;
         this.books = books;
+        this.intentAction = intentAction;
+    }
+
+    public BookAdapter(Context context, List<Book> books, String intentAction, User user) {
+        this.context = context;
+        this.books = books;
+        this.intentAction = intentAction;
+        this.user = user;
     }
 
     @NonNull
@@ -41,9 +58,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     }
 
     private void clicked(View view, int position) {
-        Intent intent = new Intent(context, BookDetailsActivity.class);
-        intent.putExtra("book", books.get(position));
-        context.startActivity(intent);
+        if (!intentAction.equals("BORROW")) {
+            Intent intent = new Intent(context, BookDetailsActivity.class);
+            intent.putExtra("book", books.get(position));
+            context.startActivity(intent);
+        } else {
+            // assign book to current user
+            confirmLoan(position);
+        }
     }
 
     @Override
@@ -64,5 +86,38 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
         }
+    }
+
+    private void confirmLoan(int position) {
+        new AlertDialog.Builder(context)
+                .setMessage(
+                        "Are you sure you want to assign this book to " +
+                                user.getFirstName() + " " +
+                                user.getLastName() + " ?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    assignBookToUser(position);
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> {})
+                .show();
+    }
+
+    private void assignBookToUser(int position) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        Book book = books.get(position);
+        databaseReference
+                .child("books")
+                .child(currentUser.getUid())
+                .child(book.getUid())
+                .child("availableQuantity")
+                .setValue(book.getAvailableQuantity() - 1);
+        databaseReference
+                .child("users")
+                .child(user.getUid())
+                .child("book-loans")
+                .push()
+                .child("book-id")
+                .setValue(book.getUid());
     }
 }

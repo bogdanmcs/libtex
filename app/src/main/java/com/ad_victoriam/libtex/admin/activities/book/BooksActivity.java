@@ -34,6 +34,8 @@ public class BooksActivity extends AppCompatActivity {
 
     private final List<Book> books = new ArrayList<>();
 
+    private String intentAction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,13 @@ public class BooksActivity extends AppCompatActivity {
         final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
         bAddBook.setOnClickListener(this::addBook);
 
-        bookAdapter = new BookAdapter(this, books);
+        if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("BORROW")) {
+            intentAction = "BORROW";
+            bookAdapter = new BookAdapter(this, books, intentAction, getIntent().getParcelableExtra("user"));
+        } else {
+            intentAction = "NONE";
+            bookAdapter = new BookAdapter(this, books, intentAction);
+        }
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(bookAdapter);
@@ -61,14 +69,20 @@ public class BooksActivity extends AppCompatActivity {
 
                 Book book = snapshot.getValue(Book.class);
 
+                // check if available quantity > 0
                 if (book != null) {
-                    book.setUid(snapshot.getKey());
 
-                    if (!books.contains(book)) {
-                        books.add(book);
+                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
+
+                        book.setUid(snapshot.getKey());
+
+                        if (!books.contains(book)) {
+                            books.add(book);
+                        }
+
+                        bookAdapter.notifyItemChanged(books.size() - 1);
+
                     }
-
-                    bookAdapter.notifyItemChanged(books.size() - 1);
                 }
             }
 
@@ -78,20 +92,24 @@ public class BooksActivity extends AppCompatActivity {
                 Book book = snapshot.getValue(Book.class);
 
                 if (book != null) {
-                    book.setUid(snapshot.getKey());
 
-                    int indexOfChangedBook = -1;
-                    for (Book b: books) {
-                        if (b.getUid().equals(book.getUid())) {
-                            indexOfChangedBook = books.indexOf(b);
-                            books.set(indexOfChangedBook, book);
+                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
+
+                        book.setUid(snapshot.getKey());
+
+                        int indexOfChangedBook = -1;
+                        for (Book b: books) {
+                            if (b.getUid().equals(book.getUid())) {
+                                indexOfChangedBook = books.indexOf(b);
+                                books.set(indexOfChangedBook, book);
+                            }
                         }
-                    }
 
-                    if (indexOfChangedBook != -1) {
-                        bookAdapter.notifyItemChanged(indexOfChangedBook);
-                    } else {
-                        bookAdapter.notifyDataSetChanged();
+                        if (indexOfChangedBook != -1) {
+                            bookAdapter.notifyItemChanged(indexOfChangedBook);
+                        } else {
+                            bookAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -102,20 +120,24 @@ public class BooksActivity extends AppCompatActivity {
                 Book book = snapshot.getValue(Book.class);
 
                 if (book != null) {
-                    book.setUid(snapshot.getKey());
 
-                    int indexOfRemovedBook = -1;
-                    for (Book b: books) {
-                        if (b.getUid().equals(book.getUid())) {
-                            indexOfRemovedBook = books.indexOf(b);
-                            books.remove(indexOfRemovedBook);
+                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
+
+                        book.setUid(snapshot.getKey());
+
+                        int indexOfRemovedBook = -1;
+                        for (Book b: books) {
+                            if (b.getUid().equals(book.getUid())) {
+                                indexOfRemovedBook = books.indexOf(b);
+                                books.remove(indexOfRemovedBook);
+                            }
                         }
-                    }
 
-                    if (indexOfRemovedBook != -1) {
-                        bookAdapter.notifyItemChanged(indexOfRemovedBook);
-                    } else {
-                        bookAdapter.notifyDataSetChanged();
+                        if (indexOfRemovedBook != -1) {
+                            bookAdapter.notifyItemChanged(indexOfRemovedBook);
+                        } else {
+                            bookAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -134,6 +156,8 @@ public class BooksActivity extends AppCompatActivity {
 
 
     public void addBook(View view) {
-        startActivity(new Intent(this, AddBookActivity.class));
+        if (!getIntent().hasExtra("Action")) {
+            startActivity(new Intent(this, AddBookActivity.class));
+        }
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.book.BooksActivity;
 import com.ad_victoriam.libtex.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
@@ -48,8 +49,10 @@ public class UserDetailsActivity extends AppCompatActivity {
         }
 
         final Button bDeleteUser = findViewById(R.id.bDeleteUser);
+        final Button bAssignBook = findViewById(R.id.bAssignBook);
         final FloatingActionButton bEditUser = findViewById(R.id.bEditUser);
         bDeleteUser.setOnClickListener(this::deleteUser);
+        bAssignBook.setOnClickListener(this::assignBook);
         bEditUser.setOnClickListener(this::editUser);
     }
 
@@ -64,6 +67,13 @@ public class UserDetailsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .show();
+    }
+
+    private void assignBook(View view) {
+        Intent intent = new Intent(this, BooksActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("action", "BORROW");
+        startActivity(intent);
     }
 
     private void editUser(View view) {
