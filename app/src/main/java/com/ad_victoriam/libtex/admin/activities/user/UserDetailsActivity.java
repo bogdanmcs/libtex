@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.book.BooksActivity;
+import com.ad_victoriam.libtex.admin.activities.book.UserCurrentLoansActivity;
 import com.ad_victoriam.libtex.model.User;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -50,9 +52,11 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         final Button bDeleteUser = findViewById(R.id.bDeleteUser);
         final Button bAssignBook = findViewById(R.id.bAssignBook);
+        final Button bReturnBook = findViewById(R.id.bReturnBook);
         final FloatingActionButton bEditUser = findViewById(R.id.bEditUser);
         bDeleteUser.setOnClickListener(this::deleteUser);
         bAssignBook.setOnClickListener(this::assignBook);
+        bReturnBook.setOnClickListener(this::returnBook);
         bEditUser.setOnClickListener(this::editUser);
     }
 
@@ -73,6 +77,13 @@ public class UserDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BooksActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("action", "BORROW");
+        startActivity(intent);
+    }
+
+    private void returnBook(View view) {
+        // view current loaned books for this user
+        Intent intent = new Intent(this, UserCurrentLoansActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

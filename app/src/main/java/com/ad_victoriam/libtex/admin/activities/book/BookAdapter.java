@@ -132,30 +132,4 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .push()
                 .setValue(bookLoan);
     }
-
-    static class BookLoan {
-
-        private final String bookUid;
-        private final LocalDateTime timestamp;
-        private final LocalDateTime deadline;
-
-        public BookLoan(String bookUid) {
-            this.bookUid = bookUid;
-            LocalDateTime currentLocalDateTime = LocalDateTime.now();
-            this.timestamp = currentLocalDateTime;
-            this.deadline = currentLocalDateTime.plusMonths(3);
-        }
-
-        public String getBookUid() {
-            return bookUid;
-        }
-
-        public LocalDateTime getTimestamp() {
-            return timestamp;
-        }
-
-        public LocalDateTime getDeadline() {
-            return deadline;
-        }
-    }
 }
