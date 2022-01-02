@@ -156,7 +156,7 @@ public class BooksActivity extends AppCompatActivity {
 
 
     public void addBook(View view) {
-        if (!getIntent().hasExtra("Action")) {
+        if (!getIntent().hasExtra("action")) {
             startActivity(new Intent(this, AddBookActivity.class));
         }
     }
