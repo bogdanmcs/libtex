@@ -97,19 +97,33 @@ public class BooksActivity extends AppCompatActivity {
 
                         book.setUid(snapshot.getKey());
 
+                        boolean foundBook = false;
                         int indexOfChangedBook = -1;
                         for (Book b: books) {
                             if (b.getUid().equals(book.getUid())) {
                                 indexOfChangedBook = books.indexOf(b);
                                 books.set(indexOfChangedBook, book);
+                                foundBook = true;
+                                break;
                             }
+                        }
+
+                        if (!foundBook) {
+                            books.add(book);
                         }
 
                         if (indexOfChangedBook != -1) {
                             bookAdapter.notifyItemChanged(indexOfChangedBook);
                         } else {
-                            bookAdapter.notifyDataSetChanged();
+                            if (!foundBook) {
+                                bookAdapter.notifyItemChanged(books.size() - 1);
+                            } else {
+                                bookAdapter.notifyDataSetChanged();
+                            }
                         }
+                    } else {
+                        // remove book because action = "BORROW", but available quantity = 0
+                        onChildRemoved(snapshot);
                     }
                 }
             }
@@ -121,23 +135,20 @@ public class BooksActivity extends AppCompatActivity {
 
                 if (book != null) {
 
-                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
+                    book.setUid(snapshot.getKey());
 
-                        book.setUid(snapshot.getKey());
-
-                        int indexOfRemovedBook = -1;
-                        for (Book b: books) {
-                            if (b.getUid().equals(book.getUid())) {
-                                indexOfRemovedBook = books.indexOf(b);
-                                books.remove(indexOfRemovedBook);
-                            }
+                    int indexOfRemovedBook = -1;
+                    for (Book b: books) {
+                        if (b.getUid().equals(book.getUid())) {
+                            indexOfRemovedBook = books.indexOf(b);
+                            books.remove(indexOfRemovedBook);
                         }
+                    }
 
-                        if (indexOfRemovedBook != -1) {
-                            bookAdapter.notifyItemChanged(indexOfRemovedBook);
-                        } else {
-                            bookAdapter.notifyDataSetChanged();
-                        }
+                    if (indexOfRemovedBook != -1) {
+                        bookAdapter.notifyItemChanged(indexOfRemovedBook);
+                    } else {
+                        bookAdapter.notifyDataSetChanged();
                     }
                 }
             }
