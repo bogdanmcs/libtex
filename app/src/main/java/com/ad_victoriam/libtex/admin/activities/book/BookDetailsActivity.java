@@ -36,13 +36,13 @@ public class BookDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_book_details);
 
-        tTitle = findViewById(R.id.tBookAuthorName);
-        tAuthorName = findViewById(R.id.tFirstName);
-        tPublisher = findViewById(R.id.tLastName);
-        tNoOfPages = findViewById(R.id.tIDCardSerialNumber);
-        tDescription = findViewById(R.id.tTodo3);
-        tAvailableQuantity = findViewById(R.id.tTodo1);
-        tTotalQuantity = findViewById(R.id.tTodo2);
+        tTitle = findViewById(R.id.tTitle);
+        tAuthorName = findViewById(R.id.tAuthorName);
+        tPublisher = findViewById(R.id.tPublisher);
+        tNoOfPages = findViewById(R.id.tNoOfPages);
+        tAvailableQuantity = findViewById(R.id.tAvailableQuantity);
+        tTotalQuantity = findViewById(R.id.tTotalQuantity);
+        tDescription = findViewById(R.id.tDescription);
 
         if (book == null && getIntent().hasExtra("book")) {
             book = getIntent().getParcelableExtra("book");
@@ -58,8 +58,8 @@ public class BookDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
 
-        final Button bDeleteBook = findViewById(R.id.bDeleteUser);
-        final FloatingActionButton bEditBook = findViewById(R.id.bEditUser);
+        final Button bDeleteBook = findViewById(R.id.bDeleteBook);
+        final FloatingActionButton bEditBook = findViewById(R.id.bEditBook);
         bDeleteBook.setOnClickListener(this::deleteBook);
         bEditBook.setOnClickListener(this::editBook);
     }

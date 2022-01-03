@@ -12,13 +12,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tTitle"
+            android:id="@+id/tBookTitle"
             android:layout_width="323dp"
             android:layout_height="64dp"
             android:layout_marginStart="44dp"
             android:layout_marginTop="44dp"
             android:layout_marginEnd="44dp"
-            android:text="Title"
+            android:text="Book title"
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,88 +27,88 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tAuthorName"
+            android:id="@+id/tBookAuthorName"
             android:layout_width="220dp"
             android:layout_height="41dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="96dp"
-            android:text="Author name"
+            android:text="Book author name"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tBookTitle" />
 
         <TextView
-            android:id="@+id/tPublisher"
+            android:id="@+id/tBookPublisher"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="96dp"
-            android:text="Publisher"
+            android:text="Book publisher"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tAuthorName" />
+            app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName" />
 
         <TextView
-            android:id="@+id/tNoOfPages"
+            android:id="@+id/tTimestamp"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="96dp"
-            android:text="No of pages"
+            android:text="Timestamp"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tPublisher" />
+            app:layout_constraintTop_toBottomOf="@+id/tBookPublisher" />
 
         <TextView
-            android:id="@+id/tAvailableQuantity"
+            android:id="@+id/tDeadline"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="96dp"
-            android:text="Available quantity"
+            android:text="Deadline"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tNoOfPages" />
+            app:layout_constraintTop_toBottomOf="@+id/tTimestamp" />
 
         <TextView
-            android:id="@+id/tTotalQuantity"
+            android:id="@+id/tTodo2"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="96dp"
-            android:text="Total quantity"
+            android:text="$todo"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tAvailableQuantity" />
+            app:layout_constraintTop_toBottomOf="@+id/tDeadline" />
 
         <TextView
-            android:id="@+id/tDescription"
+            android:id="@+id/tTodo3"
             android:layout_width="220dp"
             android:layout_height="150dp"
             android:layout_marginStart="95dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="96dp"
-            android:text="Description"
+            android:text="$todo"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tTotalQuantity" />
+            app:layout_constraintTop_toBottomOf="@+id/tTodo2" />
 
         <Button
-            android:id="@+id/bDeleteBook"
+            android:id="@+id/bViewLocation"
             android:layout_width="249dp"
             android:layout_height="56dp"
             android:layout_marginStart="60dp"
@@ -116,24 +116,13 @@
             android:layout_marginEnd="81dp"
             android:layout_marginBottom="32dp"
             android:backgroundTint="@color/grey"
-            android:text="Delete this book"
+            android:text="View location"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tDescription"
+            app:layout_constraintTop_toBottomOf="@+id/tTodo3"
             app:layout_constraintVertical_bias="0.0" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/bEditBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="36dp"
-            android:layout_marginBottom="32dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/book_details_settings" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

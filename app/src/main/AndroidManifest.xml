@@ -93,6 +93,22 @@
             android:name=".admin.activities.book.UserCurrentLoansActivity">
         </activity>
 
+        <activity android:name=".user.loans.CurrentLoansActivity">
+
+        </activity>
+
+        <activity
+            android:name=".user.loans.CurrentLoanDetailsActivity">
+
+        </activity>
+
+        <activity
+            android:name=".user.loans.MapsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_maps">
+
+        </activity>
+
     </application>
 
 </manifest>
