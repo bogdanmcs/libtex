@@ -5,51 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="211dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="80dp"
-        android:text="Hello admin!"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/bViewUsers"
+    <Button
+        android:id="@+id/bLogOut"
+        android:layout_width="112dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="clicked"
+        android:text="Log out"
+        android:backgroundTint="@color/grey2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bViewBooks"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/bViewUsers"
+        android:layout_width="232dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="148dp"
+        android:onClick="clicked"
+        android:text="View users"
+        android:backgroundTint="@color/grey2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/bLogOut"
-        android:layout_width="124dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="160dp"
-        android:onClick="clicked"
-        android:text="Log out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/bViewUsers"
-        android:layout_width="125dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="60dp"
-        android:onClick="clicked"
-        android:text="View users"
-        app:layout_constraintBottom_toTopOf="@+id/bViewBooks"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/bViewBooks"
-        android:layout_width="119dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="88dp"
-        android:text="View books"
+        android:layout_width="232dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="64dp"
         android:onClick="clicked"
-        app:layout_constraintBottom_toTopOf="@+id/bLogOut"
+        android:text="View books"
+        android:backgroundTint="@color/grey2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bViewUsers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
