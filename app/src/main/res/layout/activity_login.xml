@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="291dp"
-        android:layout_height="98dp"
+        android:layout_width="325dp"
+        android:layout_height="68dp"
         android:layout_marginStart="53dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="54dp"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:hint="Email"
         app:counterEnabled="true"
@@ -51,6 +51,7 @@
         app:counterEnabled="true"
         app:counterMaxLength="50"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout8">
 
@@ -63,26 +64,29 @@
 
     <Button
         android:id="@+id/bLogIn"
-        android:layout_width="221dp"
-        android:layout_height="78dp"
+        android:layout_width="128dp"
+        android:layout_height="57dp"
         android:layout_marginStart="96dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="96dp"
-        android:layout_marginBottom="64dp"
         android:text="Log in"
-        app:layout_constraintBottom_toTopOf="@+id/bCreateAccount"
+        android:backgroundTint="@color/grey2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
 
     <Button
         android:id="@+id/bCreateAccount"
-        android:layout_width="220dp"
-        android:layout_height="52dp"
+        android:layout_width="222dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:text="Create an account"
+        android:backgroundTint="@color/grey2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bLogIn"
+        app:layout_constraintVertical_bias="0.921" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

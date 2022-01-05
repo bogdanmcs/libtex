@@ -47,7 +47,13 @@ public class RegisterActivity extends AppCompatActivity {
         ePassword = findViewById(R.id.ePassword);
 
         final Button bRegister = findViewById(R.id.bRegister);
+        final Button bLogIn = findViewById(R.id.bLogIn);
         bRegister.setOnClickListener(this::validateCredentials);
+        bLogIn.setOnClickListener(this::goToLogin);
+    }
+
+    private void goToLogin(View view) {
+        finish();
     }
 
     private void createAccount(String email, String password) {
