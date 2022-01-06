@@ -50,10 +50,10 @@ public class CurrentLoansActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(loanAdapter);
 
-        attachDatabaseBooksListener();
+        attachDatabaseBookLoansListener();
     }
 
-    private void attachDatabaseBooksListener() {
+    private void attachDatabaseBookLoansListener() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference
                 .child("users")
@@ -70,6 +70,7 @@ public class CurrentLoansActivity extends AppCompatActivity {
                             // get the book
                             if (bookLoan != null) {
                                 String libraryUid = snapshot.getKey();
+                                bookLoan.setBookLoanUid(dataSnapshot.getKey());
 
                                 databaseReference
                                         .child("books")
@@ -93,7 +94,7 @@ public class CurrentLoansActivity extends AppCompatActivity {
                                                                 if (!bookLoans.contains(bookLoan)) {
                                                                     bookLoans.add(bookLoan);
                                                                 }
-                                                                loanAdapter.notifyItemChanged(bookLoans.size() - 1);
+                                                                loanAdapter.notifyItemInserted(bookLoans.size() - 1);
                                                                 break;
                                                             }
                                                         }
@@ -110,35 +111,32 @@ public class CurrentLoansActivity extends AppCompatActivity {
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-//                        BookLoan bookLoan = snapshot.getValue(BookLoan.class);
+                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                            BookLoan bookLoan = dataSnapshot.getValue(BookLoan.class);
 
-//                        System.out.println(snapshot.getValue().toString());
-//                        if (bookLoan != null) {
-//
-//                            bookLoan.setBookLoanUid(snapshot.getKey());
-//
-//                            int indexOfChangedBookLoan = -1;
-//                            for (BookLoan b: bookLoans) {
-//                                if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
-//                                    indexOfChangedBookLoan = bookLoans.indexOf(b);
-//                                    // keep book data - no need to query again
-//                                    Book bookData = b.getBook();
-//                                    bookLoan.setBook(bookData);
-//                                    bookLoans.set(indexOfChangedBookLoan, bookLoan);
-//                                    break;
-//                                }
-//                            }
-//
-//                            if (indexOfChangedBookLoan != -1) {
-//                                bookLoanAdapter.notifyItemChanged(indexOfChangedBookLoan);
-//                            } else {
-//                                bookLoanAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-                        System.out.println(snapshot.getKey());
-                        System.out.println(snapshot.getValue());
+                            if (bookLoan != null) {
+                                bookLoan.setBookLoanUid(dataSnapshot.getKey());
+                                int indexOfChangedBookLoan = -1;
+
+                                for (BookLoan b: bookLoans) {
+                                    if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
+                                        indexOfChangedBookLoan = bookLoans.indexOf(b);
+                                        bookLoan.setBook(b.getBook());
+                                        bookLoans.set(indexOfChangedBookLoan, bookLoan);
+                                        break;
+                                    }
+                                }
+
+                                if (indexOfChangedBookLoan != -1) {
+                                    loanAdapter.notifyItemChanged(indexOfChangedBookLoan);
+                                } else {
+                                    loanAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
                     }
 
+                    // todo
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
@@ -161,8 +159,6 @@ public class CurrentLoansActivity extends AppCompatActivity {
 //                                bookLoanAdapter.notifyDataSetChanged();
 //                            }
 //                        }
-                            System.out.println(snapshot.getKey());
-                            System.out.println(snapshot.getValue());
                         }
 
                     @Override

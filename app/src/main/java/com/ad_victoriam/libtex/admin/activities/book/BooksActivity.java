@@ -3,6 +3,8 @@ package com.ad_victoriam.libtex.admin.activities.book;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +33,9 @@ public class BooksActivity extends AppCompatActivity {
     private BookAdapter bookAdapter;
 
     private RecyclerView recyclerView;
+    private SearchView searchView;
 
-    private final List<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
     private String intentAction;
 
@@ -42,6 +45,9 @@ public class BooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_books);
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+
+        searchView = findViewById(R.id.searchView);
+        // ?
 
         final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
         bAddBook.setOnClickListener(this::addBook);
@@ -80,7 +86,7 @@ public class BooksActivity extends AppCompatActivity {
                             books.add(book);
                         }
 
-                        bookAdapter.notifyItemChanged(books.size() - 1);
+                        bookAdapter.notifyItemInserted(books.size() - 1);
 
                     }
                 }
@@ -164,7 +170,6 @@ public class BooksActivity extends AppCompatActivity {
             }
         });
     }
-
 
     public void addBook(View view) {
         if (!getIntent().hasExtra("action")) {
