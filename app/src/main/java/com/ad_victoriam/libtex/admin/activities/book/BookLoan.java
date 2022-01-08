@@ -3,20 +3,18 @@ package com.ad_victoriam.libtex.admin.activities.book;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import com.ad_victoriam.libtex.model.Book;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class BookLoan implements Parcelable {
 
     private String libraryUid;
     private String bookLoanUid;
     private String bookUid;
-    private String timestamp;
-    private String deadline;
+    private String loanTimestamp;
+    private String deadlineTimestamp;
+    private String returnTimestamp;
 
     private Book book;
 
@@ -24,12 +22,13 @@ public class BookLoan implements Parcelable {
 
     }
 
-    public BookLoan(String bookUid, String timestamp, String deadline, Book book) {
+    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, Book book) {
         this.libraryUid = null;
         this.bookLoanUid = null;
         this.bookUid = bookUid;
-        this.timestamp = timestamp;
-        this.deadline = deadline;
+        this.loanTimestamp = loanTimestamp;
+        this.deadlineTimestamp = deadlineTimestamp;
+        this.returnTimestamp = null;
         this.book = book;
     }
 
@@ -37,10 +36,10 @@ public class BookLoan implements Parcelable {
         this.libraryUid = null;
         this.bookLoanUid = null;
         this.bookUid = bookUid;
-        LocalDateTime timestamp = LocalDateTime.now();
-        this.timestamp = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(timestamp);
-        LocalDateTime deadline = timestamp.plusMonths(3);
-        this.deadline = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(deadline);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        this.loanTimestamp = currentDateTime.toString();
+        this.deadlineTimestamp = currentDateTime.plusMonths(3).toString();
+        this.returnTimestamp = null;
         this.book = null;
     }
 
@@ -48,8 +47,9 @@ public class BookLoan implements Parcelable {
         libraryUid = in.readString();
         bookLoanUid = in.readString();
         bookUid = in.readString();
-        timestamp = in.readString();
-        deadline = in.readString();
+        loanTimestamp = in.readString();
+        deadlineTimestamp = in.readString();
+        returnTimestamp = in.readString();
         book = in.readParcelable(Book.class.getClassLoader());
     }
 
@@ -77,12 +77,16 @@ public class BookLoan implements Parcelable {
         return bookUid;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getLoanTimestamp() {
+        return loanTimestamp;
     }
 
-    public String getDeadline() {
-        return deadline;
+    public String getDeadlineTimestamp() {
+        return deadlineTimestamp;
+    }
+
+    public String getReturnTimestamp() {
+        return returnTimestamp;
     }
 
     public Book getBook() {
@@ -101,15 +105,15 @@ public class BookLoan implements Parcelable {
         this.bookLoanUid = bookLoanUid;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "BookLoan{" +
                 "libraryUid='" + libraryUid + '\'' +
-                "bookLoanUid='" + bookLoanUid + '\'' +
+                ", bookLoanUid='" + bookLoanUid + '\'' +
                 ", bookUid='" + bookUid + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", deadline='" + deadline + '\'' +
+                ", loanTimestamp='" + loanTimestamp + '\'' +
+                ", deadlineTimestamp='" + deadlineTimestamp + '\'' +
+                ", returnTimestamp='" + returnTimestamp + '\'' +
                 ", book=" + book +
                 '}';
     }
@@ -124,8 +128,9 @@ public class BookLoan implements Parcelable {
         parcel.writeString(libraryUid);
         parcel.writeString(bookLoanUid);
         parcel.writeString(bookUid);
-        parcel.writeString(timestamp);
-        parcel.writeString(deadline);
+        parcel.writeString(loanTimestamp);
+        parcel.writeString(deadlineTimestamp);
+        parcel.writeString(returnTimestamp);
         parcel.writeParcelable(book, i);
     }
 }

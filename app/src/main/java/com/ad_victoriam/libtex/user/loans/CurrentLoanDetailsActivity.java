@@ -46,8 +46,8 @@ public class CurrentLoanDetailsActivity extends AppCompatActivity {
             tBookTitle.setText(bookLoan.getBook().getTitle());
             tBookAuthorName.setText(bookLoan.getBook().getAuthorName());
             tBookPublisher.setText(bookLoan.getBook().getPublisher());
-            tTimestamp.setText(bookLoan.getTimestamp());
-            tDeadline.setText(bookLoan.getDeadline());
+            tTimestamp.setText(bookLoan.getLoanTimestamp());
+            tDeadline.setText(bookLoan.getDeadlineTimestamp());
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }

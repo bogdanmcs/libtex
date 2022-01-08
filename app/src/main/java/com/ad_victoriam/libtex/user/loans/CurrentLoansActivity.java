@@ -1,16 +1,19 @@
 package com.ad_victoriam.libtex.user.loans;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.book.BookLoan;
-import com.ad_victoriam.libtex.admin.activities.book.BookLoanAdapter;
 import com.ad_victoriam.libtex.model.Book;
 import com.ad_victoriam.libtex.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +47,9 @@ public class CurrentLoansActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_current_loans);
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         loanAdapter = new LoanAdapter(this, bookLoans);
         recyclerView = findViewById(R.id.recyclerView);
@@ -171,5 +177,21 @@ public class CurrentLoansActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

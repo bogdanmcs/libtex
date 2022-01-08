@@ -1,10 +1,14 @@
 package com.ad_victoriam.libtex.admin.activities.book;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,18 +32,24 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
 
-    private BookLoanAdapter bookLoanAdapter;
-
     private RecyclerView recyclerView;
+    private TextView loansStatus;
 
     private User user;
-
+    private BookLoanAdapter bookLoanAdapter;
     private final List<BookLoan> bookLoans = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_current_loans);
+
+        loansStatus = findViewById(R.id.loansStatus);
+        final String NO_BOOKS_FOUND = "No books found.";
+        loansStatus.setText(NO_BOOKS_FOUND);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
@@ -70,6 +80,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                 if (bookLoan != null) {
                     // get book loan uid and get book details from "books/currentLib/bookLoanUid"
                     bookLoan.setBookLoanUid(snapshot.getKey());
+                    loansStatus.setText("");
                     databaseReference
                             .child("books")
                             .child(currentUser.getUid())
@@ -90,7 +101,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                                                         bookLoans.add(bookLoan);
                                                     }
 
-                                                    bookLoanAdapter.notifyItemChanged(bookLoans.size() - 1);
+                                                    bookLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
 
                                                     break;
                                                 }
@@ -145,14 +156,16 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                         if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
                             indexOfRemovedBookLoan = bookLoans.indexOf(b);
                             bookLoans.remove(indexOfRemovedBookLoan);
+                            break;
                         }
                     }
 
-                    if (indexOfRemovedBookLoan != -1) {
-                        bookLoanAdapter.notifyItemChanged(indexOfRemovedBookLoan);
-                    } else {
-                        bookLoanAdapter.notifyDataSetChanged();
-                    }
+                    bookLoanAdapter.notifyDataSetChanged();
+//                    if (indexOfRemovedBookLoan != -1) {
+//                        bookLoanAdapter.notifyItemRemoved(indexOfRemovedBookLoan);
+//                    } else {
+//                        bookLoanAdapter.notifyDataSetChanged();
+//                    }
                 }
             }
 
@@ -166,5 +179,21 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

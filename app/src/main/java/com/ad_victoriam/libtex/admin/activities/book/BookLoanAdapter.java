@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,12 +16,15 @@ import com.ad_victoriam.libtex.model.Book;
 import com.ad_victoriam.libtex.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLoanViewHolder> {
@@ -54,12 +56,26 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
         holder.constraintLayout.setOnClickListener(view -> confirmReturn(view, position));
         holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
         holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());
-        holder.tDeadline.setText(bookLoans.get(position).getDeadline().toString());
+        String deadlineText = bookLoans.get(position).getDeadlineTimestamp();
+        holder.tDeadline.setText(deadlineText);
+        LocalDateTime deadline = LocalDateTime.parse(deadlineText);
+        if (deadline.isBefore(LocalDateTime.now())) {
+            holder.tDeadline.setBackgroundResource(R.drawable.deadline_exceeded);
+        } else if (deadline.minusDays(3).isBefore(LocalDateTime.now())) {
+            holder.tDeadline.setBackgroundResource(R.drawable.deadline_close);
+        } else {
+            holder.tDeadline.setBackgroundResource(R.drawable.deadline_not_exceeded);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return bookLoans.size();
+//        return bookLoans.size();
+        if (bookLoans != null) {
+            return bookLoans.size();
+        } else {
+            return 0;
+        }
     }
 
     public class BookLoanViewHolder extends RecyclerView.ViewHolder {
@@ -81,21 +97,21 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
     private void confirmReturn(View view, int position) {
         new AlertDialog.Builder(context)
                 .setMessage(
-                        "Are you sure you want to confirm the return of (" +
-                                bookLoans.get(position).getBook().getTitle() + " " +
-                                bookLoans.get(position).getBook().getAuthorName() + " " +
-                                bookLoans.get(position).getBook().getPublisher() +
-                                ") by user " +
+                        "Are you sure you want to confirm the return of " +
+                                bookLoans.get(position).getBook().getTitle() + " by " +
+                                bookLoans.get(position).getBook().getAuthorName() + " (" +
+                                bookLoans.get(position).getBook().getPublisher() + ") " +
+                                "by user " +
                                 user.getFirstName() + " " +
                                 user.getLastName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    returnBook(position);
+                    returnBook(view, position);
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .show();
     }
 
-    private void returnBook(int position) {
+    private void returnBook(View view, int position) {
         DatabaseReference databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
@@ -123,7 +139,6 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
                                                 .child(book.getUid())
                                                 .child("availableQuantity")
                                                 .setValue(book.getAvailableQuantity() + 1);
-                                        Toast.makeText(context, "The return was successful", Toast.LENGTH_SHORT).show();
                                         break;
                                     }
                                 }
@@ -142,5 +157,7 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
                 .child(currentUser.getUid())
                 .child(bookLoans.get(position).getBookLoanUid())
                 .removeValue();
+
+        Snackbar.make(context, view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
     }
 }

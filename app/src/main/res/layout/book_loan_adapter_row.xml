@@ -69,16 +69,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/book_small_30" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/textView"-->
-<!--                android:layout_width="98dp"-->
-<!--                android:layout_height="25dp"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:text="Deadline"-->
-<!--                android:textAlignment="center"-->
-<!--                android:gravity="center"-->
-<!--                app:layout_constraintEnd_toStartOf="@+id/tDeadline"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName" />-->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="98dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="8dp"
+                android:text="Deadline"
+                android:textAlignment="center"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/tDeadline"
+                app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

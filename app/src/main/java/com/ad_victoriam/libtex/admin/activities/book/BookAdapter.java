@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.model.Book;
 import com.ad_victoriam.libtex.model.User;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -65,7 +66,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             context.startActivity(intent);
         } else {
             // assign book to current user
-            confirmLoan(position);
+            confirmLoan(view, position);
         }
     }
 
@@ -79,7 +80,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         ConstraintLayout constraintLayout;
         TextView tBookTitle;
         TextView tBookAuthorName;
-//        @todo TextView tBookPublisher;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,20 +89,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         }
     }
 
-    private void confirmLoan(int position) {
+    private void confirmLoan(View view, int position) {
         new AlertDialog.Builder(context)
                 .setMessage(
                         "Are you sure you want to assign this book to " +
                                 user.getFirstName() + " " +
                                 user.getLastName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    assignBookToUser(position);
+                    assignBookToUser(view, position);
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})
                 .show();
     }
 
-    private void assignBookToUser(int position) {
+    private void assignBookToUser(View view, int position) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -131,5 +131,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .child(currentUser.getUid())
                 .push()
                 .setValue(bookLoan);
+        Snackbar.make(view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
     }
 }

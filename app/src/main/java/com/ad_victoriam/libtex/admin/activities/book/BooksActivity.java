@@ -2,6 +2,8 @@ package com.ad_victoriam.libtex.admin.activities.book;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +36,6 @@ public class BooksActivity extends AppCompatActivity {
     private BookAdapter bookAdapter;
 
     private RecyclerView recyclerView;
-    private SearchView searchView;
 
     private List<Book> books = new ArrayList<>();
 
@@ -46,17 +48,18 @@ public class BooksActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        searchView = findViewById(R.id.searchView);
-        // ?
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
-        bAddBook.setOnClickListener(this::addBook);
 
         if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("BORROW")) {
             intentAction = "BORROW";
+            bAddBook.setVisibility(View.GONE);
             bookAdapter = new BookAdapter(this, books, intentAction, getIntent().getParcelableExtra("user"));
         } else {
             intentAction = "NONE";
+            bAddBook.setOnClickListener(this::addBook);
             bookAdapter = new BookAdapter(this, books, intentAction);
         }
         recyclerView = findViewById(R.id.recyclerView);
@@ -99,38 +102,27 @@ public class BooksActivity extends AppCompatActivity {
 
                 if (book != null) {
 
-                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
-
-                        book.setUid(snapshot.getKey());
-
-                        boolean foundBook = false;
-                        int indexOfChangedBook = -1;
-                        for (Book b: books) {
-                            if (b.getUid().equals(book.getUid())) {
-                                indexOfChangedBook = books.indexOf(b);
-                                books.set(indexOfChangedBook, book);
-                                foundBook = true;
-                                break;
-                            }
-                        }
-
-                        if (!foundBook) {
-                            books.add(book);
-                        }
-
-                        if (indexOfChangedBook != -1) {
-                            bookAdapter.notifyItemChanged(indexOfChangedBook);
-                        } else {
-                            if (!foundBook) {
-                                bookAdapter.notifyItemChanged(books.size() - 1);
-                            } else {
-                                bookAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    } else {
-                        // remove book because action = "BORROW", but available quantity = 0
-                        onChildRemoved(snapshot);
+                    boolean isToBeRemoved = false;
+                    if (intentAction.equals("BORROW") && book.getAvailableQuantity() == 0) {
+                        isToBeRemoved = true;
                     }
+
+                    book.setUid(snapshot.getKey());
+
+                    int indexOfChangedBook = -1;
+                    for (Book b : books) {
+                        if (b.getUid().equals(book.getUid())) {
+                            indexOfChangedBook = books.indexOf(b);
+                            if (isToBeRemoved) {
+                                books.remove(indexOfChangedBook);
+                            } else {
+                                books.set(indexOfChangedBook, book);
+                            }
+                            break;
+                        }
+                    }
+
+                    bookAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -148,11 +140,12 @@ public class BooksActivity extends AppCompatActivity {
                         if (b.getUid().equals(book.getUid())) {
                             indexOfRemovedBook = books.indexOf(b);
                             books.remove(indexOfRemovedBook);
+                            break;
                         }
                     }
 
                     if (indexOfRemovedBook != -1) {
-                        bookAdapter.notifyItemChanged(indexOfRemovedBook);
+                        bookAdapter.notifyItemRemoved(indexOfRemovedBook);
                     } else {
                         bookAdapter.notifyDataSetChanged();
                     }
@@ -175,5 +168,21 @@ public class BooksActivity extends AppCompatActivity {
         if (!getIntent().hasExtra("action")) {
             startActivity(new Intent(this, AddBookActivity.class));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

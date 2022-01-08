@@ -2,8 +2,6 @@ package com.ad_victoriam.libtex.user.loans;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import com.ad_victoriam.libtex.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder> {
@@ -50,12 +49,10 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
         holder.constraintLayout.setOnClickListener(view -> viewBookLoan(view, position));
         holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
         holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());
-        String deadlineText = bookLoans.get(position).getDeadline();
+        String deadlineText = bookLoans.get(position).getDeadlineTimestamp();
         holder.tDeadline.setText(deadlineText);
         // get book loan deadline and format time
-        LocalDateTime deadline;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        deadline = LocalDateTime.parse(deadlineText, formatter);
+        LocalDateTime deadline = LocalDateTime.parse(deadlineText);
         if (deadline.isBefore(LocalDateTime.now())) {
             holder.tDeadline.setBackgroundResource(R.drawable.deadline_exceeded);
         } else if (deadline.minusDays(3).isBefore(LocalDateTime.now())) {
