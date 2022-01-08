@@ -113,24 +113,33 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .child(book.getUid())
                 .child("availableQuantity")
                 .setValue(book.getAvailableQuantity() - 1);
+
         BookLoan bookLoan = new BookLoan(book.getUid());
-        // updateChildren
+        String bookLoanKey = databaseReference
+                .child("users")
+                .child(user.getUid())
+                .child("book-loans")
+                .push()
+                .getKey();
+
         databaseReference
                 .child("users")
                 .child(user.getUid())
                 .child("book-loans")
                 .child("current-loans")
                 .child(currentUser.getUid())
-                .push()
+                .child(bookLoanKey)
                 .setValue(bookLoan);
+
         databaseReference
                 .child("users")
                 .child(user.getUid())
                 .child("book-loans")
                 .child("loans-history")
                 .child(currentUser.getUid())
-                .push()
+                .child(bookLoanKey)
                 .setValue(bookLoan);
+
         Snackbar.make(view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -157,6 +157,17 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
                 .child(currentUser.getUid())
                 .child(bookLoans.get(position).getBookLoanUid())
                 .removeValue();
+        // update book loan in loans history - return date
+        LocalDateTime returnTimestamp = LocalDateTime.now();
+        databaseReference
+                .child("users")
+                .child(user.getUid())
+                .child("book-loans")
+                .child("loans-history")
+                .child(currentUser.getUid())
+                .child(bookLoans.get(position).getBookLoanUid())
+                .child("returnTimestamp")
+                .setValue(returnTimestamp.toString());
 
         Snackbar.make(context, view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
     }

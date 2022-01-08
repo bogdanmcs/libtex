@@ -14,7 +14,6 @@ public class BookLoan implements Parcelable {
     private String bookUid;
     private String loanTimestamp;
     private String deadlineTimestamp;
-    private String returnTimestamp;
 
     private Book book;
 
@@ -28,7 +27,6 @@ public class BookLoan implements Parcelable {
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
-        this.returnTimestamp = null;
         this.book = book;
     }
 
@@ -39,7 +37,6 @@ public class BookLoan implements Parcelable {
         LocalDateTime currentDateTime = LocalDateTime.now();
         this.loanTimestamp = currentDateTime.toString();
         this.deadlineTimestamp = currentDateTime.plusMonths(3).toString();
-        this.returnTimestamp = null;
         this.book = null;
     }
 
@@ -49,7 +46,6 @@ public class BookLoan implements Parcelable {
         bookUid = in.readString();
         loanTimestamp = in.readString();
         deadlineTimestamp = in.readString();
-        returnTimestamp = in.readString();
         book = in.readParcelable(Book.class.getClassLoader());
     }
 
@@ -85,10 +81,6 @@ public class BookLoan implements Parcelable {
         return deadlineTimestamp;
     }
 
-    public String getReturnTimestamp() {
-        return returnTimestamp;
-    }
-
     public Book getBook() {
         return book;
     }
@@ -113,7 +105,6 @@ public class BookLoan implements Parcelable {
                 ", bookUid='" + bookUid + '\'' +
                 ", loanTimestamp='" + loanTimestamp + '\'' +
                 ", deadlineTimestamp='" + deadlineTimestamp + '\'' +
-                ", returnTimestamp='" + returnTimestamp + '\'' +
                 ", book=" + book +
                 '}';
     }
@@ -130,7 +121,6 @@ public class BookLoan implements Parcelable {
         parcel.writeString(bookUid);
         parcel.writeString(loanTimestamp);
         parcel.writeString(deadlineTimestamp);
-        parcel.writeString(returnTimestamp);
         parcel.writeParcelable(book, i);
     }
 }
