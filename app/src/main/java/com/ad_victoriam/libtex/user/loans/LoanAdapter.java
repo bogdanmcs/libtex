@@ -25,6 +25,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
     private final Context context;
     private final List<BookLoan> bookLoans;
     private User user;
+    private String fragmentType;
 
     public LoanAdapter(Context context, List<BookLoan> bookLoans) {
         this.context = context;
@@ -35,6 +36,12 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
         this.context = context;
         this.bookLoans = bookLoans;
         this.user = user;
+    }
+
+    public LoanAdapter(Context context, List<BookLoan> bookLoans, String fragmentType) {
+        this.context = context;
+        this.bookLoans = bookLoans;
+        this.fragmentType = fragmentType;
     }
 
     @NonNull
@@ -80,6 +87,12 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tDeadline = itemView.findViewById(R.id.tDeadline);
+
+            if (fragmentType.equals("ALL")) {
+                tDeadline.setVisibility(View.GONE);
+                TextView deadlineTextView = itemView.findViewById(R.id.deadlineTextView);
+                deadlineTextView.setVisibility(View.GONE);
+            }
         }
     }
 

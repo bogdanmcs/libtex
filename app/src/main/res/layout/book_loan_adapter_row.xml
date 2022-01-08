@@ -70,7 +70,7 @@
                 app:srcCompat="@drawable/book_small_30" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/deadlineTextView"
                 android:layout_width="98dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="8dp"

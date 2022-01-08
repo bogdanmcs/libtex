@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/bot_nav_loans_colors.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_close.xml" value="0.13515625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_exceeded.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_not_exceeded.xml" value="0.249609375" />
@@ -29,16 +30,19 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_register_user.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_register_user_admin.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_current_loan_details.xml" value="0.3125" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_current_loans.xml" value="0.16" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_current_loans.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_home.xml" value="0.1" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_loans.xml" value="0.1" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_register.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_view_current_loans.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_loan_adapter_row.xml" value="0.22" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_user_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/test123.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/toolbar.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/user_adapter_row.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/app_bar_menu.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/menu/bottom_navigation_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/menu.xml" value="0.234375" />
       </map>
     </option>
