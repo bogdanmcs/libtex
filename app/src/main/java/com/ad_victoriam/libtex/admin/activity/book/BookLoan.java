@@ -1,9 +1,9 @@
-package com.ad_victoriam.libtex.admin.activities.book;
+package com.ad_victoriam.libtex.admin.activity.book;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ad_victoriam.libtex.model.Book;
+import com.ad_victoriam.libtex.common.model.Book;
 
 import java.time.LocalDateTime;
 

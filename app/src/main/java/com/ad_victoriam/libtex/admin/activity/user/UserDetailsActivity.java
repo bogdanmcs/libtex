@@ -1,20 +1,24 @@
-package com.ad_victoriam.libtex.admin.activities.user;
+package com.ad_victoriam.libtex.admin.activity.user;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.book.BooksActivity;
-import com.ad_victoriam.libtex.admin.activities.book.UserCurrentLoansActivity;
-import com.ad_victoriam.libtex.model.User;
+import com.ad_victoriam.libtex.admin.activity.book.BooksActivity;
+import com.ad_victoriam.libtex.admin.activity.book.UserCurrentLoansActivity;
+import com.ad_victoriam.libtex.common.model.User;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +37,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_details);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         tEmail = findViewById(R.id.tEmail);
         tFirstName = findViewById(R.id.tFirstName);
@@ -89,5 +96,21 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private void editUser(View view) {
 //        startActivity(new Intent(this, EditUserActivity.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

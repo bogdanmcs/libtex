@@ -12,12 +12,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.book.BookLoan;
-import com.ad_victoriam.libtex.model.User;
+import com.ad_victoriam.libtex.admin.activity.book.BookLoan;
+import com.ad_victoriam.libtex.common.model.User;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder> {

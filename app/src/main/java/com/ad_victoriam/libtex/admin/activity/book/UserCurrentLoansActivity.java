@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.activities.book;
+package com.ad_victoriam.libtex.admin.activity.book;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.model.Book;
-import com.ad_victoriam.libtex.model.User;
+import com.ad_victoriam.libtex.common.model.Book;
+import com.ad_victoriam.libtex.common.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

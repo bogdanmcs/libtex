@@ -38,11 +38,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".auth.LoginActivity">
+        <activity android:name=".common.auth.LoginActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.AdminHomeActivity">
+        <activity android:name=".admin.activity.AdminHomeActivity">
 
         </activity>
 
@@ -52,46 +52,46 @@
 
         <activity
             android:name=".user.auth.RegisterActivity"
-            android:parentActivityName=".auth.LoginActivity">
+            android:parentActivityName=".common.auth.LoginActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.book.BooksActivity">
+        <activity android:name=".admin.activity.book.BooksActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.book.AddBookActivity">
+        <activity android:name=".admin.activity.book.AddBookActivity">
 
         </activity>
 
         <activity
-            android:name=".admin.activities.book.BookDetailsActivity"
-            android:parentActivityName=".admin.activities.book.BooksActivity"
+            android:name=".admin.activity.book.BookDetailsActivity"
+            android:parentActivityName=".admin.activity.book.BooksActivity"
             android:launchMode="singleTop">
         </activity>
 
         <activity
-            android:name=".admin.activities.book.EditBookActivity"
-            android:parentActivityName=".admin.activities.book.BookDetailsActivity">
+            android:name=".admin.activity.book.EditBookActivity"
+            android:parentActivityName=".admin.activity.book.BookDetailsActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.user.UsersActivity">
+        <activity android:name=".admin.activity.user.UsersActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.user.AddUserActivity">
+        <activity android:name=".admin.activity.user.AddUserActivity">
 
         </activity>
 
         <activity
-            android:name=".admin.activities.user.UserDetailsActivity"
-            android:parentActivityName=".admin.activities.book.BooksActivity"
+            android:name=".admin.activity.user.UserDetailsActivity"
+            android:parentActivityName=".admin.activity.book.BooksActivity"
             android:launchMode="singleTop">
         </activity>
 
         <activity
-            android:name=".admin.activities.book.UserCurrentLoansActivity">
+            android:name=".admin.activity.book.UserCurrentLoansActivity">
         </activity>
 
         <activity android:name=".user.loans.CurrentLoansActivity">

@@ -1,19 +1,20 @@
-package com.ad_victoriam.libtex.auth;
+package com.ad_victoriam.libtex.common.auth;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.activity.AdminHomeActivity;
 import com.ad_victoriam.libtex.user.UserHomeActivity;
 import com.ad_victoriam.libtex.user.auth.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,8 +25,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -40,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -126,5 +128,21 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, UserHomeActivity.class));
         }
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

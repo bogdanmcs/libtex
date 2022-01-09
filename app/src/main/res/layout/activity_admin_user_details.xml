@@ -1,167 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tEmail"
-            android:layout_width="323dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="44dp"
-            android:text="Email"
-            android:textAlignment="center"
-            android:textSize="24sp"
+    <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tFirstName"
-            android:layout_width="220dp"
-            android:layout_height="41dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="96dp"
-            android:text="First name"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tEmail" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <TextView
-            android:id="@+id/tLastName"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="96dp"
-            android:text="Last name"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tFirstName" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tIDCardSerialNumber"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="96dp"
-            android:text="ID card serial number"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tLastName" />
+            <TextView
+                android:id="@+id/tEmail"
+                android:layout_width="323dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginEnd="44dp"
+                android:text="Email"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tTodo1"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="96dp"
-            android:text="$todo"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tIDCardSerialNumber" />
+            <TextView
+                android:id="@+id/tFirstName"
+                android:layout_width="220dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="96dp"
+                android:text="First name"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tEmail" />
 
-        <TextView
-            android:id="@+id/tTodo2"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="96dp"
-            android:text="$todo"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tTodo1" />
+            <TextView
+                android:id="@+id/tLastName"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="96dp"
+                android:text="Last name"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tFirstName" />
 
-        <TextView
-            android:id="@+id/tTodo3"
-            android:layout_width="220dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="96dp"
-            android:text="$todo"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tTodo2" />
+            <TextView
+                android:id="@+id/tIDCardSerialNumber"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="95dp"
+                android:text="ID card serial number"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.529"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tLastName" />
 
-        <Button
-            android:id="@+id/bAssignBook"
-            android:layout_width="180dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="81dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="81dp"
-            android:backgroundTint="@color/grey"
-            android:text="Assign book"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tTodo3" />
+            <TextView
+                android:id="@+id/tTodo1"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="96dp"
+                android:text="$todo"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tIDCardSerialNumber" />
 
-        <Button
-            android:id="@+id/bReturnBook"
-            android:layout_width="180dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="115dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="116dp"
-            android:backgroundTint="@color/grey"
-            android:text="Return book"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bAssignBook" />
+            <TextView
+                android:id="@+id/tTodo2"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="96dp"
+                android:text="$todo"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tTodo1" />
 
-        <Button
-            android:id="@+id/bDeleteUser"
-            android:layout_width="180dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="81dp"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="@color/grey"
-            android:text="Delete this user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.611"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bReturnBook"
-            app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/tTodo3"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="95dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="96dp"
+                android:text="$todo"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tTodo2" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/bEditUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/book_details_settings" />
+            <Button
+                android:id="@+id/bAssignBook"
+                android:layout_width="180dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="81dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="81dp"
+                android:backgroundTint="@color/grey"
+                android:text="Assign book"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.492"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tTodo3" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/bReturnBook"
+                android:layout_width="180dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="115dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="116dp"
+                android:backgroundTint="@color/grey"
+                android:text="Return book"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bAssignBook" />
 
-</ScrollView>
+            <Button
+                android:id="@+id/bDeleteUser"
+                android:layout_width="180dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="81dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/grey"
+                android:text="Delete this user"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.611"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bReturnBook"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bEditUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/book_details_settings" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

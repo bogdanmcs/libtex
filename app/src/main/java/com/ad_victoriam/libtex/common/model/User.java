@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.model;
+package com.ad_victoriam.libtex.common.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

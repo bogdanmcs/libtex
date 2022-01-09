@@ -1,18 +1,22 @@
-package com.ad_victoriam.libtex.admin.activities.book;
+package com.ad_victoriam.libtex.admin.activity.book;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.model.Book;
+import com.ad_victoriam.libtex.common.model.Book;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +39,9 @@ public class BookDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_book_details);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         tTitle = findViewById(R.id.tTitle);
         tAuthorName = findViewById(R.id.tAuthorName);
@@ -80,5 +87,21 @@ public class BookDetailsActivity extends AppCompatActivity {
 
     private void editBook(View view) {
         startActivity(new Intent(this, EditBookActivity.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+
+                break;
+        }
+        return true;
     }
 }

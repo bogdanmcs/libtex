@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.book.BookLoan;
-import com.ad_victoriam.libtex.model.Book;
+import com.ad_victoriam.libtex.admin.activity.book.BookLoan;
+import com.ad_victoriam.libtex.common.model.Book;
 import com.ad_victoriam.libtex.user.loans.LoanAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

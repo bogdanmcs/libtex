@@ -23,13 +23,13 @@ public class CurrentLoansActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_loans);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(botNavListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new ActiveLoansFragment()).commit();
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
     }
 
     private final NavigationBarView.OnItemSelectedListener botNavListener =

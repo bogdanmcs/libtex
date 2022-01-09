@@ -2,13 +2,15 @@ package com.ad_victoriam.libtex.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.auth.LoginActivity;
+import com.ad_victoriam.libtex.common.auth.LoginActivity;
 import com.ad_victoriam.libtex.user.loans.CurrentLoansActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -18,6 +20,9 @@ public class UserHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final Button bViewCurrentLoans = findViewById(R.id.bViewCurrentLoans);
         final Button bLogOut = findViewById(R.id.bLogOut);
@@ -35,5 +40,13 @@ public class UserHomeActivity extends AppCompatActivity {
         mAuth.signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+//        MenuItem menuItem = menu.findItem(R.id.search);
+//        menuItem.setVisible(false);
+        return true;
     }
 }
