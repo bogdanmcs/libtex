@@ -25,124 +25,159 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tEmail"
-                android:layout_width="323dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="44dp"
-                android:layout_marginEnd="44dp"
-                android:text="Email"
-                android:textAlignment="center"
-                android:textSize="24sp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fullNameCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tFirstName"
-                android:layout_width="220dp"
-                android:layout_height="41dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="96dp"
-                android:text="First name"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tEmail" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tLastName"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="Last name"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tFirstName" />
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Full name"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tIDCardSerialNumber"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="95dp"
-                android:text="ID card serial number"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.529"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tLastName" />
+                    <TextView
+                        android:id="@+id/tFullName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Full name text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView1"
+                        app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
-            <TextView
-                android:id="@+id/tTodo1"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="$todo"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tIDCardSerialNumber" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tTodo2"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="96dp"
-                android:text="$todo"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTodo1" />
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tTodo3"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="$todo"
-                android:textAlignment="center"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/emailCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTodo2" />
+                app:layout_constraintTop_toBottomOf="@id/fullNameCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Email"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="EmailText"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView2"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/idCardSerialNumberCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/emailCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Id card serial number"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tIdCardSerialNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Serial number text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView3"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/bAssignBook"
                 android:layout_width="180dp"
                 android:layout_height="72dp"
-                android:layout_marginStart="81dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="81dp"
-                android:backgroundTint="@color/grey"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/libtex_primary"
                 android:text="Assign book"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.492"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTodo3" />
+                app:layout_constraintTop_toBottomOf="@+id/idCardSerialNumberCardView" />
 
             <Button
                 android:id="@+id/bReturnBook"
                 android:layout_width="180dp"
                 android:layout_height="72dp"
-                android:layout_marginStart="115dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="116dp"
-                android:backgroundTint="@color/grey"
+                android:backgroundTint="@color/libtex_primary"
                 android:text="Return book"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bAssignBook" />
 
@@ -150,29 +185,16 @@
                 android:id="@+id/bDeleteUser"
                 android:layout_width="180dp"
                 android:layout_height="72dp"
-                android:layout_marginStart="60dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="81dp"
                 android:layout_marginBottom="4dp"
-                android:backgroundTint="@color/grey"
+                android:backgroundTint="@color/libtex_primary"
                 android:text="Delete this user"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.611"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bReturnBook"
                 app:layout_constraintVertical_bias="0.0" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/bEditUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/book_details_settings" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

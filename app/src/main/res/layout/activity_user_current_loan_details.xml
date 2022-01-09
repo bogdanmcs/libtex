@@ -14,7 +14,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,118 +25,267 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tBookTitle"
-                android:layout_width="317dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="44dp"
-                android:text="Book title"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textSize="24sp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/titleCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tBookAuthorName"
-                android:layout_width="225dp"
-                android:layout_height="31dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="96dp"
-                android:text="Book author name"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tBookTitle" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tBookPublisher"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="Book publisher(specs)"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName" />
+                    <TextView
+                        android:id="@+id/tempTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Title"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tTimestamp"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="Timestamp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tBookPublisher" />
+                    <TextView
+                        android:id="@+id/tBookTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Title text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tempTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/tempTitle" />
 
-            <TextView
-                android:id="@+id/tDeadline"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="Deadline"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTimestamp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tTodo2"
-                android:layout_width="220dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="$todo"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tDeadline" />
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tTodo3"
-                android:layout_width="220dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="95dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="96dp"
-                android:text="$todo"
-                android:textAlignment="center"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/authorNameCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTodo2" />
+                app:layout_constraintTop_toBottomOf="@id/titleCardView">
 
-            <Button
-                android:id="@+id/bViewLocation"
-                android:layout_width="249dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="81dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="81dp"
-                android:layout_marginBottom="32dp"
-                android:backgroundTint="@color/grey"
-                android:text="View location"
-                app:layout_constraintBottom_toBottomOf="parent"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tempAuthorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Author"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tBookAuthorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Author name text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tempAuthorName"
+                        app:layout_constraintTop_toBottomOf="@+id/tempAuthorName" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/publisherCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tTodo3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@id/authorNameCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tempPublisher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Publisher"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tBookPublisher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Publisher text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tempPublisher"
+                        app:layout_constraintTop_toBottomOf="@+id/tempPublisher" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/timestampCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/publisherCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tempTimestamp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Time stamp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tTimestamp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Timestamp text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tempTimestamp"
+                        app:layout_constraintTop_toBottomOf="@+id/tempTimestamp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/deadlineCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="64dp"
+                android:backgroundTint="@color/white_smoke"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timestampCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tempDeadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Deadline"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tDeadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Deadline text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tempDeadline"
+                        app:layout_constraintTop_toBottomOf="@+id/tempDeadline" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tTodo2"-->
+            <!--                android:layout_width="220dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                android:layout_marginStart="95dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:layout_marginEnd="96dp"-->
+            <!--                android:text="$todo"-->
+            <!--                android:textAlignment="center"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tDeadline" />-->
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tTodo3"-->
+            <!--                android:layout_width="220dp"-->
+            <!--                android:layout_height="150dp"-->
+            <!--                android:layout_marginStart="95dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:layout_marginEnd="96dp"-->
+            <!--                android:text="$todo"-->
+            <!--                android:textAlignment="center"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/tTodo2" />-->
+
+                        <Button
+                            android:id="@+id/bViewLocation"
+                            android:layout_width="249dp"
+                            android:layout_height="56dp"
+                            android:layout_marginStart="81dp"
+                            android:layout_marginTop="64dp"
+                            android:layout_marginEnd="81dp"
+                            android:layout_marginBottom="32dp"
+                            android:backgroundTint="@color/libtex_primary"
+                            android:text="View location"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/deadlineCardView"
+                            app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -31,6 +31,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private TextView tEmail;
     private TextView tFirstName;
     private TextView tLastName;
+    private TextView tFullName;
     private TextView tIdCardSerialNumber;
 
     @Override
@@ -42,16 +43,18 @@ public class UserDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tEmail = findViewById(R.id.tEmail);
-        tFirstName = findViewById(R.id.tFirstName);
-        tLastName = findViewById(R.id.tLastName);
-        tIdCardSerialNumber = findViewById(R.id.tIDCardSerialNumber);
+//        tFirstName = findViewById(R.id.tFirstName);
+//        tLastName = findViewById(R.id.tLastName);
+        tFullName = findViewById(R.id.tFullName);
+        tIdCardSerialNumber = findViewById(R.id.tIdCardSerialNumber);
 
         if (user == null && getIntent().hasExtra("user")) {
             user = getIntent().getParcelableExtra("user");
 
             tEmail.setText(user.getEmail());
-            tFirstName.setText(user.getFirstName());
-            tLastName.setText(user.getLastName());
+//            tFirstName.setText(user.getFirstName());
+//            tLastName.setText(user.getLastName());
+            tFullName.setText(user.getFirstName() + " " + user.getLastName());
             tIdCardSerialNumber.setText(user.getIdCardSerialNumber());
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
@@ -60,11 +63,11 @@ public class UserDetailsActivity extends AppCompatActivity {
         final Button bDeleteUser = findViewById(R.id.bDeleteUser);
         final Button bAssignBook = findViewById(R.id.bAssignBook);
         final Button bReturnBook = findViewById(R.id.bReturnBook);
-        final FloatingActionButton bEditUser = findViewById(R.id.bEditUser);
+//        final FloatingActionButton bEditUser = findViewById(R.id.bEditUser);
         bDeleteUser.setOnClickListener(this::deleteUser);
         bAssignBook.setOnClickListener(this::assignBook);
         bReturnBook.setOnClickListener(this::returnBook);
-        bEditUser.setOnClickListener(this::editUser);
+//        bEditUser.setOnClickListener(this::editUser);
     }
 
     private void deleteUser(View view) {
