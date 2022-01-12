@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ad_victoriam.libtex.admin.activity.AdminHomeActivity;
-import com.ad_victoriam.libtex.common.auth.LoginActivity;
-import com.ad_victoriam.libtex.user.UserHomeActivity;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.common.activities.LoginActivity;
+import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
