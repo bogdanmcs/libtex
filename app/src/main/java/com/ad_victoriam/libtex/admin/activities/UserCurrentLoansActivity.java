@@ -50,7 +50,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
         final String NO_BOOKS_FOUND = "No books found.";
         loansStatus.setText(NO_BOOKS_FOUND);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
@@ -185,7 +185,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
         return true;
     }
 

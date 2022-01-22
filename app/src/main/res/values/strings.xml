@@ -2,4 +2,11 @@
     <string name="app_name">Libtex</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="empty_field">Please fill out this field</string>
+    <string name="field_max_limit">Max limit of characters is</string>
+    <string name="field_min_limit">Min limit of characters is</string>
+    <string name="email_not_valid">Email address is not valid</string>
+    <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
+    <string name="terms_and_privacy_not_checked">You must agree before continuing</string>
+    <string name="email_in_use">Email is already in use</string>
 </resources>

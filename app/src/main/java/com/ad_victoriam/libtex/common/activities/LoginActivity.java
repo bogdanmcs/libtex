@@ -4,21 +4,26 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
-import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.ad_victoriam.libtex.user.activities.RegisterActivity;
+import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,8 +45,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        topAppBar.setVisibility(View.INVISIBLE);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.bTest:
+//                        Toast.makeText(getApplicationContext(), "hello menu listener", Toast.LENGTH_SHORT).show();
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -54,41 +70,62 @@ public class LoginActivity extends AppCompatActivity {
         bCreateAccount.setOnClickListener(this::bCreateAccount);
     }
 
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == 66) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            if (intent.hasExtra("success") && intent.getStringExtra("success").equals("true")) {
+                                Toast.makeText(getApplicationContext(), "Registration was successful", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                }
+            }
+    );
+
     private void bCreateAccount(View view) {
-        startActivity(new Intent(this, RegisterActivity.class));
+        activityResultLauncher.launch(new Intent(this, RegisterActivity.class));
     }
 
     private void validateCredentials(View view) {
         String email = eEmail.getText().toString();
         String password = ePassword.getText().toString();
 
-        boolean errorFlag = false;
+        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
+        TextView tPasswordHelper = findViewById(R.id.tPasswordHelper);
+        tEmailHelper.setText("");
+        tPasswordHelper.setText("");
 
-        if (password.isEmpty()) {
-            ePassword.setError("Please fill this field");
-            ePassword.requestFocus();
-            errorFlag = true;
-        } else if (password.length() > 50) {
-            ePassword.setError("Maximum length is 50 characters");
-            ePassword.requestFocus();
-            errorFlag = true;
-        }
+        boolean isErrorEmail = true;
+        boolean isErrorPassword = true;
+        int EMAIL_MAX_LIMIT_CHARS = 50;
+        int PASSWORD_MAX_LIMIT_CHARS = 32;
 
         if (email.isEmpty()) {
-            eEmail.setError("Please fill this field");
-            eEmail.requestFocus();
-            errorFlag = true;
+            tEmailHelper.setText(R.string.empty_field);
         } else if (email.length() > 50) {
-            eEmail.setError("Maximum length is 50 characters");
-            eEmail.requestFocus();
-            errorFlag = true;
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + EMAIL_MAX_LIMIT_CHARS;
+            tEmailHelper.setText(fieldMaxLimitMessage);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            eEmail.setError("Email is not valid");
-            eEmail.requestFocus();
-            errorFlag = true;
+            tEmailHelper.setText(R.string.email_not_valid);
+        } else {
+            isErrorEmail = false;
         }
 
-        if (errorFlag) {
+        if (password.isEmpty()) {
+            tPasswordHelper.setText(R.string.empty_field);
+        } else if (password.length() > PASSWORD_MAX_LIMIT_CHARS) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + PASSWORD_MAX_LIMIT_CHARS;
+            tPasswordHelper.setText(fieldMaxLimitMessage);
+        } else {
+            isErrorPassword = false;
+        }
+
+        if (isErrorEmail || isErrorPassword) {
             return;
         }
 
@@ -128,21 +165,5 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, UserHomeActivity.class));
         }
         finish();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
     }
 }

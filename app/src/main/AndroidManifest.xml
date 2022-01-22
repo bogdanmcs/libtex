@@ -51,8 +51,7 @@
         </activity>
 
         <activity
-            android:name=".user.activities.RegisterActivity"
-            android:parentActivityName=".common.activities.LoginActivity">
+            android:name=".user.activities.RegisterActivity">
 
         </activity>
 
@@ -65,14 +64,11 @@
         </activity>
 
         <activity
-            android:name=".admin.activities.BookDetailsActivity"
-            android:parentActivityName=".admin.activities.BooksActivity"
-            android:launchMode="singleTop">
+            android:name=".admin.activities.BookDetailsActivity">
         </activity>
 
         <activity
-            android:name=".admin.activities.EditBookActivity"
-            android:parentActivityName=".admin.activities.BookDetailsActivity">
+            android:name=".admin.activities.EditBookActivity">
 
         </activity>
 
@@ -85,16 +81,15 @@
         </activity>
 
         <activity
-            android:name=".admin.activities.UserDetailsActivity"
-            android:parentActivityName=".admin.activities.BooksActivity"
-            android:launchMode="singleTop">
+            android:name=".admin.activities.UserDetailsActivity">
         </activity>
 
         <activity
             android:name=".admin.activities.UserCurrentLoansActivity">
         </activity>
 
-        <activity android:name=".user.activities.CurrentLoansActivity">
+        <activity
+            android:name=".user.activities.CurrentLoansActivity">
 
         </activity>
 

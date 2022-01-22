@@ -20,7 +20,7 @@ public class UserHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
 
         final Button bViewCurrentLoans = findViewById(R.id.bViewCurrentLoans);
@@ -43,9 +43,7 @@ public class UserHomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
-//        MenuItem menuItem = menu.findItem(R.id.search);
-//        menuItem.setVisible(false);
+        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
         return true;
     }
 }

@@ -37,7 +37,7 @@ public class CurrentLoanDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_current_loan_details);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
 
         tBookTitle = findViewById(R.id.tBookTitle);
@@ -104,7 +104,7 @@ public class CurrentLoanDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
         return true;
     }
 
