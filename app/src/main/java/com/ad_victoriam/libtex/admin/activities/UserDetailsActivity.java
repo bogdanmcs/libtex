@@ -3,14 +3,12 @@ package com.ad_victoriam.libtex.admin.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.User;
 
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,34 +25,59 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private User user;
 
-    private TextView tEmail;
-    private TextView tFirstName;
-    private TextView tLastName;
-    private TextView tFullName;
-    private TextView tIdCardSerialNumber;
+    private TextView eEmail;
+    private TextView eFullName;
+    private TextView eIdCardSeries;
+    private TextView eIdCardNumber;
+    private TextView eDob;
+    private TextView ePhoneNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_details);
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "User details");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+                }
+                return false;
+            }
+        });
 
-        tEmail = findViewById(R.id.tEmail);
-//        tFirstName = findViewById(R.id.tFirstName);
-//        tLastName = findViewById(R.id.tLastName);
-        tFullName = findViewById(R.id.tFullName);
-        tIdCardSerialNumber = findViewById(R.id.tIdCardSerialNumber);
+        eEmail = findViewById(R.id.eEmail);
+        eFullName = findViewById(R.id.eFullName);
+        eIdCardSeries = findViewById(R.id.eIdCardSeries);
+        eIdCardNumber = findViewById(R.id.eIdCardNumber);
+        eDob = findViewById(R.id.eDob);
+        ePhoneNumber = findViewById(R.id.ePhoneNumber);
+        eEmail.setFocusable(false);
+        eFullName.setFocusable(false);
+        eIdCardSeries.setFocusable(false);
+        eIdCardNumber.setFocusable(false);
+        eDob.setFocusable(false);
+        ePhoneNumber.setFocusable(false);
 
         if (user == null && getIntent().hasExtra("user")) {
             user = getIntent().getParcelableExtra("user");
 
-            tEmail.setText(user.getEmail());
-//            tFirstName.setText(user.getFirstName());
-//            tLastName.setText(user.getLastName());
-            tFullName.setText(user.getFirstName() + " " + user.getLastName());
-            tIdCardSerialNumber.setText(user.getIdCardSerialNumber());
+            eEmail.setText(user.getEmail());
+            eFullName.setText(user.getFullName());
+            eIdCardSeries.setText(user.getIdCardSeries());
+            eIdCardNumber.setText(user.getIdCardNumber());
+            eDob.setText(user.getDateOfBirthday());
+            ePhoneNumber.setText(user.getPhoneNumber());
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
@@ -98,19 +123,5 @@ public class UserDetailsActivity extends AppCompatActivity {
 //        startActivity(new Intent(this, EditUserActivity.class));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
-    }
 }

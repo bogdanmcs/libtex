@@ -7,9 +7,11 @@ public class User implements Parcelable {
 
     private String uid;
     private String email;
-    private String firstName;
-    private String lastName;
-    private String idCardSerialNumber;
+    private String fullName;
+    private String idCardSeries;
+    private String idCardNumber;
+    private String dateOfBirthday;
+    private String phoneNumber;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -17,16 +19,26 @@ public class User implements Parcelable {
 
     public User(String email) {
         this.email = email;
-        this.firstName = null;
-        this.lastName = null;
-        this.idCardSerialNumber = null;
+        this.fullName = null;
+        this.idCardSeries = null;
+        this.idCardNumber = null;
+        this.dateOfBirthday = null;
+        this.phoneNumber = null;
     }
 
-    public User(String email, String firstName, String lastName, String idCardSerialNumber) {
+    public User(
+            String email,
+            String fullName,
+            String idCardSeries,
+            String idCardNumber,
+            String dateOfBirthday,
+            String phoneNumber) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.idCardSerialNumber = idCardSerialNumber;
+        this.fullName = fullName;
+        this.idCardSeries = idCardSeries;
+        this.idCardNumber = idCardNumber;
+        this.dateOfBirthday = dateOfBirthday;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getUid() {
@@ -41,16 +53,24 @@ public class User implements Parcelable {
         return email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getIdCardSeries() {
+        return idCardSeries;
     }
 
-    public String getIdCardSerialNumber() {
-        return idCardSerialNumber;
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public String getDateOfBirthday() {
+        return dateOfBirthday;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     @Override
@@ -62,17 +82,21 @@ public class User implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(uid);
         parcel.writeString(email);
-        parcel.writeString(firstName);
-        parcel.writeString(lastName);
-        parcel.writeString(idCardSerialNumber);
+        parcel.writeString(fullName);
+        parcel.writeString(idCardSeries);
+        parcel.writeString(idCardNumber);
+        parcel.writeString(dateOfBirthday);
+        parcel.writeString(phoneNumber);
     }
 
     protected User(Parcel in) {
         uid = in.readString();
         email = in.readString();
-        firstName = in.readString();
-        lastName = in.readString();
-        idCardSerialNumber = in.readString();
+        fullName = in.readString();
+        idCardSeries = in.readString();
+        idCardNumber = in.readString();
+        dateOfBirthday = in.readString();
+        phoneNumber = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

@@ -2,7 +2,6 @@ package com.ad_victoriam.libtex.admin.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -16,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.adapters.UserAdapter;
 import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,13 +43,26 @@ public class UsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_users);
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Users");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.addNew) {
+                    addNewUser();
+                }
+                return false;
+            }
+        });
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-
-        final FloatingActionButton bAddUser = findViewById(R.id.bAddUser);
-        bAddUser.setOnClickListener(this::addUser);
 
         userAdapter = new UserAdapter(this, users);
         recyclerView = findViewById(R.id.recyclerView);
@@ -136,23 +151,7 @@ public class UsersActivity extends AppCompatActivity {
     }
 
 
-    public void addUser(View view) {
+    public void addNewUser() {
         startActivity(new Intent(this, AddUserActivity.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
     }
 }

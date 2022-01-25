@@ -102,8 +102,7 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
                                 bookLoans.get(position).getBook().getAuthorName() + " (" +
                                 bookLoans.get(position).getBook().getPublisher() + ") " +
                                 "by user " +
-                                user.getFirstName() + " " +
-                                user.getLastName() + " ?")
+                                user.getFullName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     returnBook(view, position);
                 })

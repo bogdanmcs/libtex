@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.adapters.BookAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,8 +49,15 @@ public class BooksActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Books");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
 
@@ -167,21 +176,5 @@ public class BooksActivity extends AppCompatActivity {
         if (!getIntent().hasExtra("action")) {
             startActivity(new Intent(this, AddBookActivity.class));
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
     }
 }

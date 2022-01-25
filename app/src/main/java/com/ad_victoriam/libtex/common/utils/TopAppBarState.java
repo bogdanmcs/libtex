@@ -42,4 +42,8 @@ public class TopAppBarState {
         materialToolbar.setTitleCentered(true);
         materialToolbar.setTitleTextColor(colorResId);
     }
+
+    public void setAdminHomeIcon(Context context, MaterialToolbar materialToolbar) {
+
+    }
 }

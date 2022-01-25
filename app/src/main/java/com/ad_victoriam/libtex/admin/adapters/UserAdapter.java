@@ -37,10 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.UserViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> clicked(view, position));
-        String userFullName =
-                users.get(position).getFirstName() +
-                " " +
-                users.get(position).getLastName();
+        String userFullName = users.get(position).getFullName();
         holder.tFullName.setText(userFullName);
         holder.tEmail.setText(users.get(position).getEmail());
     }

@@ -1,12 +1,25 @@
 <resources>
+
+    <!-- titles -->
     <string name="app_name">Libtex</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="empty_field">Please fill out this field</string>
+
+    <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>
     <string name="field_min_limit">Min limit of characters is</string>
+
+    <!-- validations -->
+    <string name="empty_field">*Required</string>
     <string name="email_not_valid">Email address is not valid</string>
-    <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
-    <string name="terms_and_privacy_not_checked">You must agree before continuing</string>
+    <string name="ic_series_not_valid">IC series is not valid</string>
+    <string name="ic_number_not_valid">IC number is not valid</string>
+    <string name="phone_number_not_valid">Phone number is not valid</string>
     <string name="email_in_use">Email is already in use</string>
+    <string name="email_not_used">This email is not associated with any account</string>
+    <string name="terms_and_privacy_not_checked">You must agree before continuing</string>
+
+    <!-- texts -->
+    <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
+
 </resources>

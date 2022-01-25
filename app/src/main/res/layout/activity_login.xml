@@ -17,10 +17,11 @@
         android:id="@+id/imageView"
         android:layout_width="340dp"
         android:layout_height="100dp"
-        android:layout_marginStart="53dp"
+        android:layout_marginStart="54dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="54dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topAppBar"
         app:srcCompat="@drawable/logo" />
@@ -30,9 +31,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
@@ -41,10 +40,10 @@
         app:endIconMode="clear_text"
         app:hintEnabled="false"
         app:hintTextColor="@color/libtex_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:startIconDrawable="@drawable/ic_baseline_email_24" >
+        app:startIconDrawable="@drawable/ic_baseline_email_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/eEmail"
@@ -59,9 +58,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
@@ -70,11 +67,11 @@
         app:endIconMode="password_toggle"
         app:hintEnabled="false"
         app:hintTextColor="@color/libtex_primary"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
         app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
         app:layout_constraintTop_toBottomOf="@+id/tEmailHelper"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24" >
+        app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ePassword"
@@ -88,17 +85,17 @@
         android:id="@+id/bLogIn"
         android:layout_width="340dp"
         android:layout_height="55dp"
-        android:layout_marginStart="96dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="96dp"
         android:backgroundTint="@color/libtex_primary"
         android:text="Log in"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tPasswordHelper" />
+        app:layout_constraintBottom_toTopOf="@+id/bCreateAccount"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout9"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout9"
+        app:layout_constraintTop_toBottomOf="@+id/tPasswordHelper"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bCreateAccount"
@@ -113,9 +110,7 @@
         android:textColor="@color/libtex_primary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bLogIn"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tEmailHelper"
@@ -146,7 +141,6 @@
         android:layout_width="53dp"
         android:layout_height="54dp"
         android:layout_marginStart="96dp"
-        android:layout_marginTop="180dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
@@ -155,8 +149,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/bCreateAccount"
-        app:layout_constraintTop_toBottomOf="@+id/bLogIn"
-        app:layout_constraintVertical_bias="0.947"
+        app:layout_constraintTop_toTopOf="@+id/bCreateAccount"
+        app:layout_constraintVertical_bias="0.428"
         app:srcCompat="@drawable/help_47" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

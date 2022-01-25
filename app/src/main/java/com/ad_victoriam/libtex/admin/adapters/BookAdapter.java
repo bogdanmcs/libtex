@@ -94,8 +94,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         new AlertDialog.Builder(context)
                 .setMessage(
                         "Are you sure you want to assign this book to " +
-                                user.getFirstName() + " " +
-                                user.getLastName() + " ?")
+                                user.getFullName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     assignBookToUser(view, position);
                 })

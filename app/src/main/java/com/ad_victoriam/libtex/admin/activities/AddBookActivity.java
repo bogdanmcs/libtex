@@ -47,7 +47,7 @@ public class AddBookActivity extends AppCompatActivity {
         eBookTitle = findViewById(R.id.eEmail);
         eBookAuthorName = findViewById(R.id.eFirstName);
         eBookPublisher = findViewById(R.id.eLastName);
-        eBookNoOfPages = findViewById(R.id.eIdCardSerialNumber);
+        eBookNoOfPages = findViewById(R.id.eIdCardSeries);
         eBookDescription = findViewById(R.id.eTodo1);
         eBookTotalQuantity = findViewById(R.id.eTodo2);
 

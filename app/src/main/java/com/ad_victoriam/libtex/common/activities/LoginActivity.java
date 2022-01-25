@@ -47,17 +47,6 @@ public class LoginActivity extends AppCompatActivity {
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         topAppBar.setVisibility(View.INVISIBLE);
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.bTest:
-//                        Toast.makeText(getApplicationContext(), "hello menu listener", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
 
         mAuth = FirebaseAuth.getInstance();
 
