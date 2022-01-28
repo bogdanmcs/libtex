@@ -3,6 +3,7 @@ package com.ad_victoriam.libtex.admin.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,20 +17,24 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.utils.County;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
+
 public class UserDetailsActivity extends AppCompatActivity {
 
+    private DatabaseReference databaseReference;
     private User user;
-
 
     private MaterialButton bSetUserDetailsState;
     private boolean areUserDetailsShown = false;
@@ -61,6 +66,8 @@ public class UserDetailsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_details);
+
+        databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         TopAppBarState.get().setChildMode(this, topAppBar);
@@ -145,6 +152,11 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void setEditableState(boolean isEditable) {
+        if (isEditable) {
+            sEditMode.setChecked(true);
+        } else {
+            sEditMode.setChecked(false);
+        }
         layoutEmail.setEnabled(false);
         layoutFullName.setEnabled(isEditable);
         layoutIdCardSeries.setEnabled(isEditable);
@@ -202,9 +214,11 @@ public class UserDetailsActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to remove this user?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
                     // verify if deletion is successful or not
-                    databaseReference.child("users").child(user.getUid()).removeValue();
+                    databaseReference
+                            .child("users")
+                            .child(user.getUid())
+                            .removeValue();
                     finish();
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})
@@ -226,6 +240,110 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void commitEditChanges(View view) {
-        Toast.makeText(this, "commiiiiiiiit", Toast.LENGTH_SHORT).show();
+        String email = eEmail.getText().toString();
+        String fullName = eFullName.getText().toString();
+        String idCardSeries = eIdCardSeries.getText().toString();
+        String idCardNumber = eIdCardNumber.getText().toString();
+        String dob = eDob.getText().toString();
+        String phoneNumber = ePhoneNumber.getText().toString();
+
+        if (areUserDetailsValid()) {
+            setEditableState(false);
+            User updatedUser = new User(email, fullName, idCardSeries, idCardNumber, dob, phoneNumber);
+            databaseReference
+                    .child("users")
+                    .child(user.getUid())
+                    .setValue(updatedUser);
+            Snackbar.make(view, "User has been updated succesfully", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean areUserDetailsValid() {
+        String email = eEmail.getText().toString();
+        String fullName = eFullName.getText().toString();
+        String idCardSeries = eIdCardSeries.getText().toString();
+        String idCardNumber = eIdCardNumber.getText().toString();
+        String dob = eDob.getText().toString();
+        String phoneNumber = ePhoneNumber.getText().toString();
+
+        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
+        TextView tFullNameHelper = findViewById(R.id.tFullNameHelper);
+        TextView tIdCardSeriesHelper = findViewById(R.id.tIdCardSeriesHelper);
+        TextView tIdCardNumberHelper = findViewById(R.id.tIdCardNumberHelper);
+        TextView tDobHelper = findViewById(R.id.tDobHelper);
+        TextView tPhoneNumberHelper = findViewById(R.id.tPhoneNumberHelper);
+        tEmailHelper.setText("");
+        tFullNameHelper.setText("");
+        tIdCardSeriesHelper.setText("");
+        tIdCardNumberHelper.setText("");
+        tDobHelper.setText("");
+        tPhoneNumberHelper.setText("");
+
+        boolean isErrorEmail = true;
+        boolean isErrorFullName = true;
+        boolean isErrorIdCardSeries = true;
+        boolean isErrorIdCardNumber = true;
+        boolean isErrorDob = true;
+        boolean isErrorPhoneNumber = true;
+        int STANDARD_MAX_LIMIT = 50;
+        int IC_NUMBER_LENGTH = 6;
+
+        if (email.isEmpty()) {
+            tEmailHelper.setText(R.string.empty_field);
+        } else if (email.length() > STANDARD_MAX_LIMIT) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
+            tEmailHelper.setText(fieldMaxLimitMessage);
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            tEmailHelper.setText(R.string.email_not_valid);
+        } else {
+            isErrorEmail = false;
+        }
+
+        if (fullName.isEmpty()) {
+            tFullNameHelper.setText(R.string.empty_field);
+        } else if (fullName.length() > STANDARD_MAX_LIMIT) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
+            tFullNameHelper.setText(fieldMaxLimitMessage);
+        } else {
+            isErrorFullName = false;
+        }
+        if (idCardSeries.isEmpty()) {
+            tIdCardSeriesHelper.setText(R.string.empty_field);
+        } else if (!Arrays.stream(County.class.getEnumConstants()).anyMatch(c -> c.name().equals(idCardSeries))) {
+            tIdCardSeriesHelper.setText(R.string.ic_series_not_valid);
+        } else {
+            isErrorIdCardSeries = false;
+        }
+
+        if (idCardNumber.isEmpty()) {
+            tIdCardNumberHelper.setText(R.string.empty_field);
+        } else if (idCardNumber.length() != IC_NUMBER_LENGTH || !idCardNumber.chars().allMatch(Character::isDigit)) {
+            tIdCardNumberHelper.setText(R.string.ic_number_not_valid);
+        } else {
+            isErrorIdCardNumber = false;
+        }
+
+        if (dob.isEmpty()) {
+            tDobHelper.setText(R.string.empty_field);
+        } else {
+            isErrorDob = false;
+        }
+
+        if (phoneNumber.isEmpty()) {
+            tPhoneNumberHelper.setText(R.string.empty_field);
+        } else if (phoneNumber.length() > STANDARD_MAX_LIMIT) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
+            tPhoneNumberHelper.setText(fieldMaxLimitMessage);
+        } else if (!Patterns.PHONE.matcher(phoneNumber).matches()) {
+            tPhoneNumberHelper.setText(R.string.phone_number_not_valid);
+        } else {
+            isErrorPhoneNumber = false;
+        }
+
+        if (isErrorEmail || isErrorFullName || isErrorIdCardSeries || isErrorIdCardNumber || isErrorDob || isErrorPhoneNumber) {
+            return false;
+        }
+
+        return true;
     }
 }
