@@ -1,9 +1,13 @@
 package com.ad_victoriam.libtex.admin.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +21,11 @@ import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.admin.adapters.BookLoanAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -32,26 +39,44 @@ import java.util.List;
 
 public class UserCurrentLoansActivity extends AppCompatActivity {
 
+
+
     private DatabaseReference databaseReference;
 
+    private BookLoanAdapter bookLoanAdapter;
+
+    private TextView tRecordsCounter;
     private RecyclerView recyclerView;
-    private TextView loansStatus;
 
     private User user;
-    private BookLoanAdapter bookLoanAdapter;
     private final List<BookLoan> bookLoans = new ArrayList<>();
+    private int recordsCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_user_current_loans);
 
-        loansStatus = findViewById(R.id.loansStatus);
-        final String NO_BOOKS_FOUND = "No books found.";
-        loansStatus.setText(NO_BOOKS_FOUND);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Return book");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+                }
+                return false;
+            }
+        });
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        tRecordsCounter = findViewById(R.id.tRecordsCounter);
 
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
@@ -82,7 +107,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                 if (bookLoan != null) {
                     // get book loan uid and get book details from "books/currentLib/bookLoanUid"
                     bookLoan.setBookLoanUid(snapshot.getKey());
-                    loansStatus.setText("");
+                    tRecordsCounter.setText("");
                     databaseReference
                             .child("books")
                             .child(currentUser.getUid())
@@ -101,10 +126,11 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                                                     bookLoan.setBook(book);
                                                     if (!bookLoans.contains(bookLoan)) {
                                                         bookLoans.add(bookLoan);
+                                                        recordsCounter++;
+                                                        String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
+                                                        tRecordsCounter.setText(text);
                                                     }
-
                                                     bookLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
-
                                                     break;
                                                 }
                                             }
@@ -158,16 +184,18 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                         if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
                             indexOfRemovedBookLoan = bookLoans.indexOf(b);
                             bookLoans.remove(indexOfRemovedBookLoan);
+                            recordsCounter--;
+                            String text;
+                            if (recordsCounter > 0) {
+                                text = getResources().getString(R.string.records_found) + " " + recordsCounter;
+                            } else {
+                                text = getResources().getString(R.string.no_records_found);
+                            }
+                            tRecordsCounter.setText(text);
                             break;
                         }
                     }
-
                     bookLoanAdapter.notifyDataSetChanged();
-//                    if (indexOfRemovedBookLoan != -1) {
-//                        bookLoanAdapter.notifyItemRemoved(indexOfRemovedBookLoan);
-//                    } else {
-//                        bookLoanAdapter.notifyDataSetChanged();
-//                    }
                 }
             }
 
@@ -181,21 +209,5 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
     }
 }

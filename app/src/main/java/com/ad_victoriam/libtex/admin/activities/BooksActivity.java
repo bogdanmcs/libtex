@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import com.ad_victoriam.libtex.admin.adapters.BookAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,10 +39,11 @@ public class BooksActivity extends AppCompatActivity {
 
     private BookAdapter bookAdapter;
 
+    private TextView tRecordsCounter;
     private RecyclerView recyclerView;
 
     private List<Book> books = new ArrayList<>();
-
+    private int recordsCounter = 0;
     private String intentAction;
 
     @Override
@@ -51,23 +55,33 @@ public class BooksActivity extends AppCompatActivity {
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Books");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.addNew) {
+                    addNewBook();
+                }
+                return false;
+            }
+        });
 
-        final FloatingActionButton bAddBook = findViewById(R.id.bAddUser);
+        tRecordsCounter = findViewById(R.id.tRecordsCounter);
+        ActionMenuItemView addNewItem = topAppBar.findViewById(R.id.addNew);
 
         if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("BORROW")) {
             intentAction = "BORROW";
-            bAddBook.setVisibility(View.GONE);
+            addNewItem.setVisibility(View.GONE);
+            TopAppBarState.get().setTitleMode(this, topAppBar, "Assign book");
             bookAdapter = new BookAdapter(this, books, intentAction, getIntent().getParcelableExtra("user"));
         } else {
             intentAction = "NONE";
-            bAddBook.setOnClickListener(this::addBook);
+            TopAppBarState.get().setTitleMode(this, topAppBar, "Books");
             bookAdapter = new BookAdapter(this, books, intentAction);
         }
         recyclerView = findViewById(R.id.recyclerView);
@@ -95,10 +109,11 @@ public class BooksActivity extends AppCompatActivity {
 
                         if (!books.contains(book)) {
                             books.add(book);
+                            recordsCounter++;
+                            String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
+                            tRecordsCounter.setText(text);
                         }
-
                         bookAdapter.notifyItemInserted(books.size() - 1);
-
                     }
                 }
             }
@@ -123,13 +138,20 @@ public class BooksActivity extends AppCompatActivity {
                             indexOfChangedBook = books.indexOf(b);
                             if (isToBeRemoved) {
                                 books.remove(indexOfChangedBook);
+                                recordsCounter--;
+                                String text;
+                                if (recordsCounter > 0) {
+                                    text = getResources().getString(R.string.records_found) + " " + recordsCounter;
+                                } else {
+                                    text = getResources().getString(R.string.no_records_found);
+                                }
+                                tRecordsCounter.setText(text);
                             } else {
                                 books.set(indexOfChangedBook, book);
                             }
                             break;
                         }
                     }
-
                     bookAdapter.notifyDataSetChanged();
                 }
             }
@@ -148,10 +170,17 @@ public class BooksActivity extends AppCompatActivity {
                         if (b.getUid().equals(book.getUid())) {
                             indexOfRemovedBook = books.indexOf(b);
                             books.remove(indexOfRemovedBook);
+                            recordsCounter--;
+                            String text;
+                            if (recordsCounter > 0) {
+                                text = getResources().getString(R.string.records_found) + " " + recordsCounter;
+                            } else {
+                                text = getResources().getString(R.string.no_records_found);
+                            }
+                            tRecordsCounter.setText(text);
                             break;
                         }
                     }
-
                     if (indexOfRemovedBook != -1) {
                         bookAdapter.notifyItemRemoved(indexOfRemovedBook);
                     } else {
@@ -172,7 +201,7 @@ public class BooksActivity extends AppCompatActivity {
         });
     }
 
-    public void addBook(View view) {
+    public void addNewBook() {
         if (!getIntent().hasExtra("action")) {
             startActivity(new Intent(this, AddBookActivity.class));
         }

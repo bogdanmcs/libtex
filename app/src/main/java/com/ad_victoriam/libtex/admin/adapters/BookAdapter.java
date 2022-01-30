@@ -58,6 +58,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.constraintLayout.setOnClickListener(view -> clicked(view, position));
         holder.tBookTitle.setText(books.get(position).getTitle());
         holder.tBookAuthorName.setText(books.get(position).getAuthorName());
+        holder.tBookPublisher.setText(books.get(position).getPublisher());
     }
 
     private void clicked(View view, int position) {
@@ -81,12 +82,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         ConstraintLayout constraintLayout;
         TextView tBookTitle;
         TextView tBookAuthorName;
+        TextView tBookPublisher;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
+            tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
         }
     }
 
@@ -140,6 +143,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .child(bookLoanKey)
                 .setValue(bookLoan);
 
-        Snackbar.make(view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(view, "Book assigned successfully", Snackbar.LENGTH_SHORT).show();
     }
 }

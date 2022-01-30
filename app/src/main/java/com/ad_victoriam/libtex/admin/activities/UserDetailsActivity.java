@@ -95,6 +95,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         sEditMode.setOnCheckedChangeListener(this::setEditMode);
 
         bCommitEditChanges = findViewById(R.id.bCommitEditChanges);
+        bCommitEditChanges.setEnabled(false);
         bCommitEditChanges.setOnClickListener(this::commitEditChanges);
 
         initializeDetailsUi();
@@ -153,10 +154,13 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private void setEditableState(boolean isEditable) {
         if (isEditable) {
-            sEditMode.setChecked(true);
+            bCommitEditChanges.setEnabled(true);
+            bCommitEditChanges.setBackgroundColor(getResources().getColor(R.color.dark_sea_green, getTheme()));
         } else {
-            sEditMode.setChecked(false);
+            bCommitEditChanges.setEnabled(false);
+            bCommitEditChanges.setBackgroundColor(getResources().getColor(R.color.light_grey, getTheme()));
         }
+        sEditMode.setChecked(isEditable);
         layoutEmail.setEnabled(false);
         layoutFullName.setEnabled(isEditable);
         layoutIdCardSeries.setEnabled(isEditable);

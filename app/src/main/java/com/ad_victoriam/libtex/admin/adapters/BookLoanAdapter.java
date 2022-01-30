@@ -70,7 +70,6 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
 
     @Override
     public int getItemCount() {
-//        return bookLoans.size();
         if (bookLoans != null) {
             return bookLoans.size();
         } else {
@@ -97,10 +96,9 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
     private void confirmReturn(View view, int position) {
         new AlertDialog.Builder(context)
                 .setMessage(
-                        "Are you sure you want to confirm the return of " +
-                                bookLoans.get(position).getBook().getTitle() + " by " +
-                                bookLoans.get(position).getBook().getAuthorName() + " (" +
-                                bookLoans.get(position).getBook().getPublisher() + ") " +
+                        "Are you sure you want to return " +
+                                bookLoans.get(position).getBook().getTitle() + " - " +
+                                bookLoans.get(position).getBook().getAuthorName() + " " +
                                 "by user " +
                                 user.getFullName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {

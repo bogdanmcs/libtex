@@ -19,37 +19,65 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tBookTitle"
-                android:layout_width="261dp"
-                android:layout_height="43dp"
-                android:layout_marginStart="24dp"
-                android:text="Book title"
-                android:textAlignment="textStart"
-                android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="@+id/imageView2" />
-
-            <TextView
-                android:id="@+id/tBookAuthorName"
-                android:layout_width="234dp"
-                android:layout_height="39dp"
-                android:layout_marginTop="8dp"
-                android:text="Book author name"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/tBookTitle"
-                app:layout_constraintTop_toBottomOf="@+id/tBookTitle" />
-
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="69dp"
-                android:layout_height="92dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:id="@+id/bookImage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/book_small_30" />
+
+            <TextView
+                android:id="@+id/tBookTitle"
+                android:layout_width="@dimen/book_row_width_size"
+                android:layout_height="@dimen/book_row_primary_height_size"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Book title"
+                android:textAlignment="textStart"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tBookAuthorName"
+                android:layout_width="@dimen/book_row_width_size"
+                android:layout_height="@dimen/book_row_secondary_height_size"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Book author name"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toBottomOf="@+id/tBookTitle" />
+
+            <TextView
+                android:id="@+id/tBookPublisher"
+                android:layout_width="@dimen/book_row_width_size"
+                android:layout_height="@dimen/book_row_secondary_height_size"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Book publisher"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
