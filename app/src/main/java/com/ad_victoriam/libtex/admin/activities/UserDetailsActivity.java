@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserDetailsActivity extends AppCompatActivity {
 
@@ -219,7 +221,6 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void bSaveEditChanges(View view) {
-        String email = eEmail.getText().toString();
         String fullName = eFullName.getText().toString();
         String idCardSeries = eIdCardSeries.getText().toString();
         String idCardNumber = eIdCardNumber.getText().toString();
@@ -228,11 +229,13 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         if (areUserDetailsValid()) {
             setEditableState(false);
-            User updatedUser = new User(email, fullName, idCardSeries, idCardNumber, dob, phoneNumber);
-            databaseReference
-                    .child("users")
-                    .child(user.getUid())
-                    .setValue(updatedUser);
+            Map<String, Object> childUpdates =  new HashMap<>();
+            childUpdates.put("users/" + user.getUid() + "/fullName", fullName);
+            childUpdates.put("users/" + user.getUid() + "/idCardSeries", idCardSeries);
+            childUpdates.put("users/" + user.getUid() + "/idCardNumber", idCardNumber);
+            childUpdates.put("users/" + user.getUid() + "/dateOfBirthday", dob);
+            childUpdates.put("users/" + user.getUid() + "/phoneNumber", phoneNumber);
+            databaseReference.updateChildren(childUpdates);
             Snackbar.make(view, "User has been updated succesfully", Snackbar.LENGTH_SHORT).show();
         }
     }
