@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.user.activities.CurrentLoanDetailsActivity;
+import com.ad_victoriam.libtex.user.activities.LoanDetailsActivity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,7 +46,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
     @NonNull
     @Override
     public LoanAdapter.LoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_loan_adapter_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_active_loan, parent, false);
         return new LoanAdapter.LoanViewHolder(view);
     }
 
@@ -87,16 +87,16 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.LoanViewHolder
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tDeadline = itemView.findViewById(R.id.tDeadline);
 
-            if (fragmentType.equals("ALL")) {
-                tDeadline.setVisibility(View.GONE);
-                TextView deadlineTextView = itemView.findViewById(R.id.deadlineTextView);
-                deadlineTextView.setVisibility(View.GONE);
-            }
+//            if (fragmentType.equals("ALL")) {
+//                tDeadline.setVisibility(View.GONE);
+//                TextView deadlineTextView = itemView.findViewById(R.id.deadlineTextView);
+//                deadlineTextView.setVisibility(View.GONE);
+//            }
         }
     }
 
     private void viewBookLoan(View view, int position) {
-        Intent intent = new Intent(context, CurrentLoanDetailsActivity.class);
+        Intent intent = new Intent(context, LoanDetailsActivity.class);
         intent.putExtra("bookLoan", bookLoans.get(position));
         context.startActivity(intent);
     }

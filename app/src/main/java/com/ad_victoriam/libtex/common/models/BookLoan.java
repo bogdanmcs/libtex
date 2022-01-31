@@ -96,18 +96,6 @@ public class BookLoan implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "BookLoan{" +
-                "libraryUid='" + libraryUid + '\'' +
-                ", bookLoanUid='" + bookLoanUid + '\'' +
-                ", bookUid='" + bookUid + '\'' +
-                ", loanTimestamp='" + loanTimestamp + '\'' +
-                ", deadlineTimestamp='" + deadlineTimestamp + '\'' +
-                ", book=" + book +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }

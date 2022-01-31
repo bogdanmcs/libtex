@@ -23,6 +23,7 @@
     <!-- Custom -->
     <dimen name="book_row_primary_height_size">40dp</dimen>
     <dimen name="book_row_secondary_height_size">20dp</dimen>
-    <dimen name="book_row_width_size">300dp</dimen>
+    <dimen name="book_row_width_size">290dp</dimen>
+    <dimen name="normal_corners">8dp</dimen>
 
 </resources>

@@ -2,6 +2,7 @@ package com.ad_victoriam.libtex.common.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.View;
 
 import com.ad_victoriam.libtex.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,7 +44,8 @@ public class TopAppBarState {
         materialToolbar.setTitleTextColor(colorResId);
     }
 
-    public void setAdminHomeIcon(Context context, MaterialToolbar materialToolbar) {
-
+    public void setAdminHome(Context context, MaterialToolbar materialToolbar) {
+        materialToolbar.setElevation(0);
+        materialToolbar.findViewById(R.id.home).setVisibility(View.GONE);
     }
 }

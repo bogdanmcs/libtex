@@ -23,7 +23,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_books.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_config_user.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_edit_book.xml" value="0.3125" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_home.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_home.xml" value="0.1" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_register_customer.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_user_current_loans.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_user_details.xml" value="0.25" />
@@ -43,18 +43,23 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_loans.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_register.xml" value="0.33" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_user_view_current_loans.xml" value="0.3125" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row.xml" value="0.33" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_loan_adapter_row.xml" value="0.22" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row_2.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_loan_adapter_row.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_user_loans.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/loan_adapter_row.xml" value="0.22" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_active_loan.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/test123.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/toolbar.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/top_app_bar.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/top_app_bar_admin.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/top_app_bar_admin_add.xml" value="0.234375" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/user_adapter_row.xml" value="0.22" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/user_adapter_row.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/app_bar_menu.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/bottom_navigation_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/menu.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/menu/return_book_menu.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/top_bar_menu.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/top_bar_menu_admin.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/menu/top_bar_menu_admin_add.xml" value="0.234375" />

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,27 +24,30 @@ public class AdminHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_home);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        topAppBar.setVisibility(View.INVISIBLE);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Home");
+        TopAppBarState.get().setAdminHome(this, topAppBar);
+
+        findViewById(R.id.bViewUsers).setOnClickListener(this::viewUsers);
+        findViewById(R.id.bViewBooks).setOnClickListener(this::viewBooks);
+        findViewById(R.id.bViewSettings).setOnClickListener(this::viewSettings);
+        findViewById(R.id.bSignOut).setOnClickListener(this::signOut);
     }
 
-    public void clicked(View view) {
-        switch (view.getId()) {
-            case R.id.bLogOut:
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-                break;
+    private void signOut(View view) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
 
-            case R.id.bViewUsers:
-                startActivity(new Intent(this, UsersActivity.class));
-                break;
+    private void viewSettings(View view) {
+    }
 
-            case R.id.bViewBooks:
-                startActivity(new Intent(this, BooksActivity.class));
-                break;
+    private void viewBooks(View view) {
+        startActivity(new Intent(this, BooksActivity.class));
+    }
 
-            default:
-        }
+    private void viewUsers(View view) {
+        startActivity(new Intent(this, UsersActivity.class));
     }
 }

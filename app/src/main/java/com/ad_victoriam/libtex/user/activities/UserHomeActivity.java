@@ -31,7 +31,7 @@ public class UserHomeActivity extends AppCompatActivity {
     }
 
     private void viewCurrentLoans(View view) {
-        startActivity(new Intent(this, CurrentLoansActivity.class));
+        startActivity(new Intent(this, LoansActivity.class));
     }
 
     private void logOut(View view) {

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +40,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private SwitchMaterial sEditMode;
 
-    private MaterialButton bCommitEditChanges;
+    private MaterialButton bSaveEditChanges;
 
     private TextInputEditText eEmail;
     private TextInputEditText eFullName;
@@ -49,12 +48,6 @@ public class UserDetailsActivity extends AppCompatActivity {
     private TextInputEditText eIdCardNumber;
     private TextInputEditText eDob;
     private TextInputEditText ePhoneNumber;
-    private TextView tEmailHelper;
-    private TextView tFullNameHelper;
-    private TextView tIdCardSeriesHelper;
-    private TextView tIdCardNumberHelper;
-    private TextView tDobHelper;
-    private TextView tPhoneNumberHelper;
     private TextInputLayout layoutEmail;
     private TextInputLayout layoutFullName;
     private TextInputLayout layoutIdCardSeries;
@@ -94,9 +87,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         sEditMode = findViewById(R.id.sEditMode);
         sEditMode.setOnCheckedChangeListener(this::setEditMode);
 
-        bCommitEditChanges = findViewById(R.id.bCommitEditChanges);
-        bCommitEditChanges.setEnabled(false);
-        bCommitEditChanges.setOnClickListener(this::commitEditChanges);
+        bSaveEditChanges = findViewById(R.id.bSaveEditChanges);
+        bSaveEditChanges.setEnabled(false);
+        bSaveEditChanges.setOnClickListener(this::bSaveEditChanges);
 
         initializeDetailsUi();
 
@@ -113,12 +106,12 @@ public class UserDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
 
+        final MaterialButton bAddNewLoan = findViewById(R.id.bAddNewLoan);
+        final MaterialButton bViewActiveLoans = findViewById(R.id.bViewActiveLoans);
         final MaterialButton bDeleteUser = findViewById(R.id.bDeleteUser);
-        final MaterialButton bAssignBook = findViewById(R.id.bAssignBook);
-        final MaterialButton bReturnBook = findViewById(R.id.bReturnBook);
+        bAddNewLoan.setOnClickListener(this::assignBook);
+        bViewActiveLoans.setOnClickListener(this::returnBook);
         bDeleteUser.setOnClickListener(this::deleteUser);
-        bAssignBook.setOnClickListener(this::assignBook);
-        bReturnBook.setOnClickListener(this::returnBook);
     }
 
     private void setEditMode(CompoundButton compoundButton, boolean b) {
@@ -136,12 +129,6 @@ public class UserDetailsActivity extends AppCompatActivity {
         eIdCardNumber = findViewById(R.id.eIdCardNumber);
         eDob = findViewById(R.id.eDob);
         ePhoneNumber = findViewById(R.id.ePhoneNumber);
-        tEmailHelper = findViewById(R.id.tEmailHelper);
-        tFullNameHelper = findViewById(R.id.tFullNameHelper);
-        tIdCardSeriesHelper = findViewById(R.id.tIdCardSeriesHelper);
-        tIdCardNumberHelper = findViewById(R.id.tIdCardNumberHelper);
-        tDobHelper = findViewById(R.id.tDobHelper);
-        tPhoneNumberHelper = findViewById(R.id.tPhoneNumberHelper);
         layoutEmail = findViewById(R.id.layoutEmail);
         layoutFullName = findViewById(R.id.layoutFullName);
         layoutIdCardSeries = findViewById(R.id.layoutIdCardSeries);
@@ -154,11 +141,11 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private void setEditableState(boolean isEditable) {
         if (isEditable) {
-            bCommitEditChanges.setEnabled(true);
-            bCommitEditChanges.setBackgroundColor(getResources().getColor(R.color.dark_sea_green, getTheme()));
+            bSaveEditChanges.setEnabled(true);
+            bSaveEditChanges.setBackgroundColor(getResources().getColor(R.color.dark_sea_green, getTheme()));
         } else {
-            bCommitEditChanges.setEnabled(false);
-            bCommitEditChanges.setBackgroundColor(getResources().getColor(R.color.light_grey, getTheme()));
+            bSaveEditChanges.setEnabled(false);
+            bSaveEditChanges.setBackgroundColor(getResources().getColor(R.color.light_grey, getTheme()));
         }
         sEditMode.setChecked(isEditable);
         layoutEmail.setEnabled(false);
@@ -188,13 +175,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         layoutIdCardNumber.setVisibility(View.VISIBLE);
         layoutDob.setVisibility(View.VISIBLE);
         layoutPhoneNumber.setVisibility(View.VISIBLE);
-        tEmailHelper.setVisibility(View.VISIBLE);
-        tFullNameHelper.setVisibility(View.VISIBLE);
-        tIdCardSeriesHelper.setVisibility(View.VISIBLE);
-        tIdCardNumberHelper.setVisibility(View.VISIBLE);
-        tDobHelper.setVisibility(View.VISIBLE);
-        tPhoneNumberHelper.setVisibility(View.VISIBLE);
-        bCommitEditChanges.setVisibility(View.VISIBLE);
+        bSaveEditChanges.setVisibility(View.VISIBLE);
     }
 
     private void hideUserDetails() {
@@ -205,13 +186,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         layoutIdCardNumber.setVisibility(View.GONE);
         layoutDob.setVisibility(View.GONE);
         layoutPhoneNumber.setVisibility(View.GONE);
-        tEmailHelper.setVisibility(View.GONE);
-        tFullNameHelper.setVisibility(View.GONE);
-        tIdCardSeriesHelper.setVisibility(View.GONE);
-        tIdCardNumberHelper.setVisibility(View.GONE);
-        tDobHelper.setVisibility(View.GONE);
-        tPhoneNumberHelper.setVisibility(View.GONE);
-        bCommitEditChanges.setVisibility(View.GONE);
+        bSaveEditChanges.setVisibility(View.GONE);
     }
 
     private void deleteUser(View view) {
@@ -238,12 +213,12 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private void returnBook(View view) {
         // view current loaned books for this user
-        Intent intent = new Intent(this, UserCurrentLoansActivity.class);
+        Intent intent = new Intent(this, ActiveLoansActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }
 
-    private void commitEditChanges(View view) {
+    private void bSaveEditChanges(View view) {
         String email = eEmail.getText().toString();
         String fullName = eFullName.getText().toString();
         String idCardSeries = eIdCardSeries.getText().toString();
@@ -270,19 +245,6 @@ public class UserDetailsActivity extends AppCompatActivity {
         String dob = eDob.getText().toString();
         String phoneNumber = ePhoneNumber.getText().toString();
 
-        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-        TextView tFullNameHelper = findViewById(R.id.tFullNameHelper);
-        TextView tIdCardSeriesHelper = findViewById(R.id.tIdCardSeriesHelper);
-        TextView tIdCardNumberHelper = findViewById(R.id.tIdCardNumberHelper);
-        TextView tDobHelper = findViewById(R.id.tDobHelper);
-        TextView tPhoneNumberHelper = findViewById(R.id.tPhoneNumberHelper);
-        tEmailHelper.setText("");
-        tFullNameHelper.setText("");
-        tIdCardSeriesHelper.setText("");
-        tIdCardNumberHelper.setText("");
-        tDobHelper.setText("");
-        tPhoneNumberHelper.setText("");
-
         boolean isErrorEmail = true;
         boolean isErrorFullName = true;
         boolean isErrorIdCardSeries = true;
@@ -293,55 +255,61 @@ public class UserDetailsActivity extends AppCompatActivity {
         int IC_NUMBER_LENGTH = 6;
 
         if (email.isEmpty()) {
-            tEmailHelper.setText(R.string.empty_field);
+            layoutEmail.setError(getString(R.string.empty_field));
         } else if (email.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tEmailHelper.setText(fieldMaxLimitMessage);
+            layoutEmail.setError(fieldMaxLimitMessage);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tEmailHelper.setText(R.string.email_not_valid);
+            layoutEmail.setError(getString(R.string.email_not_valid));
         } else {
             isErrorEmail = false;
+            layoutEmail.setError(null);
         }
 
         if (fullName.isEmpty()) {
-            tFullNameHelper.setText(R.string.empty_field);
+            layoutFullName.setError(getString(R.string.empty_field));
         } else if (fullName.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tFullNameHelper.setText(fieldMaxLimitMessage);
+            layoutFullName.setError(fieldMaxLimitMessage);
         } else {
             isErrorFullName = false;
+            layoutFullName.setError(null);
         }
         if (idCardSeries.isEmpty()) {
-            tIdCardSeriesHelper.setText(R.string.empty_field);
+            layoutIdCardSeries.setError(getString(R.string.empty_field));
         } else if (!Arrays.stream(County.class.getEnumConstants()).anyMatch(c -> c.name().equals(idCardSeries))) {
-            tIdCardSeriesHelper.setText(R.string.ic_series_not_valid);
+            layoutIdCardSeries.setError(getString(R.string.ic_series_not_valid));
         } else {
             isErrorIdCardSeries = false;
+            layoutIdCardSeries.setError(null);
         }
 
         if (idCardNumber.isEmpty()) {
-            tIdCardNumberHelper.setText(R.string.empty_field);
+            layoutIdCardNumber.setError(getString(R.string.empty_field));
         } else if (idCardNumber.length() != IC_NUMBER_LENGTH || !idCardNumber.chars().allMatch(Character::isDigit)) {
-            tIdCardNumberHelper.setText(R.string.ic_number_not_valid);
+            layoutIdCardNumber.setError(getString(R.string.ic_number_not_valid));
         } else {
             isErrorIdCardNumber = false;
+            layoutIdCardNumber.setError(null);
         }
 
         if (dob.isEmpty()) {
-            tDobHelper.setText(R.string.empty_field);
+            layoutDob.setError(getString(R.string.empty_field));
         } else {
             isErrorDob = false;
+            layoutDob.setError(null);
         }
 
         if (phoneNumber.isEmpty()) {
-            tPhoneNumberHelper.setText(R.string.empty_field);
+            layoutPhoneNumber.setError(getString(R.string.empty_field));
         } else if (phoneNumber.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tPhoneNumberHelper.setText(fieldMaxLimitMessage);
+            layoutPhoneNumber.setError(fieldMaxLimitMessage);
         } else if (!Patterns.PHONE.matcher(phoneNumber).matches()) {
-            tPhoneNumberHelper.setText(R.string.phone_number_not_valid);
+            layoutPhoneNumber.setError(getString(R.string.phone_number_not_valid));
         } else {
             isErrorPhoneNumber = false;
+            layoutPhoneNumber.setError(null);
         }
 
         if (isErrorEmail || isErrorFullName || isErrorIdCardSeries || isErrorIdCardNumber || isErrorDob || isErrorPhoneNumber) {

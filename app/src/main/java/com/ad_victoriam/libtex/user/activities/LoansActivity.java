@@ -16,7 +16,7 @@ import com.ad_victoriam.libtex.user.fragments.AllLoansFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class CurrentLoansActivity extends AppCompatActivity {
+public class LoansActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

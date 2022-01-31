@@ -22,7 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CurrentLoanDetailsActivity extends AppCompatActivity {
+public class LoanDetailsActivity extends AppCompatActivity {
 
     private BookLoan bookLoan;
 
@@ -35,7 +35,7 @@ public class CurrentLoanDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_current_loan_details);
+        setContentView(R.layout.activity_user_loan_details);
 
         Toolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);

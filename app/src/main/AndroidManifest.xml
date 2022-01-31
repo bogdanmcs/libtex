@@ -85,16 +85,16 @@
         </activity>
 
         <activity
-            android:name=".admin.activities.UserCurrentLoansActivity">
+            android:name=".admin.activities.ActiveLoansActivity">
         </activity>
 
         <activity
-            android:name=".user.activities.CurrentLoansActivity">
+            android:name=".user.activities.LoansActivity">
 
         </activity>
 
         <activity
-            android:name=".user.activities.CurrentLoanDetailsActivity">
+            android:name=".user.activities.LoanDetailsActivity">
 
         </activity>
 

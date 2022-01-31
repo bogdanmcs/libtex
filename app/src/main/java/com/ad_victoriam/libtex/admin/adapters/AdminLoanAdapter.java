@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,21 +26,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
-public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLoanViewHolder> {
+public class AdminLoanAdapter extends RecyclerView.Adapter<AdminLoanAdapter.BookLoanViewHolder> {
 
     private final Context context;
     private final List<BookLoan> bookLoans;
     private User user;
 
-    public BookLoanAdapter(Context context, List<BookLoan> bookLoans) {
+    public AdminLoanAdapter(Context context, List<BookLoan> bookLoans) {
         this.context = context;
         this.bookLoans = bookLoans;
     }
 
-    public BookLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
+    public AdminLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
         this.context = context;
         this.bookLoans = bookLoans;
         this.user = user;
@@ -46,26 +50,41 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
 
     @NonNull
     @Override
-    public BookLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_loan_adapter_row, parent, false);
-        return new BookLoanAdapter.BookLoanViewHolder(view);
+    public AdminLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_active_loan, parent, false);
+        return new AdminLoanAdapter.BookLoanViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookLoanAdapter.BookLoanViewHolder holder, int position) {
-        holder.constraintLayout.setOnClickListener(view -> confirmReturn(view, position));
+    public void onBindViewHolder(@NonNull AdminLoanAdapter.BookLoanViewHolder holder, int position) {
+        holder.constraintLayout.setOnClickListener(view -> viewLoanDetails(view, position));
         holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
         holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());
+        holder.tBookPublisher.setText(bookLoans.get(position).getBook().getPublisher());
+
+        DateFormat Date = DateFormat.getDateInstance();
+        Calendar calendar = Calendar.getInstance();
+
         String deadlineText = bookLoans.get(position).getDeadlineTimestamp();
-        holder.tDeadline.setText(deadlineText);
-        LocalDateTime deadline = LocalDateTime.parse(deadlineText);
-        if (deadline.isBefore(LocalDateTime.now())) {
-            holder.tDeadline.setBackgroundResource(R.drawable.deadline_exceeded);
-        } else if (deadline.minusDays(3).isBefore(LocalDateTime.now())) {
-            holder.tDeadline.setBackgroundResource(R.drawable.deadline_close);
+        LocalDateTime deadlineDateTime = LocalDateTime.parse(deadlineText);
+        calendar.set(deadlineDateTime.getYear(), deadlineDateTime.getMonthValue() - 1, deadlineDateTime.getDayOfMonth());
+        String deadlineTextFormatted = Date.format(calendar.getTime());
+        holder.tDeadline.setText(deadlineTextFormatted);
+
+        String loanedOnText = bookLoans.get(position).getLoanTimestamp();
+        LocalDateTime loanedOnDateTime = LocalDateTime.parse(loanedOnText);
+        calendar.set(loanedOnDateTime.getYear(), loanedOnDateTime.getMonthValue() - 1, loanedOnDateTime.getDayOfMonth());
+        String loanedOnTextFormatted = Date.format(calendar.getTime());
+        holder.tLoanedOn.setText(loanedOnTextFormatted);
+
+        if (deadlineDateTime.isBefore(LocalDateTime.now())) {
+            holder.cardView.setBackgroundResource(R.drawable.deadline_exceeded);
+        } else if (deadlineDateTime.minusDays(3).isBefore(LocalDateTime.now())) {
+            holder.cardView.setBackgroundResource(R.drawable.deadline_close);
         } else {
-            holder.tDeadline.setBackgroundResource(R.drawable.deadline_not_exceeded);
+            holder.cardView.setBackgroundResource(R.drawable.deadline_not_exceeded);
         }
+        holder.bReturnBook.setOnClickListener(view -> confirmReturn(view, position));
     }
 
     @Override
@@ -80,16 +99,24 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
     public class BookLoanViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout constraintLayout;
+        CardView cardView;
         TextView tBookTitle;
         TextView tBookAuthorName;
+        TextView tBookPublisher;
         TextView tDeadline;
+        TextView tLoanedOn;
+        MaterialButton bReturnBook;
 
         public BookLoanViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
+            cardView = itemView.findViewById(R.id.cardView);
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
+            tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
             tDeadline = itemView.findViewById(R.id.tDeadline);
+            tLoanedOn = itemView.findViewById(R.id.tLoanedOn);
+            bReturnBook = itemView.findViewById(R.id.bReturnBook);
         }
     }
 
@@ -167,5 +194,9 @@ public class BookLoanAdapter extends RecyclerView.Adapter<BookLoanAdapter.BookLo
                 .setValue(returnTimestamp.toString());
 
         Snackbar.make(context, view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void viewLoanDetails(View view, int position) {
+        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
     }
 }

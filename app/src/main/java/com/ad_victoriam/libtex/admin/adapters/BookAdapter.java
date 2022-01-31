@@ -49,7 +49,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_adapter_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_book, parent, false);
         return new BookViewHolder(view);
     }
 
@@ -57,7 +57,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> clicked(view, position));
         holder.tBookTitle.setText(books.get(position).getTitle());
-        holder.tBookAuthorName.setText(books.get(position).getAuthorName());
+        String text = "by " + books.get(position).getAuthorName();
+        holder.tBookAuthorName.setText(text);
         holder.tBookPublisher.setText(books.get(position).getPublisher());
     }
 

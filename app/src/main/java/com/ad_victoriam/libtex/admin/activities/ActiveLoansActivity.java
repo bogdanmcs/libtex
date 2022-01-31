@@ -2,12 +2,9 @@ package com.ad_victoriam.libtex.admin.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,14 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.admin.adapters.BookLoanAdapter;
+import com.ad_victoriam.libtex.admin.adapters.AdminLoanAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -37,13 +33,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCurrentLoansActivity extends AppCompatActivity {
+public class ActiveLoansActivity extends AppCompatActivity {
 
 
 
     private DatabaseReference databaseReference;
 
-    private BookLoanAdapter bookLoanAdapter;
+    private AdminLoanAdapter adminLoanAdapter;
 
     private TextView tRecordsCounter;
     private RecyclerView recyclerView;
@@ -55,7 +51,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_user_current_loans);
+        setContentView(R.layout.activity_admin_active_loans);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         TopAppBarState.get().setChildMode(this, topAppBar);
@@ -81,10 +77,10 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         user = getIntent().getParcelableExtra("user");
-        bookLoanAdapter = new BookLoanAdapter(this, bookLoans, user);
+        adminLoanAdapter = new AdminLoanAdapter(this, bookLoans, user);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(bookLoanAdapter);
+        recyclerView.setAdapter(adminLoanAdapter);
 
         attachDatabaseBooksListener();
     }
@@ -130,7 +126,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                                                         String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
                                                         tRecordsCounter.setText(text);
                                                     }
-                                                    bookLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
+                                                    adminLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
                                                     break;
                                                 }
                                             }
@@ -164,9 +160,9 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                     }
 
                     if (indexOfChangedBookLoan != -1) {
-                        bookLoanAdapter.notifyItemChanged(indexOfChangedBookLoan);
+                        adminLoanAdapter.notifyItemChanged(indexOfChangedBookLoan);
                     } else {
-                        bookLoanAdapter.notifyDataSetChanged();
+                        adminLoanAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -195,7 +191,7 @@ public class UserCurrentLoansActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    bookLoanAdapter.notifyDataSetChanged();
+                    adminLoanAdapter.notifyDataSetChanged();
                 }
             }
 
