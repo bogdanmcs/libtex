@@ -2,6 +2,7 @@ package com.ad_victoriam.libtex.admin.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,11 +79,14 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
         holder.tLoanedOn.setText(loanedOnTextFormatted);
 
         if (deadlineDateTime.isBefore(LocalDateTime.now())) {
-            holder.cardView.setBackgroundResource(R.drawable.deadline_exceeded);
+            int color = context.getResources().getColor(R.color.indian_red, context.getTheme());
+            holder.cardView.setCardBackgroundColor(color);
         } else if (deadlineDateTime.minusDays(3).isBefore(LocalDateTime.now())) {
-            holder.cardView.setBackgroundResource(R.drawable.deadline_close);
+            int color = context.getResources().getColor(R.color.yellow, context.getTheme());
+            holder.cardView.setCardBackgroundColor(color);
         } else {
-            holder.cardView.setBackgroundResource(R.drawable.deadline_not_exceeded);
+            int color = context.getResources().getColor(R.color.light_green, context.getTheme());
+            holder.cardView.setCardBackgroundColor(color);
         }
         holder.bReturnBook.setOnClickListener(view -> confirmReturn(view, position));
     }

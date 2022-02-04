@@ -26,9 +26,10 @@ public class TopAppBarState {
     }
 
     public void setChildMode(Context context, MaterialToolbar materialToolbar) {
-        int colorResId = context.getResources().getColor(R.color.royal_blue, context.getTheme());
+        int colorLibtexPrimary = context.getResources().getColor(R.color.libtex_primary, context.getTheme());
         materialToolbar.setNavigationIcon(backArrowResId);
-        materialToolbar.setNavigationIconTint(colorResId);
+        materialToolbar.setNavigationIconTint(colorLibtexPrimary);
+        int color = context.getResources().getColor(R.color.light_sky_blue, context.getTheme());
         materialToolbar.setBackgroundColor(Color.WHITE);
         materialToolbar.setElevation(0);
     }
