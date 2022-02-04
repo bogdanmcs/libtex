@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.activities;
+package com.ad_victoriam.libtex.admin.activities.users;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.users.AddUserActivity;
 import com.ad_victoriam.libtex.admin.adapters.UserAdapter;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

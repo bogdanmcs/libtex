@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.activities;
+package com.ad_victoriam.libtex.admin.activities.books;
 
 import android.app.AlertDialog;
 import android.content.Intent;

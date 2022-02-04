@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.activities;
+package com.ad_victoriam.libtex.admin.activities.users;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.admin.adapters.AdminLoanAdapter;
+import com.ad_victoriam.libtex.admin.adapters.AdminActiveLoanAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
@@ -35,11 +36,9 @@ import java.util.List;
 
 public class ActiveLoansActivity extends AppCompatActivity {
 
-
-
     private DatabaseReference databaseReference;
 
-    private AdminLoanAdapter adminLoanAdapter;
+    private AdminActiveLoanAdapter adminActiveLoanAdapter;
 
     private TextView tRecordsCounter;
     private RecyclerView recyclerView;
@@ -55,7 +54,7 @@ public class ActiveLoansActivity extends AppCompatActivity {
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Return book");
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Active loans");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,10 +76,10 @@ public class ActiveLoansActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         user = getIntent().getParcelableExtra("user");
-        adminLoanAdapter = new AdminLoanAdapter(this, bookLoans, user);
+        adminActiveLoanAdapter = new AdminActiveLoanAdapter(this, bookLoans, user);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adminLoanAdapter);
+        recyclerView.setAdapter(adminActiveLoanAdapter);
 
         attachDatabaseBooksListener();
     }
@@ -126,7 +125,7 @@ public class ActiveLoansActivity extends AppCompatActivity {
                                                         String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
                                                         tRecordsCounter.setText(text);
                                                     }
-                                                    adminLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
+                                                    adminActiveLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
                                                     break;
                                                 }
                                             }
@@ -160,9 +159,9 @@ public class ActiveLoansActivity extends AppCompatActivity {
                     }
 
                     if (indexOfChangedBookLoan != -1) {
-                        adminLoanAdapter.notifyItemChanged(indexOfChangedBookLoan);
+                        adminActiveLoanAdapter.notifyItemChanged(indexOfChangedBookLoan);
                     } else {
-                        adminLoanAdapter.notifyDataSetChanged();
+                        adminActiveLoanAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -191,7 +190,7 @@ public class ActiveLoansActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    adminLoanAdapter.notifyDataSetChanged();
+                    adminActiveLoanAdapter.notifyDataSetChanged();
                 }
             }
 

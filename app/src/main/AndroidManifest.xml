@@ -55,37 +55,41 @@
 
         </activity>
 
-        <activity android:name=".admin.activities.BooksActivity">
+        <activity android:name=".admin.activities.books.BooksActivity">
 
         </activity>
 
-        <activity android:name=".admin.activities.AddBookActivity">
-
-        </activity>
-
-        <activity
-            android:name=".admin.activities.BookDetailsActivity">
-        </activity>
-
-        <activity
-            android:name=".admin.activities.EditBookActivity">
-
-        </activity>
-
-        <activity android:name=".admin.activities.UsersActivity">
-
-        </activity>
-
-        <activity android:name=".admin.activities.AddUserActivity">
+        <activity android:name=".admin.activities.books.AddBookActivity">
 
         </activity>
 
         <activity
-            android:name=".admin.activities.UserDetailsActivity">
+            android:name=".admin.activities.books.BookDetailsActivity">
         </activity>
 
         <activity
-            android:name=".admin.activities.ActiveLoansActivity">
+            android:name=".admin.activities.books.EditBookActivity">
+
+        </activity>
+
+        <activity android:name=".admin.activities.users.UsersActivity">
+
+        </activity>
+
+        <activity android:name=".admin.activities.users.AddUserActivity">
+
+        </activity>
+
+        <activity
+            android:name=".admin.activities.users.UserDetailsActivity">
+        </activity>
+
+        <activity
+            android:name=".admin.activities.users.ActiveLoansActivity">
+        </activity>
+
+        <activity
+            android:name=".admin.activities.users.AllLoansActivity">
         </activity>
 
         <activity

@@ -12,11 +12,11 @@ public class BookLoan implements Parcelable {
     private String bookUid;
     private String loanTimestamp;
     private String deadlineTimestamp;
+    private String returnTimestamp;
 
     private Book book;
 
     public BookLoan() {
-
     }
 
     public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, Book book) {
@@ -25,6 +25,17 @@ public class BookLoan implements Parcelable {
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
+        this.returnTimestamp = null;
+        this.book = book;
+    }
+
+    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, String returnTimestmap, Book book) {
+        this.libraryUid = null;
+        this.bookLoanUid = null;
+        this.bookUid = bookUid;
+        this.loanTimestamp = loanTimestamp;
+        this.deadlineTimestamp = deadlineTimestamp;
+        this.returnTimestamp = returnTimestmap;
         this.book = book;
     }
 
@@ -35,6 +46,7 @@ public class BookLoan implements Parcelable {
         LocalDateTime currentDateTime = LocalDateTime.now();
         this.loanTimestamp = currentDateTime.toString();
         this.deadlineTimestamp = currentDateTime.plusMonths(3).toString();
+        this.returnTimestamp = null;
         this.book = null;
     }
 
@@ -44,6 +56,7 @@ public class BookLoan implements Parcelable {
         bookUid = in.readString();
         loanTimestamp = in.readString();
         deadlineTimestamp = in.readString();
+        returnTimestamp = in.readString();
         book = in.readParcelable(Book.class.getClassLoader());
     }
 
@@ -79,6 +92,10 @@ public class BookLoan implements Parcelable {
         return deadlineTimestamp;
     }
 
+    public String getReturnTimestamp() {
+        return returnTimestamp;
+    }
+
     public Book getBook() {
         return book;
     }
@@ -107,6 +124,7 @@ public class BookLoan implements Parcelable {
         parcel.writeString(bookUid);
         parcel.writeString(loanTimestamp);
         parcel.writeString(deadlineTimestamp);
+        parcel.writeString(returnTimestamp);
         parcel.writeParcelable(book, i);
     }
 }

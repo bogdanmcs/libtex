@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.activities;
+package com.ad_victoriam.libtex.admin.activities.users;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,6 +15,8 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.activities.books.BooksActivity;
 import com.ad_victoriam.libtex.admin.utils.County;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
@@ -110,9 +111,11 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         final MaterialButton bAddNewLoan = findViewById(R.id.bAddNewLoan);
         final MaterialButton bViewActiveLoans = findViewById(R.id.bViewActiveLoans);
+        final MaterialButton bViewAllLoans = findViewById(R.id.bViewAllLoans);
         final MaterialButton bDeleteUser = findViewById(R.id.bDeleteUser);
         bAddNewLoan.setOnClickListener(this::assignBook);
-        bViewActiveLoans.setOnClickListener(this::returnBook);
+        bViewActiveLoans.setOnClickListener(this::viewActiveLoans);
+        bViewAllLoans.setOnClickListener(this::viewAllLoans);
         bDeleteUser.setOnClickListener(this::deleteUser);
     }
 
@@ -213,9 +216,13 @@ public class UserDetailsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void returnBook(View view) {
-        // view current loaned books for this user
+    private void viewActiveLoans(View view) {
         Intent intent = new Intent(this, ActiveLoansActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+    private void viewAllLoans(View view) {
+        Intent intent = new Intent(this, AllLoansActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }

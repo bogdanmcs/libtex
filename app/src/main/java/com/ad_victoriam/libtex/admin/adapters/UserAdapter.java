@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.UserDetailsActivity;
+import com.ad_victoriam.libtex.admin.activities.users.UserDetailsActivity;
 import com.ad_victoriam.libtex.common.models.User;
 
 import java.util.List;

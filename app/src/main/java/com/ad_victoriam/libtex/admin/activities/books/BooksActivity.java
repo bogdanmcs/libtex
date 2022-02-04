@@ -1,8 +1,7 @@
-package com.ad_victoriam.libtex.admin.activities;
+package com.ad_victoriam.libtex.admin.activities.books;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,12 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.books.AddBookActivity;
 import com.ad_victoriam.libtex.admin.adapters.BookAdapter;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;

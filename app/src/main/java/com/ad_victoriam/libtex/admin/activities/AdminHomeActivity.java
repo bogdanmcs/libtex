@@ -2,15 +2,13 @@ package com.ad_victoriam.libtex.admin.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.books.BooksActivity;
+import com.ad_victoriam.libtex.admin.activities.users.UsersActivity;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;

@@ -31,18 +31,18 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
-public class AdminLoanAdapter extends RecyclerView.Adapter<AdminLoanAdapter.BookLoanViewHolder> {
+public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoanAdapter.BookLoanViewHolder> {
 
     private final Context context;
     private final List<BookLoan> bookLoans;
     private User user;
 
-    public AdminLoanAdapter(Context context, List<BookLoan> bookLoans) {
+    public AdminActiveLoanAdapter(Context context, List<BookLoan> bookLoans) {
         this.context = context;
         this.bookLoans = bookLoans;
     }
 
-    public AdminLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
+    public AdminActiveLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
         this.context = context;
         this.bookLoans = bookLoans;
         this.user = user;
@@ -50,13 +50,13 @@ public class AdminLoanAdapter extends RecyclerView.Adapter<AdminLoanAdapter.Book
 
     @NonNull
     @Override
-    public AdminLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdminActiveLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_active_loan, parent, false);
-        return new AdminLoanAdapter.BookLoanViewHolder(view);
+        return new AdminActiveLoanAdapter.BookLoanViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdminLoanAdapter.BookLoanViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdminActiveLoanAdapter.BookLoanViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> viewLoanDetails(view, position));
         holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
         holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());

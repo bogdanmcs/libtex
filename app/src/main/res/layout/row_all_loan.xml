@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:cardCornerRadius="@dimen/normal_corners"
+        app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,40 +99,15 @@
                 app:layout_constraintTop_toBottomOf="@id/iBookImage" />
 
             <TextView
-                android:id="@+id/deadlineTextView"
+                android:id="@+id/loanedOnTextView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Deadline:"
+                android:text="Loaned on:"
                 android:textAlignment="textStart"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/vDivider"
                 app:layout_constraintTop_toBottomOf="@+id/vDivider" />
-
-            <TextView
-                android:id="@+id/tDeadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Book deadline date"
-                android:textAlignment="textStart"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/deadlineTextView"
-                app:layout_constraintTop_toTopOf="@+id/deadlineTextView" />
-
-            <TextView
-                android:id="@+id/loanedOnTextView"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Loaned on:"
-                android:textAlignment="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/deadlineTextView"
-                app:layout_constraintTop_toBottomOf="@+id/deadlineTextView"
-                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tLoanedOn"
@@ -146,20 +122,30 @@
                 app:layout_constraintStart_toEndOf="@+id/loanedOnTextView"
                 app:layout_constraintTop_toTopOf="@+id/loanedOnTextView" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bReturnBook"
+            <TextView
+                android:id="@+id/returnedOnTextView"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Returned on:"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/loanedOnTextView"
+                app:layout_constraintTop_toBottomOf="@+id/loanedOnTextView"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tReturnedOn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="Return"
-                android:insetTop="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="Book returned date"
+                android:textAlignment="textStart"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/tDeadline"
-                app:layout_constraintTop_toTopOf="@id/deadlineTextView"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/returnedOnTextView"
+                app:layout_constraintTop_toTopOf="@+id/returnedOnTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
