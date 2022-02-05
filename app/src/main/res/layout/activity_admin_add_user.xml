@@ -46,6 +46,8 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:hint="Email"
+                app:errorEnabled="true"
+                app:errorContentDescription=""
                 app:boxStrokeColor="@color/libtex_primary"
                 app:hintTextColor="@color/libtex_primary"
                 app:expandedHintEnabled="false"
@@ -65,16 +67,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:hint="Full name"
                 app:boxStrokeColor="@color/libtex_primary"
-                app:hintTextColor="@color/libtex_primary"
+                app:errorContentDescription=""
+                app:errorEnabled="true"
                 app:expandedHintEnabled="false"
+                app:hintTextColor="@color/libtex_primary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tEmailHelper">
+                app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eFullName"
@@ -85,15 +89,17 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutIdCardSeries"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="130dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:hint="Id card series"
                 app:boxStrokeColor="@color/libtex_primary"
-                app:hintTextColor="@color/libtex_primary"
+                app:errorContentDescription=""
+                app:errorEnabled="true"
                 app:expandedHintEnabled="false"
+                app:hintTextColor="@color/libtex_primary"
                 app:layout_constraintStart_toStartOf="@+id/layoutFullName"
-                app:layout_constraintTop_toBottomOf="@+id/tFullNameHelper">
+                app:layout_constraintTop_toBottomOf="@+id/layoutFullName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eIdCardSeries"
@@ -104,9 +110,11 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutIdCardNumber"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="150dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:hint="ID card number"
+                app:errorEnabled="true"
+                app:errorContentDescription=""
                 app:boxStrokeColor="@color/libtex_primary"
                 app:hintTextColor="@color/libtex_primary"
                 app:expandedHintEnabled="false"
@@ -124,17 +132,19 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutDob"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="150dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:hint="Date of birthday"
                 app:boxStrokeColor="@color/libtex_primary"
-                app:hintTextColor="@color/libtex_primary"
+                app:errorContentDescription=""
+                app:errorEnabled="true"
                 app:expandedHintEnabled="false"
+                app:hintTextColor="@color/libtex_primary"
                 app:layout_constraintEnd_toEndOf="@+id/layoutIdCardNumber"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/layoutIdCardSeries"
-                app:layout_constraintTop_toBottomOf="@+id/tIdCardSeriesHelper">
+                app:layout_constraintTop_toBottomOf="@+id/layoutIdCardSeries">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eDob"
@@ -146,22 +156,24 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutPhoneNumber"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="150dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:hint="Phone number"
                 app:boxStrokeColor="@color/libtex_primary"
-                app:hintTextColor="@color/libtex_primary"
+                app:errorContentDescription=""
+                app:errorEnabled="true"
                 app:expandedHintEnabled="false"
+                app:hintTextColor="@color/libtex_primary"
                 app:layout_constraintEnd_toEndOf="@+id/layoutDob"
                 app:layout_constraintStart_toStartOf="@+id/layoutDob"
-                app:layout_constraintTop_toBottomOf="@+id/tDobHelper">
+                app:layout_constraintTop_toBottomOf="@+id/layoutDob">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ePhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"/>
+                    android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -178,80 +190,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tPhoneNumberHelper"
+                app:layout_constraintTop_toBottomOf="@+id/layoutPhoneNumber"
                 app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/tEmailHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutEmail"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutEmail"
-                app:layout_constraintTop_toBottomOf="@+id/layoutEmail" />
-
-            <TextView
-                android:id="@+id/tFullNameHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutFullName"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutFullName"
-                app:layout_constraintTop_toBottomOf="@+id/layoutFullName" />
-
-            <TextView
-                android:id="@+id/tIdCardSeriesHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutIdCardSeries"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutIdCardSeries"
-                app:layout_constraintTop_toBottomOf="@+id/layoutIdCardSeries" />
-
-            <TextView
-                android:id="@+id/tIdCardNumberHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutIdCardNumber"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutIdCardNumber"
-                app:layout_constraintTop_toBottomOf="@+id/layoutIdCardNumber" />
-
-            <TextView
-                android:id="@+id/tDobHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutDob"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutDob"
-                app:layout_constraintTop_toBottomOf="@+id/layoutDob" />
-
-            <TextView
-                android:id="@+id/tPhoneNumberHelper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/red"
-                app:layout_constraintEnd_toEndOf="@+id/layoutPhoneNumber"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/layoutPhoneNumber"
-                app:layout_constraintTop_toBottomOf="@+id/layoutPhoneNumber" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

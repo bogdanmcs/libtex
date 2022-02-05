@@ -22,21 +22,25 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="128dp"
         android:rotation="40"
+        app:errorEnabled="true"
+        app:errorContentDescription=""
         app:layout_constraintBottom_toBottomOf="@+id/bLogIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textInputLayout8"
+        app:layout_constraintTop_toTopOf="@+id/layoutEmail"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/logo" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout8"
+        android:id="@+id/layoutEmail"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
+        app:errorEnabled="true"
+        app:errorContentDescription=""
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
@@ -59,11 +63,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout9"
+        android:id="@+id/layoutPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
@@ -71,12 +76,14 @@
         app:boxCornerRadiusTopStart="10dp"
         app:boxStrokeColor="@color/libtex_primary"
         app:endIconMode="password_toggle"
+        app:errorContentDescription=""
+        app:errorEnabled="true"
         app:hintEnabled="false"
         app:hintTextColor="@color/libtex_primary"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
+        app:layout_constraintEnd_toEndOf="@+id/layoutEmail"
         app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
-        app:layout_constraintTop_toBottomOf="@+id/tEmailHelper"
+        app:layout_constraintStart_toStartOf="@+id/layoutEmail"
+        app:layout_constraintTop_toBottomOf="@+id/layoutEmail"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -92,16 +99,16 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
         android:backgroundTint="@color/libtex_primary"
         android:text="Log in"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/bCreateAccount"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout9"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout9"
-        app:layout_constraintTop_toBottomOf="@+id/tPasswordHelper"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPassword"
+        app:layout_constraintStart_toStartOf="@+id/layoutPassword"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPassword"
         app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.button.MaterialButton
@@ -118,30 +125,6 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tEmailHelper"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout8"
-        app:layout_constraintHorizontal_bias="0.006"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout8"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout8" />
-
-    <TextView
-        android:id="@+id/tPasswordHelper"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout9"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout9"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
 
     <ImageButton
         android:id="@+id/floatingActionButton"

@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -43,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private TextInputEditText eEmail;
     private TextInputEditText ePassword;
+    private TextInputLayout layoutEmail;
+    private TextInputLayout layoutPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         eEmail = findViewById(R.id.eEmail);
         ePassword = findViewById(R.id.ePassword);
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutPassword = findViewById(R.id.layoutPassword);
 
         final Button bRegister = findViewById(R.id.bRegister);
         bRegister.setOnClickListener(this::validateCredentials);
@@ -86,8 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                             try {
                                 throw Objects.requireNonNull(task.getException());
                             } catch (FirebaseAuthUserCollisionException e) {
-                                TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-                                tEmailHelper.setText(R.string.email_in_use);
+                                layoutEmail.setError(getString(R.string.email_in_use));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -101,11 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = ePassword.getText().toString();
         CheckBox cTap = findViewById(R.id.cTap);
 
-        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-        TextView tPasswordHelper = findViewById(R.id.tPasswordHelper);
         TextView tTapHelper = findViewById(R.id.tTapHelper);
-        tEmailHelper.setText("");
-        tPasswordHelper.setText("");
         tTapHelper.setText("");
 
         boolean isErrorEmail = true;
@@ -116,26 +116,28 @@ public class RegisterActivity extends AppCompatActivity {
         int PASSWORD_MAX_LIMIT_CHARS = 32;
 
         if (email.isEmpty()) {
-            tEmailHelper.setText(R.string.empty_field);
+            layoutEmail.setError(getString(R.string.empty_field));
         } else if (email.length() > EMAIL_MAX_LIMIT_CHARS) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + EMAIL_MAX_LIMIT_CHARS;
-            tEmailHelper.setText(fieldMaxLimitMessage);
+            layoutEmail.setError(fieldMaxLimitMessage);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tEmailHelper.setText(R.string.email_not_valid);
+            layoutEmail.setError(getString(R.string.email_not_valid));
         } else {
             isErrorEmail = false;
+            layoutEmail.setError(null);
         }
 
         if (password.isEmpty()) {
-            tPasswordHelper.setText(R.string.empty_field);
+            layoutPassword.setError(getString(R.string.empty_field));
         } else if (password.length() > PASSWORD_MAX_LIMIT_CHARS) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + PASSWORD_MAX_LIMIT_CHARS;
-            tPasswordHelper.setText(fieldMaxLimitMessage);
+            layoutPassword.setError(fieldMaxLimitMessage);
         } else if (password.length() < PASSWORD_MIN_LIMIT_CHARS){
             String fieldMinLimitMessage = getString(R.string.field_min_limit) + " " + PASSWORD_MIN_LIMIT_CHARS;
-            tPasswordHelper.setText(fieldMinLimitMessage);
+            layoutPassword.setError(fieldMinLimitMessage);
         } else {
             isErrorPassword = false;
+            layoutPassword.setError(null);
         }
 
         if (!cTap.isChecked()) {

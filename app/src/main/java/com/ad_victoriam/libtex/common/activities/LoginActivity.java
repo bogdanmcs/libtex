@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputEditText eEmail;
     private TextInputEditText ePassword;
+    private TextInputLayout layoutEmail;
+    private TextInputLayout layoutPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
 
         eEmail = findViewById(R.id.eEmail);
         ePassword = findViewById(R.id.ePassword);
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutPassword = findViewById(R.id.layoutPassword);
+
 
         final Button bLogIn = findViewById(R.id.bLogIn);
         final Button bCreateAccount = findViewById(R.id.bCreateAccount);
@@ -84,34 +90,31 @@ public class LoginActivity extends AppCompatActivity {
         String email = eEmail.getText().toString();
         String password = ePassword.getText().toString();
 
-        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-        TextView tPasswordHelper = findViewById(R.id.tPasswordHelper);
-        tEmailHelper.setText("");
-        tPasswordHelper.setText("");
-
         boolean isErrorEmail = true;
         boolean isErrorPassword = true;
         int EMAIL_MAX_LIMIT_CHARS = 50;
         int PASSWORD_MAX_LIMIT_CHARS = 32;
 
         if (email.isEmpty()) {
-            tEmailHelper.setText(R.string.empty_field);
+            layoutEmail.setError(getString(R.string.empty_field));
         } else if (email.length() > 50) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + EMAIL_MAX_LIMIT_CHARS;
-            tEmailHelper.setText(fieldMaxLimitMessage);
+            layoutEmail.setError(fieldMaxLimitMessage);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tEmailHelper.setText(R.string.email_not_valid);
+            layoutEmail.setError(getString(R.string.email_not_valid));
         } else {
             isErrorEmail = false;
+            layoutEmail.setError(null);
         }
 
         if (password.isEmpty()) {
-            tPasswordHelper.setText(R.string.empty_field);
+            layoutPassword.setError(getString(R.string.empty_field));
         } else if (password.length() > PASSWORD_MAX_LIMIT_CHARS) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + PASSWORD_MAX_LIMIT_CHARS;
-            tPasswordHelper.setText(fieldMaxLimitMessage);
+            layoutPassword.setError(fieldMaxLimitMessage);
         } else {
             isErrorPassword = false;
+            layoutPassword.setError(null);
         }
 
         if (isErrorEmail || isErrorPassword) {

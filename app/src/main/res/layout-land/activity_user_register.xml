@@ -24,19 +24,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/bRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/layoutIdCardNumber"
-        app:layout_constraintTop_toTopOf="@+id/layoutIdCardNumber"
+        app:layout_constraintStart_toEndOf="@+id/layoutEmail"
+        app:layout_constraintTop_toTopOf="@+id/layoutEmail"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/logo" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutIdCardNumber"
+        android:id="@+id/layoutEmail"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
+        app:errorEnabled="true"
+        app:errorContentDescription=""
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
@@ -59,11 +61,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout7"
+        android:id="@+id/layoutPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
@@ -73,12 +76,14 @@
         app:counterEnabled="true"
         app:counterMaxLength="32"
         app:endIconMode="password_toggle"
+        app:errorContentDescription=""
+        app:errorEnabled="true"
         app:hintEnabled="false"
         app:hintTextColor="@color/libtex_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tEmailHelper"
+        app:layout_constraintTop_toBottomOf="@+id/layoutEmail"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -94,6 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="256dp"
         android:backgroundTint="@color/libtex_primary"
         android:text="Register"
@@ -106,41 +112,19 @@
         app:layout_constraintTop_toBottomOf="@+id/tTapHelper"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/tEmailHelper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="@+id/layoutIdCardNumber"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/layoutIdCardNumber"
-        app:layout_constraintTop_toBottomOf="@+id/layoutIdCardNumber" />
-
-    <TextView
-        android:id="@+id/tPasswordHelper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/red"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout7"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout7"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
-
     <CheckBox
         android:id="@+id/cTap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="256dp"
         android:text="@string/terms_and_privacy"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.025"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tPasswordHelper" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutPassword" />
 
     <TextView
         android:id="@+id/tTapHelper"

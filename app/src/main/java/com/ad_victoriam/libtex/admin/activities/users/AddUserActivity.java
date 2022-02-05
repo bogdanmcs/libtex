@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,13 +43,19 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
 
     DatabaseReference databaseReference;
 
-    TextInputEditText eEmail;
-    TextInputEditText eFullName;
-    TextInputEditText eIdCardSeries;
-    TextInputEditText eIdCardNumber;
-    TextInputEditText eDob;
-    LocalDate dobLocalDate;
-    TextInputEditText ePhoneNumber;
+    private TextInputEditText eEmail;
+    private TextInputEditText eFullName;
+    private TextInputEditText eIdCardSeries;
+    private TextInputEditText eIdCardNumber;
+    private TextInputEditText eDob;
+    private LocalDate dobLocalDate;
+    private TextInputEditText ePhoneNumber;
+    private TextInputLayout layoutEmail;
+    private TextInputLayout layoutFullName;
+    private TextInputLayout layoutIdCardSeries;
+    private TextInputLayout layoutIdCardNumber;
+    private TextInputLayout layoutDob;
+    private TextInputLayout layoutPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,13 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
         final FirebaseDatabase database = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/");
         databaseReference = database.getReference();
 
+        findViews();
+
+        final Button bAddUser = findViewById(R.id.bConfirmAddition);
+        bAddUser.setOnClickListener(this::bAddUser);
+    }
+
+    private void findViews() {
         eEmail = findViewById(R.id.eEmail);
         eFullName = findViewById(R.id.eFullName);
         eIdCardSeries = findViewById(R.id.eIdCardSeries);
@@ -85,9 +99,12 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
         eDob.setOnClickListener(this::pickDate);
         eDob.setFocusable(false);
         ePhoneNumber = findViewById(R.id.ePhoneNumber);
-
-        final Button bAddUser = findViewById(R.id.bConfirmAddition);
-        bAddUser.setOnClickListener(this::bAddUser);
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutFullName = findViewById(R.id.layoutFullName);
+        layoutIdCardSeries = findViewById(R.id.layoutIdCardSeries);
+        layoutIdCardNumber = findViewById(R.id.layoutIdCardNumber);
+        layoutDob = findViewById(R.id.layoutDob);
+        layoutPhoneNumber = findViewById(R.id.layoutPhoneNumber);
     }
 
     private void pickDate(View view) {
@@ -117,19 +134,6 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
         String dob = eDob.getText().toString();
         String phoneNumber = ePhoneNumber.getText().toString();
 
-        TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-        TextView tFullNameHelper = findViewById(R.id.tFullNameHelper);
-        TextView tIdCardSeriesHelper = findViewById(R.id.tIdCardSeriesHelper);
-        TextView tIdCardNumberHelper = findViewById(R.id.tIdCardNumberHelper);
-        TextView tDobHelper = findViewById(R.id.tDobHelper);
-        TextView tPhoneNumberHelper = findViewById(R.id.tPhoneNumberHelper);
-        tEmailHelper.setText("");
-        tFullNameHelper.setText("");
-        tIdCardSeriesHelper.setText("");
-        tIdCardNumberHelper.setText("");
-        tDobHelper.setText("");
-        tPhoneNumberHelper.setText("");
-
         boolean isErrorEmail = true;
         boolean isErrorFullName = true;
         boolean isErrorIdCardSeries = true;
@@ -140,55 +144,61 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
         int IC_NUMBER_LENGTH = 6;
 
         if (email.isEmpty()) {
-            tEmailHelper.setText(R.string.empty_field);
+            layoutEmail.setError(getString(R.string.empty_field));
         } else if (email.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tEmailHelper.setText(fieldMaxLimitMessage);
+            layoutEmail.setError(fieldMaxLimitMessage);
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tEmailHelper.setText(R.string.email_not_valid);
+            layoutEmail.setError(getString(R.string.email_not_valid));
         } else {
             isErrorEmail = false;
+            layoutEmail.setError(null);
         }
 
         if (fullName.isEmpty()) {
-            tFullNameHelper.setText(R.string.empty_field);
+            layoutFullName.setError(getString(R.string.empty_field));
         } else if (fullName.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tFullNameHelper.setText(fieldMaxLimitMessage);
+            layoutFullName.setError(fieldMaxLimitMessage);
         } else {
             isErrorFullName = false;
+            layoutFullName.setError(null);
         }
         if (idCardSeries.isEmpty()) {
-            tIdCardSeriesHelper.setText(R.string.empty_field);
+            layoutIdCardSeries.setError(getString(R.string.empty_field));
         } else if (!Arrays.stream(County.class.getEnumConstants()).anyMatch(c -> c.name().equals(idCardSeries))) {
-            tIdCardSeriesHelper.setText(R.string.ic_series_not_valid);
+            layoutIdCardSeries.setError(getString(R.string.ic_series_not_valid));
         } else {
             isErrorIdCardSeries = false;
+            layoutIdCardSeries.setError(null);
         }
 
         if (idCardNumber.isEmpty()) {
-            tIdCardNumberHelper.setText(R.string.empty_field);
+            layoutIdCardNumber.setError(getString(R.string.empty_field));
         } else if (idCardNumber.length() != IC_NUMBER_LENGTH || !idCardNumber.chars().allMatch(Character::isDigit)) {
-            tIdCardNumberHelper.setText(R.string.ic_number_not_valid);
+            layoutIdCardNumber.setError(getString(R.string.ic_number_not_valid));
         } else {
             isErrorIdCardNumber = false;
+            layoutIdCardNumber.setError(null);
         }
 
         if (dob.isEmpty()) {
-            tDobHelper.setText(R.string.empty_field);
+            layoutDob.setError(getString(R.string.empty_field));
         } else {
             isErrorDob = false;
+            layoutDob.setError(null);
         }
 
         if (phoneNumber.isEmpty()) {
-            tPhoneNumberHelper.setText(R.string.empty_field);
+            layoutPhoneNumber.setError(getString(R.string.empty_field));
         } else if (phoneNumber.length() > STANDARD_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
-            tPhoneNumberHelper.setText(fieldMaxLimitMessage);
+            layoutPhoneNumber.setError(fieldMaxLimitMessage);
         } else if (!Patterns.PHONE.matcher(phoneNumber).matches()) {
-            tPhoneNumberHelper.setText(R.string.phone_number_not_valid);
+            layoutPhoneNumber.setError(getString(R.string.phone_number_not_valid));
         } else {
             isErrorPhoneNumber = false;
+            layoutPhoneNumber.setError(null);
         }
 
         if (isErrorEmail || isErrorFullName || isErrorIdCardSeries || isErrorIdCardNumber || isErrorDob || isErrorPhoneNumber) {
@@ -219,8 +229,7 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
                         }
 
                     }
-                    TextView tEmailHelper = findViewById(R.id.tEmailHelper);
-                    tEmailHelper.setText(R.string.email_not_used);
+                    layoutEmail.setError(getString(R.string.email_not_used));
                 } else {
                     System.out.println(task.getResult().getValue());
                 }
