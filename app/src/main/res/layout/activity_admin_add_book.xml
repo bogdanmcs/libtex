@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:liftOnScroll="true">
+
     <include
         android:id="@+id/topAppBar"
-        layout="@layout/top_app_bar"
+        layout="@layout/top_app_bar_admin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBar">
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutEmail"
+                android:id="@+id/layoutTitle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,8 +46,8 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:hint="Title"
-                app:counterEnabled="true"
-                app:counterMaxLength="50"
+                app:errorEnabled="true"
+                app:errorContentDescription=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -48,19 +59,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutFullName"
+                android:id="@+id/layoutAuthorName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:hint="Author name"
-                app:counterEnabled="true"
-                app:counterMaxLength="50"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutTitle"
+                app:layout_constraintStart_toStartOf="@+id/layoutTitle"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTitle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eFirstName"
@@ -69,18 +80,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
+                android:id="@+id/layoutPublisher"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="50"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutFullName">
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutAuthorName"
+                app:layout_constraintStart_toStartOf="@+id/layoutAuthorName"
+                app:layout_constraintTop_toBottomOf="@+id/layoutAuthorName">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eLastName"
@@ -90,19 +101,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutIdCardSeries"
+                android:id="@+id/layoutNoOfPages"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:hint="No of pages"
-                app:counterEnabled="true"
-                app:counterMaxLength="4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutPublisher"
+                app:layout_constraintStart_toStartOf="@+id/layoutPublisher"
+                app:layout_constraintTop_toBottomOf="@+id/layoutPublisher">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eIdCardSeries"
@@ -112,39 +123,42 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutDob"
+                android:id="@+id/layoutDescription"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="50"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutIdCardSeries">
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutNoOfPages"
+                app:layout_constraintStart_toStartOf="@+id/layoutNoOfPages"
+                app:layout_constraintTop_toBottomOf="@+id/layoutNoOfPages">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eTodo1"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:hint="Description" />
+                    android:hint="Description"
+                    android:gravity="start"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutPhoneNumber"
+                android:id="@+id/layoutTotalQuantity"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutDob">
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutDescription"
+                app:layout_constraintStart_toStartOf="@+id/layoutDescription"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eTodo2"
@@ -156,25 +170,24 @@
 
             <Button
                 android:id="@+id/bConfirmAddition"
-                android:layout_width="130dp"
-                android:layout_height="59dp"
-                android:layout_marginStart="160dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="163dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
-                android:onClick="clicked"
                 android:backgroundTint="@color/libtex_primary"
+                android:onClick="clicked"
                 android:text="Add"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.476"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutPhoneNumber"
+                app:layout_constraintEnd_toEndOf="@+id/layoutTotalQuantity"
+                app:layout_constraintStart_toStartOf="@+id/layoutTotalQuantity"
+                app:layout_constraintTop_toBottomOf="@+id/layoutTotalQuantity"
                 app:layout_constraintVertical_bias="0.0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

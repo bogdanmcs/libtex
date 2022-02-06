@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.admin.activities.books;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -26,30 +31,46 @@ public class AddBookActivity extends AppCompatActivity {
 
     DatabaseReference databaseReference;
 
-    TextInputEditText eBookTitle;
-    TextInputEditText eBookAuthorName;
-    TextInputEditText eBookPublisher;
-    TextInputEditText eBookNoOfPages;
-    TextInputEditText eBookDescription;
-    TextInputEditText eBookTotalQuantity;
+    TextInputLayout layoutTitle;
+    TextInputLayout layoutAuthorName;
+    TextInputLayout layoutPublisher;
+    TextInputLayout layoutNoOfPages;
+    TextInputLayout layoutDescription;
+    TextInputLayout layoutTotalQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_add_book);
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Add new book");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+                }
+                return false;
+            }
+        });
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/");
         databaseReference = database.getReference();
 
-        eBookTitle = findViewById(R.id.eEmail);
-        eBookAuthorName = findViewById(R.id.eFirstName);
-        eBookPublisher = findViewById(R.id.eLastName);
-        eBookNoOfPages = findViewById(R.id.eIdCardSeries);
-        eBookDescription = findViewById(R.id.eTodo1);
-        eBookTotalQuantity = findViewById(R.id.eTodo2);
+        layoutTitle = findViewById(R.id.layoutTitle);
+        layoutAuthorName = findViewById(R.id.layoutAuthorName);
+        layoutPublisher = findViewById(R.id.layoutPublisher);
+        layoutNoOfPages = findViewById(R.id.layoutNoOfPages);
+        layoutDescription = findViewById(R.id.layoutDescription);
+        layoutTotalQuantity = findViewById(R.id.layoutTotalQuantity);
 
         final Button bAddBook = findViewById(R.id.bConfirmAddition);
 
@@ -58,12 +79,12 @@ public class AddBookActivity extends AppCompatActivity {
 
     private void addBook(View view) {
 
-        String bookTitle = eBookTitle.getText().toString();
-        String bookAuthorName = eBookAuthorName.getText().toString();
-        String bookPublisher = eBookPublisher.getText().toString();
-        String bookNoOfPages = eBookNoOfPages.getText().toString();
-        String bookDescription = eBookDescription.getText().toString();
-        String bookTotalQuantity = eBookTotalQuantity.getText().toString();
+        String bookTitle = layoutTitle.getEditText().getText().toString();
+        String bookAuthorName = layoutAuthorName.getEditText().getText().toString();
+        String bookPublisher = layoutPublisher.getEditText().getText().toString();
+        String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
+        String bookDescription = layoutDescription.getEditText().getText().toString();
+        String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
 
         if (areBookDetailsValid()) {
             Book book = new Book(bookTitle, bookAuthorName, bookPublisher, bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity));
@@ -77,87 +98,79 @@ public class AddBookActivity extends AppCompatActivity {
     private boolean areBookDetailsValid() {
         boolean errorFlag = false;
 
-        String bookTotalQuantity = eBookTotalQuantity.getText().toString();
+        int DESCRIPTION_MAX_LIMIT = 200;
+        int STANDARD_MAX_LIMIT = 50;
+        int IDX_MAX_LIMIT = 4;
+
+        String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
         if (bookTotalQuantity.isEmpty()) {
-            eBookTotalQuantity.setError("Please fill this field.");
-            eBookTotalQuantity.requestFocus();
+            layoutTotalQuantity.setError(getString(R.string.empty_field));
             errorFlag = true;
         } else if (bookTotalQuantity.length() > 4) {
-            eBookTotalQuantity.setError("Maximum length is 4 characters");
-            eBookTotalQuantity.requestFocus();
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
+            layoutTotalQuantity.setError(fieldMaxLimitMessage);
             errorFlag = true;
         } else {
             try {
                 if (Integer.parseInt(bookTotalQuantity) < 0 ) {
-                    eBookTotalQuantity.setError("Total quantity cannot be negative");
-                    eBookTotalQuantity.requestFocus();
+                    layoutTotalQuantity.setError(getString(R.string.is_negative));
                     errorFlag = true;
                 }
             } catch (NumberFormatException e) {
-                eBookTotalQuantity.setError("Total quantity must be a decimal number");
-                eBookTotalQuantity.requestFocus();
+                layoutTotalQuantity.setError(getString(R.string.is_not_decimal));
                 errorFlag = true;
             }
         }
 
-        String bookNoOfPages = eBookNoOfPages.getText().toString();
+        String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
         if (bookNoOfPages.isEmpty()) {
-            eBookNoOfPages.setError("Please fill this field.");
-            eBookNoOfPages.requestFocus();
+            layoutNoOfPages.setError(getString(R.string.empty_field));
             errorFlag = true;
         } else if (bookNoOfPages.length() > 4) {
-            eBookNoOfPages.setError("Maximum length is 4 characters");
-            eBookNoOfPages.requestFocus();
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
+            layoutNoOfPages.setError(fieldMaxLimitMessage);
             errorFlag = true;
         } else {
             try {
                 if (Integer.parseInt(bookNoOfPages) <= 0 ) {
-                    eBookNoOfPages.setError("No. of pages must be positive");
-                    eBookNoOfPages.requestFocus();
+                    layoutNoOfPages.setError(getString(R.string.is_negative));
                     errorFlag = true;
                 }
             } catch (NumberFormatException e) {
-                eBookNoOfPages.setError("No of pages must be a decimal number");
-                eBookNoOfPages.requestFocus();
+                layoutNoOfPages.setError(getString(R.string.is_not_decimal));
                 errorFlag = true;
             }
         }
 
-        List<TextInputEditText> bookDetails = new ArrayList<>();
-        bookDetails.add(eBookDescription);
-        bookDetails.add(eBookPublisher);
-        bookDetails.add(eBookAuthorName);
-        bookDetails.add(eBookTitle);
+        String bookDescription = layoutDescription.getEditText().getText().toString();
+        if (bookDescription.isEmpty()) {
+            layoutDescription.setError(getString(R.string.empty_field));
+            layoutDescription.requestFocus();
+            errorFlag = true;
+        } else if (bookDescription.length() > 200) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + DESCRIPTION_MAX_LIMIT;
+            layoutDescription.setError(fieldMaxLimitMessage);
+            errorFlag = true;
+        }
 
-        for (TextInputEditText bookDetail: bookDetails) {
-            String textToString = bookDetail.getText().toString();
+        List<TextInputLayout> bookDetails = new ArrayList<>();
+        bookDetails.add(layoutTitle);
+        bookDetails.add(layoutAuthorName);
+        bookDetails.add(layoutPublisher);
+
+        for (TextInputLayout bookDetail: bookDetails) {
+            String textToString = bookDetail.getEditText().getText().toString();
             if (textToString.isEmpty()) {
-                bookDetail.setError("Please fill this field.");
+                bookDetail.setError(getString(R.string.empty_field));
                 bookDetail.requestFocus();
                 errorFlag = true;
             } else if (textToString.length() > 50) {
-                bookDetail.setError("Maximum length is 50 characters");
-                bookDetail.requestFocus();
+                String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
+                bookDetail.setError(fieldMaxLimitMessage);
                 errorFlag = true;
             }
         }
 
         return !errorFlag;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
-        }
-        return true;
     }
 }

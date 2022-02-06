@@ -11,13 +11,15 @@
 
     <!-- validations -->
     <string name="empty_field">*Required</string>
-    <string name="email_not_valid">Email address is not valid</string>
-    <string name="ic_series_not_valid">IC series is not valid</string>
-    <string name="ic_number_not_valid">IC number is not valid</string>
-    <string name="phone_number_not_valid">Phone number is not valid</string>
-    <string name="email_in_use">Email is already in use</string>
-    <string name="email_not_used">This email is not associated with any account</string>
-    <string name="terms_and_privacy_not_checked">You must agree before continuing</string>
+    <string name="email_not_valid">*Email address is not valid</string>
+    <string name="ic_series_not_valid">*IC series is not valid</string>
+    <string name="ic_number_not_valid">*IC number is not valid</string>
+    <string name="phone_number_not_valid">*Phone number is not valid</string>
+    <string name="is_negative">*Number cannot be negative</string>
+    <string name="is_not_decimal">*Number must be decimal</string>
+    <string name="email_in_use">*Email is already in use</string>
+    <string name="email_not_used">*This email is not associated with any account</string>
+    <string name="terms_and_privacy_not_checked">*You must agree before continuing</string>
 
     <!-- texts -->
     <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
