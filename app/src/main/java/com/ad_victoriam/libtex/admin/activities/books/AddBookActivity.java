@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
 import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -25,18 +26,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class AddBookActivity extends AppCompatActivity {
+public class AddBookActivity extends AppCompatActivity implements CategoryDialog.CategoryDialogListener {
 
     DatabaseReference databaseReference;
 
     TextInputLayout layoutTitle;
     TextInputLayout layoutAuthorName;
     TextInputLayout layoutPublisher;
+    TextInputLayout layoutCategory;
     TextInputLayout layoutNoOfPages;
     TextInputLayout layoutDescription;
     TextInputLayout layoutTotalQuantity;
+
+    private List<String> chosenCategories = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,26 +74,37 @@ public class AddBookActivity extends AppCompatActivity {
         layoutTitle = findViewById(R.id.layoutTitle);
         layoutAuthorName = findViewById(R.id.layoutAuthorName);
         layoutPublisher = findViewById(R.id.layoutPublisher);
+        layoutCategory = findViewById(R.id.layoutCategory);
         layoutNoOfPages = findViewById(R.id.layoutNoOfPages);
         layoutDescription = findViewById(R.id.layoutDescription);
         layoutTotalQuantity = findViewById(R.id.layoutTotalQuantity);
 
-        final Button bAddBook = findViewById(R.id.bConfirmAddition);
+        TextInputEditText eCategory = findViewById(R.id.eCategory);
+        eCategory.setFocusable(false);
+        eCategory.setOnClickListener(this::chooseCategory);
 
+        final Button bAddBook = findViewById(R.id.bConfirmAddition);
         bAddBook.setOnClickListener(this::addBook);
+    }
+
+    private void chooseCategory(View view) {
+        CategoryDialog categoryDialog = new CategoryDialog(chosenCategories);
+        categoryDialog.show(getSupportFragmentManager(), "chooseCategory");
     }
 
     private void addBook(View view) {
 
-        String bookTitle = layoutTitle.getEditText().getText().toString();
-        String bookAuthorName = layoutAuthorName.getEditText().getText().toString();
-        String bookPublisher = layoutPublisher.getEditText().getText().toString();
-        String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
-        String bookDescription = layoutDescription.getEditText().getText().toString();
-        String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
-
         if (areBookDetailsValid()) {
-            Book book = new Book(bookTitle, bookAuthorName, bookPublisher, bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity));
+            String bookTitle = layoutTitle.getEditText().getText().toString();
+            String bookAuthorName = layoutAuthorName.getEditText().getText().toString();
+            String bookPublisher = layoutPublisher.getEditText().getText().toString();
+            String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
+            String bookDescription = layoutDescription.getEditText().getText().toString();
+            String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
+
+            Book book = new Book(
+                    bookTitle, bookAuthorName, bookPublisher, chosenCategories,
+                    bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity));
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference.child("books").child(currentUser.getUid()).push().setValue(book);
             Toast.makeText(getApplicationContext(), "Book added successfully.", Toast.LENGTH_SHORT).show();
@@ -101,6 +118,13 @@ public class AddBookActivity extends AppCompatActivity {
         int DESCRIPTION_MAX_LIMIT = 200;
         int STANDARD_MAX_LIMIT = 50;
         int IDX_MAX_LIMIT = 4;
+        layoutTitle.setError(null);
+        layoutAuthorName.setError(null);
+        layoutPublisher.setError(null);
+        layoutCategory.setError(null);
+        layoutDescription.setError(null);
+        layoutNoOfPages.setError(null);
+        layoutTotalQuantity.setError(null);
 
         String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
         if (bookTotalQuantity.isEmpty()) {
@@ -171,6 +195,30 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
+        if (chosenCategories.isEmpty()) {
+            layoutCategory.setError(getString(R.string.category_not_selected));
+            errorFlag = true;
+        }
+
         return !errorFlag;
+    }
+
+    @Override
+    public void saveCategories(List<String> chosenCategories) {
+
+        this.chosenCategories = chosenCategories;
+
+        String listedCategories = "";
+        boolean first = true;
+        for (String category: chosenCategories) {
+            if (first) {
+                first = false;
+            } else {
+                category = "; " + category;
+            }
+            listedCategories = listedCategories.concat(category);
+        }
+
+        layoutCategory.getEditText().setText(listedCategories);
     }
 }

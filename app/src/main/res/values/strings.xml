@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- titles -->
     <string name="app_name">Libtex</string>
@@ -19,7 +19,23 @@
     <string name="is_not_decimal">*Number must be decimal</string>
     <string name="email_in_use">*Email is already in use</string>
     <string name="email_not_used">*This email is not associated with any account</string>
+    <string name="category_not_selected">*Must select at least one category</string>
     <string name="terms_and_privacy_not_checked">*You must agree before continuing</string>
+
+    <!-- category options -->
+    <string name="co_horror">Horror</string>
+    <string name="co_action_adventure">Action &amp; Adventure</string>
+    <string name="co_comedy">Comedy</string>
+    <string name="co_romance">Romance</string>
+    <string name="co_thriller">Thriller</string>
+    <string name="co_mystery">Mystery</string>
+    <string name="co_science_fiction">Science fiction</string>
+    <string name="co_dystopian">Horror</string>
+    <string name="co_history">History</string>
+    <string name="co_humor">Humor</string>
+    <string name="co_fantasy">Fantasy</string>
+    <string name="co_children">Children</string>
+    <string name="co_biography">Biography</string>
 
     <!-- texts -->
     <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>

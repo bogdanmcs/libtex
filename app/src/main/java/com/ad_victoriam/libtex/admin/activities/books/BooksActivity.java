@@ -40,7 +40,7 @@ public class BooksActivity extends AppCompatActivity {
     private TextView tRecordsCounter;
     private RecyclerView recyclerView;
 
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
     private int recordsCounter = 0;
     private String intentAction;
 

@@ -3,12 +3,15 @@ package com.ad_victoriam.libtex.common.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class Book implements Parcelable {
 
     private String uid;
     private String title;
     private String authorName;
     private String publisher;
+    private List<String> chosenCategories;
     private String noOfPages;
     private String description;
     private int availableQuantity;
@@ -16,13 +19,15 @@ public class Book implements Parcelable {
 
 
     public Book() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+        // Default constructor required for calls to DataSnapshot.getValue(Book.class)
     }
 
-    public Book(String title, String authorName, String publisher, String noOfPages, String description, int totalQuantity) {
+    public Book(String title, String authorName, String publisher, List<String> chosenCategories,
+                String noOfPages, String description, int totalQuantity) {
         this.title = title;
         this.authorName = authorName;
         this.publisher = publisher;
+        this.chosenCategories = chosenCategories;
         this.noOfPages = noOfPages;
         this.description = description;
         this.availableQuantity = totalQuantity;
@@ -59,6 +64,14 @@ public class Book implements Parcelable {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public List<String> getChosenCategories() {
+        return chosenCategories;
+    }
+
+    public void setChosenCategories(List<String> chosenCategories) {
+        this.chosenCategories = chosenCategories;
     }
 
     public String getNoOfPages() {

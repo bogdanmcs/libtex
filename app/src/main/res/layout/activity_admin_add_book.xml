@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eEmail"
+                    android:id="@+id/eTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -74,7 +74,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/layoutTitle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eFirstName"
+                    android:id="@+id/eAuthorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -94,21 +94,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/layoutAuthorName">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eLastName"
+                    android:id="@+id/ePublisher"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Publisher" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutNoOfPages"
+                android:id="@+id/layoutCategory"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:hint="No of pages"
                 app:errorContentDescription=""
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/layoutPublisher"
@@ -116,10 +115,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/layoutPublisher">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eIdCardSeries"
+                    android:id="@+id/eCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:hint="Choose a category"
+                    app:textInputLayoutFocusedRectEnabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -130,20 +130,42 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
+                android:hint="Description"
+                app:errorContentDescription=""
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/layoutCategory"
+                app:layout_constraintStart_toStartOf="@+id/layoutCategory"
+                app:layout_constraintTop_toBottomOf="@+id/layoutCategory">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="start" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutNoOfPages"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="50"
                 app:errorContentDescription=""
                 app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="@+id/layoutNoOfPages"
-                app:layout_constraintStart_toStartOf="@+id/layoutNoOfPages"
-                app:layout_constraintTop_toBottomOf="@+id/layoutNoOfPages">
+                app:layout_constraintEnd_toEndOf="@+id/layoutDescription"
+                app:layout_constraintStart_toStartOf="@+id/layoutDescription"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eTodo1"
+                    android:id="@+id/eNoOfPages"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:hint="Description"
-                    android:gravity="start"/>
+                    android:layout_height="wrap_content"
+                    android:hint="No. of pages"
+                    android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -156,12 +178,12 @@
                 android:layout_marginEnd="32dp"
                 app:errorContentDescription=""
                 app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="@+id/layoutDescription"
-                app:layout_constraintStart_toStartOf="@+id/layoutDescription"
-                app:layout_constraintTop_toBottomOf="@+id/layoutDescription">
+                app:layout_constraintEnd_toEndOf="@+id/layoutNoOfPages"
+                app:layout_constraintStart_toStartOf="@+id/layoutNoOfPages"
+                app:layout_constraintTop_toBottomOf="@+id/layoutNoOfPages">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/eTodo2"
+                    android:id="@+id/eTotalQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Total Quantity"
@@ -184,7 +206,6 @@
                 app:layout_constraintStart_toStartOf="@+id/layoutTotalQuantity"
                 app:layout_constraintTop_toBottomOf="@+id/layoutTotalQuantity"
                 app:layout_constraintVertical_bias="0.0" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
