@@ -3,72 +3,307 @@ package com.ad_victoriam.libtex.admin.activities.books;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
 import com.ad_victoriam.libtex.common.models.Book;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class BookDetailsActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class BookDetailsActivity extends AppCompatActivity implements CategoryDialog.CategoryDialogListener {
+
+    DatabaseReference databaseReference;
 
     private Book book;
 
-    private TextView tTitle;
-    private TextView tAuthorName;
-    private TextView tPublisher;
-    private TextView tNoOfPages;
-    private TextView tDescription;
-    private TextView tAvailableQuantity;
-    private TextView tTotalQuantity;
+    private SwitchMaterial sEditMode;
+    private MaterialButton bSaveEditChanges;
+    private TextInputLayout layoutTitle;
+    private TextInputLayout layoutAuthorName;
+    private TextInputLayout layoutPublisher;
+    private TextInputLayout layoutCategory;
+    private TextInputLayout layoutDescription;
+    private TextInputLayout layoutNoOfPages;
+    private TextInputLayout layoutTotalQuantity;
+    private TextInputLayout layoutAvailableQuantity;
+
+    private List<String> chosenCategories = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_book_details);
 
-        Toolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        databaseReference = FirebaseDatabase
+                .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
 
-        tTitle = findViewById(R.id.tTitle);
-        tAuthorName = findViewById(R.id.tAuthorName);
-        tPublisher = findViewById(R.id.tPublisher);
-        tNoOfPages = findViewById(R.id.tNoOfPages);
-        tAvailableQuantity = findViewById(R.id.tAvailableQuantity);
-        tTotalQuantity = findViewById(R.id.tTotalQuantity);
-        tDescription = findViewById(R.id.tDescription);
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Book details");
+        topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+                }
+                return false;
+            }
+        });
+
+        sEditMode = findViewById(R.id.sEditMode);
+        sEditMode.setOnCheckedChangeListener(this::setEditMode);
+
+        bSaveEditChanges = findViewById(R.id.bSaveEditChanges);
+        bSaveEditChanges.setEnabled(false);
+        bSaveEditChanges.setOnClickListener(this::bSaveEditChanges);
+
+        initializeDetailsUi();
 
         if (book == null && getIntent().hasExtra("book")) {
             book = getIntent().getParcelableExtra("book");
 
-            tTitle.setText(book.getTitle());
-            tAuthorName.setText(book.getAuthorName());
-            tPublisher.setText(book.getPublisher());
-            tNoOfPages.setText(book.getNoOfPages());
-            tDescription.setText(book.getDescription());
-            tAvailableQuantity.setText(String.valueOf(book.getAvailableQuantity()));
-            tTotalQuantity.setText(String.valueOf(book.getTotalQuantity()));
+            layoutTitle.getEditText().setText(book.getTitle());
+            layoutAuthorName.getEditText().setText(book.getAuthorName());
+            layoutPublisher.getEditText().setText(book.getPublisher());
+            chosenCategories = book.getChosenCategories();
+            layoutCategory.getEditText().setText(getCategoriesString(chosenCategories));
+            layoutDescription.getEditText().setText(book.getDescription());
+            layoutNoOfPages.getEditText().setText(book.getNoOfPages());
+            layoutTotalQuantity.getEditText().setText(String.valueOf(book.getTotalQuantity()));
+            layoutAvailableQuantity.getEditText().setText(String.valueOf(book.getAvailableQuantity()));
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
 
         final Button bDeleteBook = findViewById(R.id.bDeleteBook);
-        final FloatingActionButton bEditBook = findViewById(R.id.bEditBook);
         bDeleteBook.setOnClickListener(this::deleteBook);
-        bEditBook.setOnClickListener(this::editBook);
+    }
+
+    private void initializeDetailsUi() {
+        layoutTitle = findViewById(R.id.layoutTitle);
+        layoutAuthorName = findViewById(R.id.layoutAuthorName);
+        layoutPublisher = findViewById(R.id.layoutPublisher);
+        layoutCategory = findViewById(R.id.layoutCategory);
+        layoutCategory.getEditText().setOnClickListener(this::chooseCategory);
+        layoutNoOfPages = findViewById(R.id.layoutNoOfPages);
+        layoutDescription = findViewById(R.id.layoutDescription);
+        layoutTotalQuantity = findViewById(R.id.layoutTotalQuantity);
+        layoutAvailableQuantity = findViewById(R.id.layoutAvailableQuantity);
+        setEditableState(false);
+    }
+
+    private void chooseCategory(View view) {
+        CategoryDialog categoryDialog = new CategoryDialog(chosenCategories);
+        categoryDialog.show(getSupportFragmentManager(), "chooseCategory");
+    }
+
+    private void bSaveEditChanges(View view) {
+        if (areBookDetailsValid()) {
+            String bookTitle = layoutTitle.getEditText().getText().toString();
+            String bookAuthorName = layoutAuthorName.getEditText().getText().toString();
+            String bookPublisher = layoutPublisher.getEditText().getText().toString();
+            String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
+            String bookDescription = layoutDescription.getEditText().getText().toString();
+            String bookAvailableQuantity = layoutAvailableQuantity.getEditText().getText().toString();
+
+            int quantityDifference = Integer.parseInt(bookAvailableQuantity) - book.getAvailableQuantity();
+            int totalQuantityNewValue = book.getTotalQuantity() + quantityDifference;
+            String bookTotalQuantity = String.valueOf(totalQuantityNewValue);
+
+            Book updatedBook = new Book(
+                    bookTitle, bookAuthorName, bookPublisher, chosenCategories,
+                    bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity), Integer.parseInt(bookAvailableQuantity));
+
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            Map<String, Object> childUpdates =  new HashMap<>();
+            String bookPath = "books/" + currentUser.getUid() + "/" + book.getUid();
+            childUpdates.put(bookPath + "/title", updatedBook.getTitle());
+            childUpdates.put(bookPath + "/authorName", updatedBook.getAuthorName());
+            childUpdates.put(bookPath + "/publisher", updatedBook.getPublisher());
+            childUpdates.put(bookPath + "/chosenCategories", updatedBook.getChosenCategories());
+            childUpdates.put(bookPath + "/description", updatedBook.getDescription());
+            childUpdates.put(bookPath + "/noOfPages", updatedBook.getNoOfPages());
+            childUpdates.put(bookPath + "/totalQuantity", updatedBook.getTotalQuantity());
+            childUpdates.put(bookPath + "/availableQuantity", updatedBook.getAvailableQuantity());
+
+            databaseReference.updateChildren(childUpdates);
+            setEditableState(false);
+            layoutTotalQuantity.getEditText().setText(bookTotalQuantity);
+            Snackbar.make(view, "Book has been updated successfully", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean areBookDetailsValid() {
+        boolean errorFlag = false;
+
+        int DESCRIPTION_MAX_LIMIT = 200;
+        int STANDARD_MAX_LIMIT = 50;
+        int IDX_MAX_LIMIT = 4;
+        layoutTitle.setError(null);
+        layoutAuthorName.setError(null);
+        layoutPublisher.setError(null);
+        layoutCategory.setError(null);
+        layoutDescription.setError(null);
+        layoutNoOfPages.setError(null);
+        layoutTotalQuantity.setError(null);
+
+        String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
+        if (bookTotalQuantity.isEmpty()) {
+            layoutTotalQuantity.setError(getString(R.string.empty_field));
+            errorFlag = true;
+        } else if (bookTotalQuantity.length() > 4) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
+            layoutTotalQuantity.setError(fieldMaxLimitMessage);
+            errorFlag = true;
+        } else {
+            try {
+                if (Integer.parseInt(bookTotalQuantity) < 0 ) {
+                    layoutTotalQuantity.setError(getString(R.string.is_negative));
+                    errorFlag = true;
+                }
+            } catch (NumberFormatException e) {
+                layoutTotalQuantity.setError(getString(R.string.is_not_decimal));
+                errorFlag = true;
+            }
+        }
+
+        String bookAvailableQuantity = layoutAvailableQuantity.getEditText().getText().toString();
+        if (bookAvailableQuantity.isEmpty()) {
+            layoutAvailableQuantity.setError(getString(R.string.empty_field));
+            errorFlag = true;
+        } else if (bookAvailableQuantity.length() > 4) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
+            layoutAvailableQuantity.setError(fieldMaxLimitMessage);
+            errorFlag = true;
+        } else {
+            try {
+                if (Integer.parseInt(bookAvailableQuantity) < 0 ) {
+                    layoutAvailableQuantity.setError(getString(R.string.is_negative));
+                    errorFlag = true;
+                } else if (Integer.parseInt(bookAvailableQuantity) > Integer.parseInt(bookTotalQuantity)) {
+                    layoutAvailableQuantity.setError(getString(R.string.available_qt_exceeds));
+                    errorFlag = true;
+                }
+            } catch (NumberFormatException e) {
+                layoutAvailableQuantity.setError(getString(R.string.is_not_decimal));
+                errorFlag = true;
+            }
+        }
+
+        String bookNoOfPages = layoutNoOfPages.getEditText().getText().toString();
+        if (bookNoOfPages.isEmpty()) {
+            layoutNoOfPages.setError(getString(R.string.empty_field));
+            errorFlag = true;
+        } else if (bookNoOfPages.length() > 4) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
+            layoutNoOfPages.setError(fieldMaxLimitMessage);
+            errorFlag = true;
+        } else {
+            try {
+                if (Integer.parseInt(bookNoOfPages) <= 0 ) {
+                    layoutNoOfPages.setError(getString(R.string.is_negative));
+                    errorFlag = true;
+                }
+            } catch (NumberFormatException e) {
+                layoutNoOfPages.setError(getString(R.string.is_not_decimal));
+                errorFlag = true;
+            }
+        }
+
+        String bookDescription = layoutDescription.getEditText().getText().toString();
+        if (bookDescription.isEmpty()) {
+            layoutDescription.setError(getString(R.string.empty_field));
+            layoutDescription.requestFocus();
+            errorFlag = true;
+        } else if (bookDescription.length() > 200) {
+            String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + DESCRIPTION_MAX_LIMIT;
+            layoutDescription.setError(fieldMaxLimitMessage);
+            errorFlag = true;
+        }
+
+        List<TextInputLayout> bookDetails = new ArrayList<>();
+        bookDetails.add(layoutTitle);
+        bookDetails.add(layoutAuthorName);
+        bookDetails.add(layoutPublisher);
+
+        for (TextInputLayout bookDetail: bookDetails) {
+            String textToString = bookDetail.getEditText().getText().toString();
+            if (textToString.isEmpty()) {
+                bookDetail.setError(getString(R.string.empty_field));
+                bookDetail.requestFocus();
+                errorFlag = true;
+            } else if (textToString.length() > 50) {
+                String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
+                bookDetail.setError(fieldMaxLimitMessage);
+                errorFlag = true;
+            }
+        }
+
+        if (chosenCategories.isEmpty()) {
+            layoutCategory.setError(getString(R.string.category_not_selected));
+            errorFlag = true;
+        }
+
+        return !errorFlag;
+    }
+
+    private void setEditMode(CompoundButton compoundButton, boolean b) {
+        if (compoundButton.isChecked()) {
+            setEditableState(true);
+        } else {
+            setEditableState(false);
+        }
+    }
+
+    private void setEditableState(boolean isEditable) {
+        if (isEditable) {
+            bSaveEditChanges.setEnabled(true);
+            bSaveEditChanges.setBackgroundColor(getResources().getColor(R.color.dark_sea_green, getTheme()));
+            layoutCategory.setEnabled(true);
+            layoutCategory.getEditText().setFocusable(false);
+        } else {
+            bSaveEditChanges.setEnabled(false);
+            bSaveEditChanges.setBackgroundColor(getResources().getColor(R.color.light_grey, getTheme()));
+            layoutCategory.setEnabled(false);
+        }
+        sEditMode.setChecked(isEditable);
+        layoutTitle.setEnabled(isEditable);
+        layoutAuthorName.setEnabled(isEditable);
+        layoutPublisher.setEnabled(isEditable);
+        layoutDescription.setEnabled(isEditable);
+        layoutNoOfPages.setEnabled(isEditable);
+        layoutTotalQuantity.setEnabled(false);
+        layoutAvailableQuantity.setEnabled(isEditable);
     }
 
     private void deleteBook(View view) {
@@ -85,23 +320,26 @@ public class BookDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void editBook(View view) {
-        startActivity(new Intent(this, EditBookActivity.class));
-    }
+    private String getCategoriesString(List<String> chosenCategories) {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_bar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-
-                break;
+        String listedCategories = "";
+        boolean first = true;
+        for (String category: chosenCategories) {
+            if (first) {
+                first = false;
+            } else {
+                category = "; " + category;
+            }
+            listedCategories = listedCategories.concat(category);
         }
-        return true;
+        return listedCategories;
+    }
+
+    @Override
+    public void saveCategories(List<String> chosenCategories) {
+
+        this.chosenCategories = chosenCategories;
+        String listedCategories = getCategoriesString(chosenCategories);
+        layoutCategory.getEditText().setText(listedCategories);
     }
 }

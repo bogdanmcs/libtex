@@ -3,6 +3,8 @@ package com.ad_victoriam.libtex.common.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Book implements Parcelable {
@@ -31,6 +33,18 @@ public class Book implements Parcelable {
         this.noOfPages = noOfPages;
         this.description = description;
         this.availableQuantity = totalQuantity;
+        this.totalQuantity = totalQuantity;
+    }
+
+    public Book(String title, String authorName, String publisher, List<String> chosenCategories,
+                String noOfPages, String description, int totalQuantity, int availableQuantity) {
+        this.title = title;
+        this.authorName = authorName;
+        this.publisher = publisher;
+        this.chosenCategories = chosenCategories;
+        this.noOfPages = noOfPages;
+        this.description = description;
+        this.availableQuantity = availableQuantity;
         this.totalQuantity = totalQuantity;
     }
 
@@ -117,6 +131,7 @@ public class Book implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(authorName);
         parcel.writeString(publisher);
+        parcel.writeList(chosenCategories);
         parcel.writeString(noOfPages);
         parcel.writeString(description);
         parcel.writeInt(availableQuantity);
@@ -128,6 +143,7 @@ public class Book implements Parcelable {
         title = in.readString();
         authorName = in.readString();
         publisher = in.readString();
+        chosenCategories = in.readArrayList(null);
         noOfPages = in.readString();
         description = in.readString();
         availableQuantity = in.readInt();

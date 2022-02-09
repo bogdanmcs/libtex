@@ -152,8 +152,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="50"
                 app:errorContentDescription=""
                 app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/layoutDescription"

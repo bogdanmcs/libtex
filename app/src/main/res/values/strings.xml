@@ -17,6 +17,7 @@
     <string name="phone_number_not_valid">*Phone number is not valid</string>
     <string name="is_negative">*Number cannot be negative</string>
     <string name="is_not_decimal">*Number must be decimal</string>
+    <string name="available_qt_exceeds">*Available quantity cannot exceed total quantity</string>
     <string name="email_in_use">*Email is already in use</string>
     <string name="email_not_used">*This email is not associated with any account</string>
     <string name="category_not_selected">*Must select at least one category</string>

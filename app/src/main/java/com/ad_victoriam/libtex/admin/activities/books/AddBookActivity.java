@@ -68,8 +68,9 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
             }
         });
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/");
-        databaseReference = database.getReference();
+        databaseReference = FirebaseDatabase
+                .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
 
         layoutTitle = findViewById(R.id.layoutTitle);
         layoutAuthorName = findViewById(R.id.layoutAuthorName);

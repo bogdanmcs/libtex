@@ -1,22 +1,26 @@
 package com.ad_victoriam.libtex.admin.activities.users;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.activities.books.BooksActivity;
+import com.ad_victoriam.libtex.admin.fragments.DatePickerFragment;
 import com.ad_victoriam.libtex.admin.utils.County;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
@@ -29,11 +33,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDetailsActivity extends AppCompatActivity {
+public class UserDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private DatabaseReference databaseReference;
     private User user;
@@ -133,6 +140,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         eIdCardSeries = findViewById(R.id.eIdCardSeries);
         eIdCardNumber = findViewById(R.id.eIdCardNumber);
         eDob = findViewById(R.id.eDob);
+        eDob.setOnClickListener(this::pickDate);
+        eDob.setFocusable(false);
         ePhoneNumber = findViewById(R.id.ePhoneNumber);
         layoutEmail = findViewById(R.id.layoutEmail);
         layoutFullName = findViewById(R.id.layoutFullName);
@@ -142,6 +151,26 @@ public class UserDetailsActivity extends AppCompatActivity {
         layoutPhoneNumber = findViewById(R.id.layoutPhoneNumber);
         setEditableState(false);
         hideUserDetails();
+    }
+
+    private void pickDate(View view) {
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        try {
+            String date = DateFormat.getDateInstance().format(calendar.getTime());
+            eDob.setText(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setEditableState(boolean isEditable) {
@@ -243,7 +272,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             childUpdates.put("users/" + user.getUid() + "/dateOfBirthday", dob);
             childUpdates.put("users/" + user.getUid() + "/phoneNumber", phoneNumber);
             databaseReference.updateChildren(childUpdates);
-            Snackbar.make(view, "User has been updated succesfully", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(view, "User has been updated successfully", Snackbar.LENGTH_SHORT).show();
         }
     }
 
