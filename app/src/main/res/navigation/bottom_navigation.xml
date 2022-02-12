@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/loansFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.LoansFragment"
+        android:label="Loans"
+        tools:layout="@layout/fragment_loans" />
+    <fragment
+        android:id="@+id/booksFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.BooksFragment"
+        android:label="Books"
+        tools:layout="@layout/fragment_books" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" />
+
+</navigation>

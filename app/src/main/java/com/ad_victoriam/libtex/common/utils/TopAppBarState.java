@@ -25,6 +25,12 @@ public class TopAppBarState {
         return backArrowResId;
     }
 
+    public void setNormalMode(Context context, MaterialToolbar materialToolbar) {
+        int colorLibtexPrimary = context.getResources().getColor(R.color.libtex_primary, context.getTheme());
+        materialToolbar.setBackgroundColor(Color.WHITE);
+        materialToolbar.setElevation(0);
+    }
+
     public void setChildMode(Context context, MaterialToolbar materialToolbar) {
         int colorLibtexPrimary = context.getResources().getColor(R.color.libtex_primary, context.getTheme());
         materialToolbar.setNavigationIcon(backArrowResId);
