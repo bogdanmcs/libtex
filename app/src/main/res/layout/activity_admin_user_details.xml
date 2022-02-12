@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_smoke">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -26,6 +27,7 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,13 +45,13 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/libtex_primary"
                 android:text="Show details"
                 android:textAllCaps="false"
                 android:textAlignment="textStart"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 app:icon="@drawable/ic_baseline_arrow_right_24"
-                app:iconTint="@color/black"
+                app:iconTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -223,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@color/royal_blue"
+                android:background="@color/libtex_primary"
                 android:text="ACTIONS"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -235,49 +237,83 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bAddNewLoan"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/light_steel_blue"
                 android:text="Add new loan"
                 android:textColor="@color/grey"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 app:layout_constraintEnd_toEndOf="@+id/actions"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/actions"
                 app:layout_constraintTop_toBottomOf="@+id/actions" />
 
+            <View
+                android:id="@+id/div1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bAddNewLoan" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bViewActiveLoans"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/light_steel_blue"
                 android:text="View active loans"
                 android:textColor="@color/grey"
-                app:layout_constraintEnd_toEndOf="@+id/bAddNewLoan"
-                app:layout_constraintStart_toStartOf="@+id/bAddNewLoan"
-                app:layout_constraintTop_toBottomOf="@+id/bAddNewLoan" />
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:layout_constraintEnd_toEndOf="@+id/div1"
+                app:layout_constraintStart_toStartOf="@+id/div1"
+                app:layout_constraintTop_toBottomOf="@+id/div1" />
+
+            <View
+                android:id="@+id/div2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bViewActiveLoans" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bViewAllLoans"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/light_steel_blue"
                 android:text="View all loans"
                 android:textColor="@color/grey"
-                app:layout_constraintEnd_toEndOf="@+id/bViewActiveLoans"
-                app:layout_constraintStart_toStartOf="@+id/bViewActiveLoans"
-                app:layout_constraintTop_toBottomOf="@+id/bViewActiveLoans" />
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:layout_constraintEnd_toEndOf="@+id/div2"
+                app:layout_constraintStart_toStartOf="@+id/div2"
+                app:layout_constraintTop_toBottomOf="@+id/div2" />
 
+            <View
+                android:id="@+id/div3"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bViewAllLoans" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bDeleteUser"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/indian_red"
                 android:text="Delete this user"
                 android:textColor="@color/white"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/bViewAllLoans"
-                app:layout_constraintStart_toStartOf="@+id/bViewAllLoans"
-                app:layout_constraintTop_toBottomOf="@+id/bViewAllLoans" />
+                app:layout_constraintEnd_toEndOf="@+id/div3"
+                app:layout_constraintStart_toStartOf="@+id/div3"
+                app:layout_constraintTop_toBottomOf="@+id/div3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

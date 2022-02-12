@@ -5,61 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/topAppBar"
-        layout="@layout/top_app_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/bViewCurrentLoans"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/white"
-        android:drawableTop="@drawable/loan_96"
-        android:onClick="clicked"
-        android:text="Loans"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:stateListAnimator="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBar"
-        tools:ignore="RtlHardcoded" />
-
-    <Button
-        android:id="@+id/bViewBooks"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/white"
-        android:drawableTop="@drawable/book1_96"
-        android:text="Books"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:stateListAnimator="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/bViewCurrentLoans"
-        app:layout_constraintTop_toTopOf="@+id/bViewCurrentLoans"
-        tools:ignore="RtlHardcoded" />
-
-    <Button
-        android:id="@+id/bLogOut"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/libtex_primary"
-        android:text="SIGN OUT"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bViewBooks"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:liftOnScroll="true">
+
+        <include
+            android:id="@+id/topAppBar"
+            layout="@layout/top_app_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

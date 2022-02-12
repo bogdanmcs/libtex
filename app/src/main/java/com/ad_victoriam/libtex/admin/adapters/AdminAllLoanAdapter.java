@@ -13,17 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -50,7 +41,7 @@ public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapte
     @NonNull
     @Override
     public AdminAllLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_all_loan, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_admin_all_loan, parent, false);
         return new AdminAllLoanAdapter.BookLoanViewHolder(view);
     }
 

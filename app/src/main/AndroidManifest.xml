@@ -51,7 +51,7 @@
         </activity>
 
         <activity
-            android:name=".user.activities.RegisterActivity">
+            android:name=".user.activities.auth.RegisterActivity">
 
         </activity>
 
@@ -90,23 +90,6 @@
 
         <activity
             android:name=".admin.activities.users.AllLoansActivity">
-        </activity>
-
-        <activity
-            android:name=".user.activities.LoansActivity">
-
-        </activity>
-
-        <activity
-            android:name=".user.activities.LoanDetailsActivity">
-
-        </activity>
-
-        <activity
-            android:name=".user.activities.MapsActivity"
-            android:exported="true"
-            android:label="@string/title_activity_maps">
-
         </activity>
 
     </application>

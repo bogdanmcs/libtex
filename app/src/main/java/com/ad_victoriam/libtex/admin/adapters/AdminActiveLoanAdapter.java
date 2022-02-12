@@ -2,7 +2,6 @@ package com.ad_victoriam.libtex.admin.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,7 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
     @NonNull
     @Override
     public AdminActiveLoanAdapter.BookLoanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_active_loan, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_admin_active_loan, parent, false);
         return new AdminActiveLoanAdapter.BookLoanViewHolder(view);
     }
 

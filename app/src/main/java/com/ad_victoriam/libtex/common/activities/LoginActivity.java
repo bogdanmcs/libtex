@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -18,12 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
-import com.ad_victoriam.libtex.user.activities.RegisterActivity;
+import com.ad_victoriam.libtex.user.activities.auth.RegisterActivity;
 import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;

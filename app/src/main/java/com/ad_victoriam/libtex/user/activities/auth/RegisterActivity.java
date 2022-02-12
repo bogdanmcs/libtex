@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.activities;
+package com.ad_victoriam.libtex.user.activities.auth;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
