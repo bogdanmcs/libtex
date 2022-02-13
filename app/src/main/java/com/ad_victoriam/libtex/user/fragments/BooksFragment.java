@@ -3,6 +3,7 @@ package com.ad_victoriam.libtex.user.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ public class BooksFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FragmentActivity activity;
 
     public BooksFragment() {
         // Required empty public constructor
@@ -62,7 +65,12 @@ public class BooksFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        activity = requireActivity();
+        MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
+        TopAppBarState.get().setNormalMode(activity, topAppBar);
+        TopAppBarState.get().setTitleMode(activity, topAppBar, "Books");
+
         return inflater.inflate(R.layout.fragment_books, container, false);
     }
 }

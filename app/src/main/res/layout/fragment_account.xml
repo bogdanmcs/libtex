@@ -10,15 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bSignOut"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ACCOUNT FRAGMENT"
-            android:textSize="25dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/light_grey"
+            android:text="@string/sign_out"
+            android:textColor="@color/grey2"
+            app:cornerRadius="@dimen/normal_corners"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

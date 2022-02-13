@@ -42,5 +42,6 @@
     <string name="terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
     <string name="records_found">Records found:</string>
     <string name="no_records_found">No records found.</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

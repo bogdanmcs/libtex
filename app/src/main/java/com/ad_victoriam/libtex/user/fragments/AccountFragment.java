@@ -1,14 +1,20 @@
 package com.ad_victoriam.libtex.user.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.common.activities.LoginActivity;
+import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +31,8 @@ public class AccountFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FragmentActivity activity;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -60,7 +68,23 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        activity = requireActivity();
+        MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
+        TopAppBarState.get().setNormalMode(activity, topAppBar);
+        TopAppBarState.get().setTitleMode(activity, topAppBar, "Account");
+
+        final MaterialButton bSignOut = view.findViewById(R.id.bSignOut);
+        bSignOut.setOnClickListener(this::signOut);
+
+        return view;
+    }
+
+    private void signOut(View view) {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(activity, LoginActivity.class));
+        activity.finish();
     }
 }
