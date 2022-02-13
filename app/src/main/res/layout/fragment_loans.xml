@@ -10,15 +10,58 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+<!--        V2-->
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/bActiveLoans"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="32dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="Active"-->
+<!--            app:cornerRadius="0dp"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/bAllLoans"-->
+<!--            app:layout_constraintHorizontal_weight="1"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/bAllLoans"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="32dp"-->
+<!--            android:text="All"-->
+<!--            app:cornerRadius="0dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_weight="1"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/bActiveLoans"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/bActiveLoans" />-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bActiveLoans"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="LOANS FRAGMENT"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/active"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/bAllLoans"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bAllLoans"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/all"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/bActiveLoans"
+            app:layout_constraintTop_toTopOf="@+id/bActiveLoans" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

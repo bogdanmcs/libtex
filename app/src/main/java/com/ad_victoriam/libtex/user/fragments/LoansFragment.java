@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.user.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,10 +9,14 @@ import androidx.fragment.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textview.MaterialTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +34,10 @@ public class LoansFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private MaterialButton bActiveLoans;
+    private MaterialButton bAllLoans;
+
+    private View mainView;
     private FragmentActivity activity;
 
     public LoansFragment() {
@@ -66,11 +75,33 @@ public class LoansFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mainView = inflater.inflate(R.layout.fragment_loans, container, false);
+
         activity = requireActivity();
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
         TopAppBarState.get().setNormalMode(activity, topAppBar);
         TopAppBarState.get().setTitleMode(activity, topAppBar, "Loans");
 
-        return inflater.inflate(R.layout.fragment_loans, container, false);
+        bActiveLoans = mainView.findViewById(R.id.bActiveLoans);
+        bAllLoans = mainView.findViewById(R.id.bAllLoans);
+        bActiveLoans.setOnClickListener(this::switchToActive);
+        bAllLoans.setOnClickListener(this::switchToAll);
+        switchToActive(mainView);
+
+        return mainView;
+    }
+
+    private void switchToActive(View view) {
+        bActiveLoans.setBackgroundColor(getResources().getColor(R.color.libtex_primary, activity.getTheme()));
+        bActiveLoans.setTextColor(Color.WHITE);
+        bAllLoans.setBackgroundColor(Color.WHITE);
+        bAllLoans.setTextColor(Color.BLACK);
+    }
+
+    private void switchToAll(View view) {
+        bActiveLoans.setBackgroundColor(Color.WHITE);
+        bActiveLoans.setTextColor(Color.BLACK);
+        bAllLoans.setBackgroundColor(getResources().getColor(R.color.libtex_primary, activity.getTheme()));
+        bAllLoans.setTextColor(Color.WHITE);
     }
 }
