@@ -74,10 +74,6 @@ public class AllLoansFragment extends Fragment {
         TopAppBarState.get().setNormalMode(activity, topAppBar);
         TopAppBarState.get().setTitleMode(activity, topAppBar, "Loans");
 
-        // TODO
-        // fix incorrect bot nav item display when switching from any fragment to loans fragment
-        // if last state was all loans
-
         initialize();
 
         return mainView;
