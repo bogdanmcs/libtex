@@ -3,8 +3,6 @@ package com.ad_victoriam.libtex.common.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Book implements Parcelable {

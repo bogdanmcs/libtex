@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/bot_nav_loans_colors.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/corners_active_loans.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/corners_all_loans.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_close.xml" value="0.13515625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_exceeded.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/deadline_not_exceeded.xml" value="0.249609375" />
@@ -13,6 +15,11 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_arrow_back_24_royal_blue.xml" value="0.25729166666666664" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3328125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_launcher_background.xml" value="0.13515625" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/loans_active_off.xml" value="0.154296875" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/loans_active_on.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/loans_all_off.xml" value="0.154296875" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/loans_all_on.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/loans_corners.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/textview_rounded_corners.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout-land/activity_admin_home.xml" value="0.33" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout-land/activity_login.xml" value="0.25" />
@@ -51,10 +58,13 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_loan_adapter_row.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_category.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_account.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_active_loans.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_all_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_books.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home2.xml" value="0.1390625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loans.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_temp.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_user_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/loan_adapter_row.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_active_loan.xml" value="0.25" />

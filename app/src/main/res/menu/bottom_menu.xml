@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_baseline_home_24" />
 
     <item
-        android:id="@+id/loansFragment"
+        android:id="@+id/activeLoansFragment"
         android:title="Loans"
         android:icon="@drawable/ic_baseline_loan_24" />
 
