@@ -14,26 +14,11 @@
             android:id="@+id/action_homeFragment_to_loansGraph"
             app:destination="@id/loansGraph" />
         <action
-            android:id="@+id/action_homeFragment_to_booksFragment"
-            app:destination="@id/booksFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/booksFragment"
-        android:name="com.ad_victoriam.libtex.user.fragments.BooksFragment"
-        android:label="Books"
-        tools:layout="@layout/fragment_books" >
         <action
-            android:id="@+id/action_booksFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_booksFragment_to_loansGraph"
-            app:destination="@id/loansGraph" />
-        <action
-            android:id="@+id/action_booksFragment_to_accountFragment"
-            app:destination="@id/accountFragment" />
+            android:id="@+id/action_homeFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -44,12 +29,13 @@
             android:id="@+id/action_accountFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_accountFragment_to_booksFragment"
-            app:destination="@id/booksFragment" />
-        <action
             android:id="@+id/action_accountFragment_to_loansGraph"
             app:destination="@id/loansGraph" />
+        <action
+            android:id="@+id/action_accountFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
     </fragment>
     <include app:graph="@navigation/loans_graph" />
+    <include app:graph="@navigation/books_graph" />
 
 </navigation>

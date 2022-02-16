@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_baseline_loan_24" />
 
     <item
-        android:id="@+id/booksFragment"
+        android:id="@+id/booksGraph"
         android:title="Books"
         android:icon="@drawable/ic_baseline_menu_book_24" />
 

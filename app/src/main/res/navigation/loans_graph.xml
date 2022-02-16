@@ -11,18 +11,19 @@
         android:label="Loans"
         tools:layout="@layout/fragment_active_loans">
         <action
-            android:id="@+id/action_loansFragment_to_homeFragment"
+            android:id="@+id/action_activeLoansFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_loansFragment_to_booksFragment"
-            app:destination="@id/booksFragment" />
-        <action
-            android:id="@+id/action_loansFragment_to_accountFragment"
-            app:destination="@id/accountFragment" />
-        <action
-            android:id="@+id/action_loansFragment_to_allLoansFragment"
+            android:id="@+id/action_activeLoansFragment_to_allLoansFragment"
             app:destination="@id/allLoansFragment" />
+        <action
+            android:id="@+id/action_activeLoansFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
+        <action
+            android:id="@+id/action_activeLoansFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/allLoansFragment"
         android:name="com.ad_victoriam.libtex.user.fragments.AllLoansFragment"
@@ -32,14 +33,14 @@
             android:id="@+id/action_allLoansFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_allLoansFragment_to_booksFragment"
-            app:destination="@id/booksFragment" />
+            android:id="@+id/action_allLoansFragment_to_activeLoansFragment"
+            app:destination="@id/activeLoansFragment" />
+        <action
+            android:id="@+id/action_allLoansFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
         <action
             android:id="@+id/action_allLoansFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
-        <action
-            android:id="@+id/action_allLoansFragment_to_loansFragment"
-            app:destination="@id/activeLoansFragment" />
     </fragment>
 
 </navigation>

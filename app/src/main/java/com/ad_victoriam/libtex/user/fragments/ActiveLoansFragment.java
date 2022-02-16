@@ -104,7 +104,7 @@ public class ActiveLoansFragment extends Fragment {
     }
 
     private void switchToAll(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_loansFragment_to_allLoansFragment);
+        Navigation.findNavController(view).navigate(R.id.action_activeLoansFragment_to_allLoansFragment);
     }
 
     private void attachLoansListener() {
