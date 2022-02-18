@@ -23,11 +23,13 @@
     <!-- Custom -->
     <dimen name="book_row_primary_height_size">40dp</dimen>
     <dimen name="book_row_secondary_height_size">20dp</dimen>
-    <dimen name="book_row_width_size">290dp</dimen>
+    <dimen name="book_row_width_size">270dp</dimen>
+    <dimen name="user_row_width_size">270dp</dimen>
     <dimen name="normal_corners">10dp</dimen>
     <dimen name="large_corners">20dp</dimen>
     <dimen name="normal_elevation">4dp</dimen>
     <dimen name="no_elevation">0dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="details_actions_padding">10dp</dimen>
 
 </resources>

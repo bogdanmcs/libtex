@@ -12,7 +12,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:cardCornerRadius="@dimen/normal_corners"
-        app:cardElevation="@dimen/normal_elevation"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,50 +22,40 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iUserIcon"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tFullName"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user2_80" />
-
-            <TextView
-                android:id="@+id/tFullName"
-                android:layout_width="@dimen/book_row_width_size"
-                android:layout_height="@dimen/book_row_primary_height_size"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:text="User full name"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/iUserIcon"
-                app:layout_constraintTop_toTopOf="@+id/iUserIcon" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tEmail"
-                android:layout_width="@dimen/book_row_width_size"
-                android:layout_height="@dimen/book_row_secondary_height_size"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="User email address"
                 android:textAlignment="textStart"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/iUserIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tFullName"
+                app:layout_constraintStart_toStartOf="@+id/tFullName"
                 app:layout_constraintTop_toBottomOf="@+id/tFullName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

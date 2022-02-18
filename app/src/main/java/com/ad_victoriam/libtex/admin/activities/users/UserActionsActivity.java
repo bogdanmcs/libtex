@@ -34,13 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class UserActionsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     private DatabaseReference databaseReference;
     private User user;
@@ -74,7 +73,7 @@ public class UserDetailsActivity extends AppCompatActivity implements DatePicker
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
         TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "User details");
+        TopAppBarState.get().setTitleMode(this, topAppBar, "Actions");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,10 +192,10 @@ public class UserDetailsActivity extends AppCompatActivity implements DatePicker
     private void setUserDetailsState(View view) {
         if (areUserDetailsShown) {
             hideUserDetails();
-            bSetUserDetailsState.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_baseline_arrow_right_24));
+            bSetUserDetailsState.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_baseline_arrow_forward_ios_24));
         } else {
             showUserDetails();
-            bSetUserDetailsState.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_baseline_arrow_drop_down_24));
+            bSetUserDetailsState.setIcon(AppCompatResources.getDrawable(this, R.drawable.ic_baseline_arrow_drop_down_circle_24));
         }
         areUserDetailsShown = !areUserDetailsShown;
     }

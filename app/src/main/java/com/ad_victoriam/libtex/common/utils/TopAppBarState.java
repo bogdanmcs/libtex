@@ -2,7 +2,11 @@ package com.ad_victoriam.libtex.common.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.view.menu.ActionMenuItemView;
 
 import com.ad_victoriam.libtex.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -35,7 +39,6 @@ public class TopAppBarState {
         int colorLibtexPrimary = context.getResources().getColor(R.color.libtex_primary, context.getTheme());
         materialToolbar.setNavigationIcon(backArrowResId);
         materialToolbar.setNavigationIconTint(colorLibtexPrimary);
-        int color = context.getResources().getColor(R.color.light_sky_blue, context.getTheme());
         materialToolbar.setBackgroundColor(Color.WHITE);
         materialToolbar.setElevation(0);
     }

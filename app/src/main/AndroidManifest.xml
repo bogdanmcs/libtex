@@ -81,7 +81,7 @@
         </activity>
 
         <activity
-            android:name=".admin.activities.users.UserDetailsActivity">
+            android:name=".admin.activities.users.UserActionsActivity">
         </activity>
 
         <activity

@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.users.UserDetailsActivity;
+import com.ad_victoriam.libtex.admin.activities.users.UserActionsActivity;
 import com.ad_victoriam.libtex.common.models.User;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     private void clicked(View view, int position) {
-        Intent intent = new Intent(context, UserDetailsActivity.class);
+        Intent intent = new Intent(context, UserActionsActivity.class);
         intent.putExtra("user", users.get(position));
         context.startActivity(intent);
     }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
@@ -128,6 +129,7 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
     }
 
     private void bSaveEditChanges(View view) {
+
         if (areBookDetailsValid()) {
             String bookTitle = layoutTitle.getEditText().getText().toString();
             String bookAuthorName = layoutAuthorName.getEditText().getText().toString();
@@ -142,7 +144,8 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
 
             Book updatedBook = new Book(
                     bookTitle, bookAuthorName, bookPublisher, chosenCategories,
-                    bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity), Integer.parseInt(bookAvailableQuantity));
+                    bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity),
+                    Integer.parseInt(bookAvailableQuantity));
 
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             Map<String, Object> childUpdates =  new HashMap<>();
