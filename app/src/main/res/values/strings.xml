@@ -6,11 +6,16 @@
     <string name="title_activity_maps">MapsActivity</string>
 
     <!-- nodes -->
+    <string name="n_admins">admins</string>
+    <string name="n_location">location</string>
     <string name="n_books">books</string>
     <string name="n_users">users</string>
     <string name="n_book_loans">book-loans</string>
     <string name="n_current_loans">current-loans</string>
     <string name="n_loans_history">loans-history</string>
+
+    <!-- nodes props -->
+    <string name="p_location_name">name</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>

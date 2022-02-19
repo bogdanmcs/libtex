@@ -17,7 +17,7 @@ public class Book implements Parcelable {
     private String description;
     private int availableQuantity;
 
-    private List<String> availableShowrooms = new ArrayList<>();
+    private List<String> locations = new ArrayList<>();
 
     public Book() {
         // Default constructor required for calls to DataSnapshot.getValue(Book.class)
@@ -32,7 +32,7 @@ public class Book implements Parcelable {
         this.noOfPages = noOfPages;
         this.description = description;
         this.availableQuantity = availableQuantity;
-        this.availableShowrooms = null;
+        this.locations = null;
     }
 
     public String getUid() {
@@ -99,12 +99,12 @@ public class Book implements Parcelable {
         this.availableQuantity = availableQuantity;
     }
 
-    public List<String> getAvailableShowrooms() {
-        return availableShowrooms;
+    public List<String> getLocations() {
+        return locations;
     }
 
-    public void addAvailableShowroom(String showroom) {
-        availableShowrooms.add(showroom);
+    public void addLocation(String libraryLocation) {
+        locations.add(libraryLocation);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Book implements Parcelable {
         parcel.writeString(noOfPages);
         parcel.writeString(description);
         parcel.writeInt(availableQuantity);
-        parcel.writeList(availableShowrooms);
+        parcel.writeList(locations);
     }
 
     protected Book(Parcel in) {
@@ -134,7 +134,7 @@ public class Book implements Parcelable {
         noOfPages = in.readString();
         description = in.readString();
         availableQuantity = in.readInt();
-        availableShowrooms = in.readArrayList(null);
+        locations = in.readArrayList(null);
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {

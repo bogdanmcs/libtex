@@ -24,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BooksFragment extends Fragment {
 
@@ -33,11 +35,10 @@ public class BooksFragment extends Fragment {
     private FragmentActivity activity;
 
     private RecyclerView recyclerView;
-//    private
 
-    //    private Map<String, List<Book>> libraries;
-    private List<LibtexLibrary> libraries = new ArrayList<>();
-    private List<Book> books = new ArrayList<>();
+    private final List<LibtexLibrary> libraries = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
+    private final Map<String, String> libraryNames = new HashMap<>();
     private BooksAdapter booksAdapter;
 
     public BooksFragment() {
@@ -65,7 +66,10 @@ public class BooksFragment extends Fragment {
         TopAppBarState.get().setTitleMode(activity, topAppBar, "Books");
 
         recyclerView = mainView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         booksAdapter = new BooksAdapter(activity, books);
         recyclerView.setAdapter(booksAdapter);
 
@@ -75,9 +79,34 @@ public class BooksFragment extends Fragment {
     }
 
     private void getLibrariesAndBooks() {
-        libraries = new ArrayList<>();
+        libraries.clear();
+        books.clear();
 
+        // get libraries details
+        databaseReference
+                .child(getString(R.string.n_admins))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 
+                        if (task.isSuccessful()) {
+                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                                String libraryName = dataSnapshot
+                                        .child(getString(R.string.n_location))
+                                        .child(getString(R.string.p_location_name))
+                                        .getValue(String.class);
+
+                                libraryNames.put(dataSnapshot.getKey(), libraryName);
+                            }
+                        } else {
+                            System.out.println(task.getResult());
+                        }
+                    }
+                });
+
+        // get all books
         databaseReference
                 .child(getString(R.string.n_books))
                 .get()
@@ -105,7 +134,7 @@ public class BooksFragment extends Fragment {
                             }
 
                             setBooks();
-                            booksAdapter.notifyDataSetChanged();
+                            booksAdapter.notifyItemInserted(books.size() - 1);
 
                         } else {
                             System.out.println(task.getResult());
@@ -118,15 +147,14 @@ public class BooksFragment extends Fragment {
         for (LibtexLibrary library: libraries) {
             for (Book book: library.getBooks()) {
 
-                // TODO: library uid will be replaced with name /& location
-
+                String libraryName = libraryNames.get(library.getUid());
                 if (!isDuplicate(book)) {
-                    book.addAvailableShowroom(library.getUid());
+                    book.addLocation(libraryName);
                     books.add(book);
                 } else {
                     for (Book b: books) {
                         if (b.isSame(book)) {
-                            b.addAvailableShowroom(library.getUid());
+                            b.addLocation(libraryName);
                         }
                     }
                 }

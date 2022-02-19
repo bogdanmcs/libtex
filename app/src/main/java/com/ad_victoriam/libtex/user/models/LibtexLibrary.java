@@ -6,6 +6,7 @@ import java.util.List;
 public class LibtexLibrary {
 
     private String uid;
+    private String name;
     private final List<Book> books = new ArrayList<>();
 
     public LibtexLibrary() {
@@ -16,6 +17,18 @@ public class LibtexLibrary {
         return uid;
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<Book> getBooks() {
         return books;
     }
@@ -23,10 +36,4 @@ public class LibtexLibrary {
     public void addBook(Book book) {
         books.add(book);
     }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-
 }
