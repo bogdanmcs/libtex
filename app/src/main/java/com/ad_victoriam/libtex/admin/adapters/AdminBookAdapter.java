@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.books.BookDetailsActivity;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,23 +25,23 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.BookViewHolder> {
 
     private final Context context;
-    private final List<Book> books;
+    private final List<AdminBook> adminBooks;
 
     private final String intentAction;
     private User user;
 
-    public BookAdapter(Context context, List<Book> books, String intentAction) {
+    public AdminBookAdapter(Context context, List<AdminBook> adminBooks, String intentAction) {
         this.context = context;
-        this.books = books;
+        this.adminBooks = adminBooks;
         this.intentAction = intentAction;
     }
 
-    public BookAdapter(Context context, List<Book> books, String intentAction, User user) {
+    public AdminBookAdapter(Context context, List<AdminBook> adminBooks, String intentAction, User user) {
         this.context = context;
-        this.books = books;
+        this.adminBooks = adminBooks;
         this.intentAction = intentAction;
         this.user = user;
     }
@@ -49,23 +49,23 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_book, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_admin_book, parent, false);
         return new BookViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> clicked(view, position));
-        holder.tBookTitle.setText(books.get(position).getTitle());
-        String text = "by " + books.get(position).getAuthorName();
+        holder.tBookTitle.setText(adminBooks.get(position).getTitle());
+        String text = "by " + adminBooks.get(position).getAuthorName();
         holder.tBookAuthorName.setText(text);
-        holder.tBookPublisher.setText(books.get(position).getPublisher());
+        holder.tBookPublisher.setText(adminBooks.get(position).getPublisher());
     }
 
     private void clicked(View view, int position) {
         if (!intentAction.equals("BORROW")) {
             Intent intent = new Intent(context, BookDetailsActivity.class);
-            intent.putExtra("book", books.get(position));
+            intent.putExtra("book", adminBooks.get(position));
             context.startActivity(intent);
         } else {
             // assign book to current user
@@ -75,7 +75,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public int getItemCount() {
-        return books.size();
+        return adminBooks.size();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
@@ -110,15 +110,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Book book = books.get(position);
+        AdminBook adminBook = adminBooks.get(position);
         databaseReference
                 .child("books")
                 .child(currentUser.getUid())
-                .child(book.getUid())
+                .child(adminBook.getUid())
                 .child("availableQuantity")
-                .setValue(book.getAvailableQuantity() - 1);
+                .setValue(adminBook.getAvailableQuantity() - 1);
 
-        BookLoan bookLoan = new BookLoan(book.getUid());
+        BookLoan bookLoan = new BookLoan(adminBook.getUid());
         String bookLoanKey = databaseReference
                 .child("users")
                 .child(user.getUid())

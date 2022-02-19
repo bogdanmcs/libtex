@@ -10,15 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.ad_victoriam.libtex.user.adapters.ActiveLoansAdapter;
@@ -110,10 +107,10 @@ public class ActiveLoansFragment extends Fragment {
     private void attachLoansListener() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         loansListener = databaseReference
-                .child(getString(R.string.users))
+                .child(getString(R.string.n_users))
                 .child(currentUser.getUid())
-                .child(getString(R.string.book_loans))
-                .child(getString(R.string.current_loans))
+                .child(getString(R.string.n_book_loans))
+                .child(getString(R.string.n_current_loans))
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -138,13 +135,13 @@ public class ActiveLoansFragment extends Fragment {
 
                                                 if (task.isSuccessful()) {
                                                     for (DataSnapshot dataSnapshot1: task.getResult().getChildren()) {
-                                                        Book book = dataSnapshot1.getValue(Book.class);
+                                                        AdminBook adminBook = dataSnapshot1.getValue(AdminBook.class);
 
-                                                        if (book != null) {
-                                                            book.setUid(dataSnapshot1.getKey());
+                                                        if (adminBook != null) {
+                                                            adminBook.setUid(dataSnapshot1.getKey());
 
-                                                            if (book.getUid().equals(bookLoan.getBookUid())) {
-                                                                bookLoan.setBook(book);
+                                                            if (adminBook.getUid().equals(bookLoan.getBookUid())) {
+                                                                bookLoan.setBook(adminBook);
                                                                 bookLoan.setLibraryUid(libraryUid);
 
                                                                 if (!loans.contains(bookLoan)) {

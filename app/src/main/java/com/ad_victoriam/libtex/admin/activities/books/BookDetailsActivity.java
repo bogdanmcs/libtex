@@ -11,13 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
-import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -38,7 +37,7 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
 
     DatabaseReference databaseReference;
 
-    private Book book;
+    private AdminBook adminBook;
 
     private SwitchMaterial sEditMode;
     private MaterialButton bSaveEditChanges;
@@ -90,18 +89,18 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
 
         initializeDetailsUi();
 
-        if (book == null && getIntent().hasExtra("book")) {
-            book = getIntent().getParcelableExtra("book");
+        if (adminBook == null && getIntent().hasExtra("book")) {
+            adminBook = getIntent().getParcelableExtra("book");
 
-            layoutTitle.getEditText().setText(book.getTitle());
-            layoutAuthorName.getEditText().setText(book.getAuthorName());
-            layoutPublisher.getEditText().setText(book.getPublisher());
-            chosenCategories = book.getChosenCategories();
+            layoutTitle.getEditText().setText(adminBook.getTitle());
+            layoutAuthorName.getEditText().setText(adminBook.getAuthorName());
+            layoutPublisher.getEditText().setText(adminBook.getPublisher());
+            chosenCategories = adminBook.getChosenCategories();
             layoutCategory.getEditText().setText(getCategoriesString(chosenCategories));
-            layoutDescription.getEditText().setText(book.getDescription());
-            layoutNoOfPages.getEditText().setText(book.getNoOfPages());
-            layoutTotalQuantity.getEditText().setText(String.valueOf(book.getTotalQuantity()));
-            layoutAvailableQuantity.getEditText().setText(String.valueOf(book.getAvailableQuantity()));
+            layoutDescription.getEditText().setText(adminBook.getDescription());
+            layoutNoOfPages.getEditText().setText(adminBook.getNoOfPages());
+            layoutTotalQuantity.getEditText().setText(String.valueOf(adminBook.getTotalQuantity()));
+            layoutAvailableQuantity.getEditText().setText(String.valueOf(adminBook.getAvailableQuantity()));
         } else {
             Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
         }
@@ -138,26 +137,26 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
             String bookDescription = layoutDescription.getEditText().getText().toString();
             String bookAvailableQuantity = layoutAvailableQuantity.getEditText().getText().toString();
 
-            int quantityDifference = Integer.parseInt(bookAvailableQuantity) - book.getAvailableQuantity();
-            int totalQuantityNewValue = book.getTotalQuantity() + quantityDifference;
+            int quantityDifference = Integer.parseInt(bookAvailableQuantity) - adminBook.getAvailableQuantity();
+            int totalQuantityNewValue = adminBook.getTotalQuantity() + quantityDifference;
             String bookTotalQuantity = String.valueOf(totalQuantityNewValue);
 
-            Book updatedBook = new Book(
+            AdminBook updatedAdminBook = new AdminBook(
                     bookTitle, bookAuthorName, bookPublisher, chosenCategories,
                     bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity),
                     Integer.parseInt(bookAvailableQuantity));
 
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             Map<String, Object> childUpdates =  new HashMap<>();
-            String bookPath = "books/" + currentUser.getUid() + "/" + book.getUid();
-            childUpdates.put(bookPath + "/title", updatedBook.getTitle());
-            childUpdates.put(bookPath + "/authorName", updatedBook.getAuthorName());
-            childUpdates.put(bookPath + "/publisher", updatedBook.getPublisher());
-            childUpdates.put(bookPath + "/chosenCategories", updatedBook.getChosenCategories());
-            childUpdates.put(bookPath + "/description", updatedBook.getDescription());
-            childUpdates.put(bookPath + "/noOfPages", updatedBook.getNoOfPages());
-            childUpdates.put(bookPath + "/totalQuantity", updatedBook.getTotalQuantity());
-            childUpdates.put(bookPath + "/availableQuantity", updatedBook.getAvailableQuantity());
+            String bookPath = "books/" + currentUser.getUid() + "/" + adminBook.getUid();
+            childUpdates.put(bookPath + "/title", updatedAdminBook.getTitle());
+            childUpdates.put(bookPath + "/authorName", updatedAdminBook.getAuthorName());
+            childUpdates.put(bookPath + "/publisher", updatedAdminBook.getPublisher());
+            childUpdates.put(bookPath + "/chosenCategories", updatedAdminBook.getChosenCategories());
+            childUpdates.put(bookPath + "/description", updatedAdminBook.getDescription());
+            childUpdates.put(bookPath + "/noOfPages", updatedAdminBook.getNoOfPages());
+            childUpdates.put(bookPath + "/totalQuantity", updatedAdminBook.getTotalQuantity());
+            childUpdates.put(bookPath + "/availableQuantity", updatedAdminBook.getAvailableQuantity());
 
             databaseReference.updateChildren(childUpdates);
             setEditableState(false);
@@ -316,7 +315,7 @@ public class BookDetailsActivity extends AppCompatActivity implements CategoryDi
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                     // verify if deletion is successful or not
-                    databaseReference.child("books").child(currentUser.getUid()).child(book.getUid()).removeValue();
+                    databaseReference.child("books").child(currentUser.getUid()).child(adminBook.getUid()).removeValue();
                     finish();
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> {})

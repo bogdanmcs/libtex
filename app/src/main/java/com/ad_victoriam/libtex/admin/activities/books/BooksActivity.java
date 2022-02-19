@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.books.AddBookActivity;
-import com.ad_victoriam.libtex.admin.adapters.BookAdapter;
-import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.admin.adapters.AdminBookAdapter;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,12 +34,12 @@ public class BooksActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
 
-    private BookAdapter bookAdapter;
+    private AdminBookAdapter adminBookAdapter;
 
     private TextView tRecordsCounter;
     private RecyclerView recyclerView;
 
-    private final List<Book> books = new ArrayList<>();
+    private final List<AdminBook> adminBooks = new ArrayList<>();
     private int recordsCounter = 0;
     private String intentAction;
 
@@ -76,15 +75,15 @@ public class BooksActivity extends AppCompatActivity {
             intentAction = "BORROW";
             addNewItem.setVisibility(View.GONE);
             TopAppBarState.get().setTitleMode(this, topAppBar, "Assign book");
-            bookAdapter = new BookAdapter(this, books, intentAction, getIntent().getParcelableExtra("user"));
+            adminBookAdapter = new AdminBookAdapter(this, adminBooks, intentAction, getIntent().getParcelableExtra("user"));
         } else {
             intentAction = "NONE";
             TopAppBarState.get().setTitleMode(this, topAppBar, "Books");
-            bookAdapter = new BookAdapter(this, books, intentAction);
+            adminBookAdapter = new AdminBookAdapter(this, adminBooks, intentAction);
         }
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(bookAdapter);
+        recyclerView.setAdapter(adminBookAdapter);
 
         attachDatabaseBooksListener();
     }
@@ -96,22 +95,22 @@ public class BooksActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                Book book = snapshot.getValue(Book.class);
+                AdminBook adminBook = snapshot.getValue(AdminBook.class);
 
                 // check if available quantity > 0
-                if (book != null) {
+                if (adminBook != null) {
 
-                    if (!intentAction.equals("BORROW") || book.getAvailableQuantity() > 0) {
+                    if (!intentAction.equals("BORROW") || adminBook.getAvailableQuantity() > 0) {
 
-                        book.setUid(snapshot.getKey());
+                        adminBook.setUid(snapshot.getKey());
 
-                        if (!books.contains(book)) {
-                            books.add(book);
+                        if (!adminBooks.contains(adminBook)) {
+                            adminBooks.add(adminBook);
                             recordsCounter++;
                             String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
                             tRecordsCounter.setText(text);
                         }
-                        bookAdapter.notifyItemInserted(books.size() - 1);
+                        adminBookAdapter.notifyItemInserted(adminBooks.size() - 1);
                     }
                 }
             }
@@ -119,23 +118,23 @@ public class BooksActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                Book book = snapshot.getValue(Book.class);
+                AdminBook adminBook = snapshot.getValue(AdminBook.class);
 
-                if (book != null) {
+                if (adminBook != null) {
 
                     boolean isToBeRemoved = false;
-                    if (intentAction.equals("BORROW") && book.getAvailableQuantity() == 0) {
+                    if (intentAction.equals("BORROW") && adminBook.getAvailableQuantity() == 0) {
                         isToBeRemoved = true;
                     }
 
-                    book.setUid(snapshot.getKey());
+                    adminBook.setUid(snapshot.getKey());
 
                     int indexOfChangedBook = -1;
-                    for (Book b : books) {
-                        if (b.getUid().equals(book.getUid())) {
-                            indexOfChangedBook = books.indexOf(b);
+                    for (AdminBook b : adminBooks) {
+                        if (b.getUid().equals(adminBook.getUid())) {
+                            indexOfChangedBook = adminBooks.indexOf(b);
                             if (isToBeRemoved) {
-                                books.remove(indexOfChangedBook);
+                                adminBooks.remove(indexOfChangedBook);
                                 recordsCounter--;
                                 String text;
                                 if (recordsCounter > 0) {
@@ -145,29 +144,29 @@ public class BooksActivity extends AppCompatActivity {
                                 }
                                 tRecordsCounter.setText(text);
                             } else {
-                                books.set(indexOfChangedBook, book);
+                                adminBooks.set(indexOfChangedBook, adminBook);
                             }
                             break;
                         }
                     }
-                    bookAdapter.notifyDataSetChanged();
+                    adminBookAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-                Book book = snapshot.getValue(Book.class);
+                AdminBook adminBook = snapshot.getValue(AdminBook.class);
 
-                if (book != null) {
+                if (adminBook != null) {
 
-                    book.setUid(snapshot.getKey());
+                    adminBook.setUid(snapshot.getKey());
 
                     int indexOfRemovedBook = -1;
-                    for (Book b: books) {
-                        if (b.getUid().equals(book.getUid())) {
-                            indexOfRemovedBook = books.indexOf(b);
-                            books.remove(indexOfRemovedBook);
+                    for (AdminBook b: adminBooks) {
+                        if (b.getUid().equals(adminBook.getUid())) {
+                            indexOfRemovedBook = adminBooks.indexOf(b);
+                            adminBooks.remove(indexOfRemovedBook);
                             recordsCounter--;
                             String text;
                             if (recordsCounter > 0) {
@@ -180,9 +179,9 @@ public class BooksActivity extends AppCompatActivity {
                         }
                     }
                     if (indexOfRemovedBook != -1) {
-                        bookAdapter.notifyItemRemoved(indexOfRemovedBook);
+                        adminBookAdapter.notifyItemRemoved(indexOfRemovedBook);
                     } else {
-                        bookAdapter.notifyDataSetChanged();
+                        adminBookAdapter.notifyDataSetChanged();
                     }
                 }
             }

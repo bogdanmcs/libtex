@@ -1,8 +1,9 @@
-package com.ad_victoriam.libtex.common.models;
+package com.ad_victoriam.libtex.user.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Book implements Parcelable {
@@ -15,27 +16,15 @@ public class Book implements Parcelable {
     private String noOfPages;
     private String description;
     private int availableQuantity;
-    private int totalQuantity;
 
+    private List<String> availableShowrooms = new ArrayList<>();
 
     public Book() {
         // Default constructor required for calls to DataSnapshot.getValue(Book.class)
     }
 
     public Book(String title, String authorName, String publisher, List<String> chosenCategories,
-                String noOfPages, String description, int totalQuantity) {
-        this.title = title;
-        this.authorName = authorName;
-        this.publisher = publisher;
-        this.chosenCategories = chosenCategories;
-        this.noOfPages = noOfPages;
-        this.description = description;
-        this.availableQuantity = totalQuantity;
-        this.totalQuantity = totalQuantity;
-    }
-
-    public Book(String title, String authorName, String publisher, List<String> chosenCategories,
-                String noOfPages, String description, int totalQuantity, int availableQuantity) {
+                String noOfPages, String description, int availableQuantity) {
         this.title = title;
         this.authorName = authorName;
         this.publisher = publisher;
@@ -43,7 +32,7 @@ public class Book implements Parcelable {
         this.noOfPages = noOfPages;
         this.description = description;
         this.availableQuantity = availableQuantity;
-        this.totalQuantity = totalQuantity;
+        this.availableShowrooms = null;
     }
 
     public String getUid() {
@@ -110,12 +99,12 @@ public class Book implements Parcelable {
         this.availableQuantity = availableQuantity;
     }
 
-    public int getTotalQuantity() {
-        return totalQuantity;
+    public List<String> getAvailableShowrooms() {
+        return availableShowrooms;
     }
 
-    public void setTotalQuantity(int totalQuantity) {
-        this.totalQuantity = totalQuantity;
+    public void addAvailableShowroom(String showroom) {
+        availableShowrooms.add(showroom);
     }
 
     @Override
@@ -133,7 +122,7 @@ public class Book implements Parcelable {
         parcel.writeString(noOfPages);
         parcel.writeString(description);
         parcel.writeInt(availableQuantity);
-        parcel.writeInt(totalQuantity);
+        parcel.writeList(availableShowrooms);
     }
 
     protected Book(Parcel in) {
@@ -145,7 +134,7 @@ public class Book implements Parcelable {
         noOfPages = in.readString();
         description = in.readString();
         availableQuantity = in.readInt();
-        totalQuantity = in.readInt();
+        availableShowrooms = in.readArrayList(null);
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -159,4 +148,10 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
+
+    public boolean isSame(Book book) {
+        return this.title.equals(book.title) &&
+                this.authorName.equals(book.authorName) &&
+                this.publisher.equals(book.publisher);
+    }
 }

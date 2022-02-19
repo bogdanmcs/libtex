@@ -2,20 +2,18 @@ package com.ad_victoriam.libtex.admin.activities.books;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
-import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -26,9 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AddBookActivity extends AppCompatActivity implements CategoryDialog.CategoryDialogListener {
 
@@ -103,11 +99,11 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
             String bookDescription = layoutDescription.getEditText().getText().toString();
             String bookTotalQuantity = layoutTotalQuantity.getEditText().getText().toString();
 
-            Book book = new Book(
+            AdminBook adminBook = new AdminBook(
                     bookTitle, bookAuthorName, bookPublisher, chosenCategories,
                     bookNoOfPages, bookDescription, Integer.parseInt(bookTotalQuantity));
             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            databaseReference.child("books").child(currentUser.getUid()).push().setValue(book);
+            databaseReference.child("books").child(currentUser.getUid()).push().setValue(adminBook);
             Toast.makeText(getApplicationContext(), "Book added successfully.", Toast.LENGTH_SHORT).show();
             finish();
         }

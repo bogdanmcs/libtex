@@ -16,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.adapters.AdminAllLoanAdapter;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.admin.adapters.AdminActiveLoanAdapter;
-import com.ad_victoriam.libtex.common.models.Book;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -114,12 +113,12 @@ public class AllLoansActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
-                                                    Book book = dataSnapshot.getValue(Book.class);
+                                                    AdminBook adminBook = dataSnapshot.getValue(AdminBook.class);
 
-                                                    if (book != null && bookLoan.getBookUid().equals(dataSnapshot.getKey())) {
+                                                    if (adminBook != null && bookLoan.getBookUid().equals(dataSnapshot.getKey())) {
                                                         // got the book
-                                                        book.setUid(dataSnapshot.getKey());
-                                                        bookLoan.setBook(book);
+                                                        adminBook.setUid(dataSnapshot.getKey());
+                                                        bookLoan.setBook(adminBook);
                                                         if (!bookLoans.contains(bookLoan)) {
                                                             bookLoans.add(bookLoan);
                                                             recordsCounter++;
@@ -152,8 +151,8 @@ public class AllLoansActivity extends AppCompatActivity {
                                 if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
                                     indexOfChangedBookLoan = bookLoans.indexOf(b);
                                     // keep book data - no need to query again
-                                    Book bookData = b.getBook();
-                                    bookLoan.setBook(bookData);
+                                    AdminBook adminBookData = b.getBook();
+                                    bookLoan.setBook(adminBookData);
                                     bookLoans.set(indexOfChangedBookLoan, bookLoan);
                                     break;
                                 }

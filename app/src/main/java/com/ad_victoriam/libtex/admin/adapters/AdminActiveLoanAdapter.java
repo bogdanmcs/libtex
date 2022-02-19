@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.common.models.Book;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -153,19 +153,19 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()) {
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-                                Book book = dataSnapshot.getValue(Book.class);
+                                AdminBook adminBook = dataSnapshot.getValue(AdminBook.class);
 
-                                if (book != null) {
-                                    book.setUid(dataSnapshot.getKey());
+                                if (adminBook != null) {
+                                    adminBook.setUid(dataSnapshot.getKey());
 
-                                    if (book.getUid().equals(bookLoans.get(position).getBookUid())) {
+                                    if (adminBook.getUid().equals(bookLoans.get(position).getBookUid())) {
                                         // found the book, increase AQ by 1
                                         databaseReference
                                                 .child("books")
                                                 .child(currentUser.getUid())
-                                                .child(book.getUid())
+                                                .child(adminBook.getUid())
                                                 .child("availableQuantity")
-                                                .setValue(book.getAvailableQuantity() + 1);
+                                                .setValue(adminBook.getAvailableQuantity() + 1);
                                         break;
                                     }
                                 }

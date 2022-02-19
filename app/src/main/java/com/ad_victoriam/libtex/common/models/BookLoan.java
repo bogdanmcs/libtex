@@ -3,6 +3,8 @@ package com.ad_victoriam.libtex.common.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ad_victoriam.libtex.admin.models.AdminBook;
+
 import java.time.LocalDateTime;
 
 public class BookLoan implements Parcelable {
@@ -14,29 +16,29 @@ public class BookLoan implements Parcelable {
     private String deadlineTimestamp;
     private String returnTimestamp;
 
-    private Book book;
+    private AdminBook adminBook;
 
     public BookLoan() {
     }
 
-    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, Book book) {
+    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, AdminBook adminBook) {
         this.libraryUid = null;
         this.bookLoanUid = null;
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
         this.returnTimestamp = null;
-        this.book = book;
+        this.adminBook = adminBook;
     }
 
-    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, String returnTimestmap, Book book) {
+    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, String returnTimestmap, AdminBook adminBook) {
         this.libraryUid = null;
         this.bookLoanUid = null;
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
         this.returnTimestamp = returnTimestmap;
-        this.book = book;
+        this.adminBook = adminBook;
     }
 
     public BookLoan(String bookUid) {
@@ -47,7 +49,7 @@ public class BookLoan implements Parcelable {
         this.loanTimestamp = currentDateTime.toString();
         this.deadlineTimestamp = currentDateTime.plusMonths(3).toString();
         this.returnTimestamp = null;
-        this.book = null;
+        this.adminBook = null;
     }
 
     protected BookLoan(Parcel in) {
@@ -57,7 +59,7 @@ public class BookLoan implements Parcelable {
         loanTimestamp = in.readString();
         deadlineTimestamp = in.readString();
         returnTimestamp = in.readString();
-        book = in.readParcelable(Book.class.getClassLoader());
+        adminBook = in.readParcelable(AdminBook.class.getClassLoader());
     }
 
     public static final Creator<BookLoan> CREATOR = new Creator<BookLoan>() {
@@ -96,12 +98,12 @@ public class BookLoan implements Parcelable {
         return returnTimestamp;
     }
 
-    public Book getBook() {
-        return book;
+    public AdminBook getBook() {
+        return adminBook;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBook(AdminBook adminBook) {
+        this.adminBook = adminBook;
     }
 
     public String getBookLoanUid() {
@@ -125,6 +127,6 @@ public class BookLoan implements Parcelable {
         parcel.writeString(loanTimestamp);
         parcel.writeString(deadlineTimestamp);
         parcel.writeString(returnTimestamp);
-        parcel.writeParcelable(book, i);
+        parcel.writeParcelable(adminBook, i);
     }
 }
