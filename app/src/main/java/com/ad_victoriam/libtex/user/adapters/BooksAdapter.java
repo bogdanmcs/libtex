@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
@@ -65,6 +66,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     }
 
     private void viewDetails(View view, int position) {
-        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
+        Navigation.findNavController(view).navigate(R.id.action_booksFragment_to_bookDetailsFragment);
     }
 }

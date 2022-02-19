@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
@@ -32,12 +33,15 @@ public class BooksFragment extends Fragment {
 
     private DatabaseReference databaseReference;
 
+    private View mainView;
+
     private FragmentActivity activity;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
 
     private final List<LibtexLibrary> libraries = new ArrayList<>();
-    private final List<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
     private final Map<String, String> libraryNames = new HashMap<>();
     private BooksAdapter booksAdapter;
 
@@ -54,17 +58,41 @@ public class BooksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View mainView = inflater.inflate(R.layout.fragment_books, container, false);
+        mainView = inflater.inflate(R.layout.fragment_books, container, false);
 
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
 
         activity = requireActivity();
+
+        setTopAppBar();
+        setRecyclerView();
+
+        swipeRefreshLayout = mainView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                books = new ArrayList<>();
+                booksAdapter = new BooksAdapter(activity, books);
+                recyclerView.setAdapter(booksAdapter);
+                getLibrariesAndBooks();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getLibrariesAndBooks();
+
+        return mainView;
+    }
+
+    private void setTopAppBar() {
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
         TopAppBarState.get().setNormalMode(activity, topAppBar);
         TopAppBarState.get().setTitleMode(activity, topAppBar, "Books");
+    }
 
+    private void setRecyclerView() {
         recyclerView = mainView.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -72,15 +100,9 @@ public class BooksFragment extends Fragment {
 
         booksAdapter = new BooksAdapter(activity, books);
         recyclerView.setAdapter(booksAdapter);
-
-        getLibrariesAndBooks();
-
-        return mainView;
     }
 
     private void getLibrariesAndBooks() {
-        libraries.clear();
-        books.clear();
 
         // get libraries details
         databaseReference

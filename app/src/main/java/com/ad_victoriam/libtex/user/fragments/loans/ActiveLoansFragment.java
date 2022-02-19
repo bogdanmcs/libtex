@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.fragments;
+package com.ad_victoriam.libtex.user.fragments.loans;
 
 import android.graphics.Color;
 import android.os.Bundle;

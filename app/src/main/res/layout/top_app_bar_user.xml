@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.appbar.MaterialToolbar
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topAppBar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/libtex_background_primary"
+    app:title="Title"
+    app:menu="@menu/top_bar_menu_user"
+    style="@style/Widget.MaterialComponents.Toolbar.Primary" />

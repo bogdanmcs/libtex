@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/activeLoansFragment"
-        android:name="com.ad_victoriam.libtex.user.fragments.ActiveLoansFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.loans.ActiveLoansFragment"
         android:label="Loans"
         tools:layout="@layout/fragment_active_loans">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/allLoansFragment"
-        android:name="com.ad_victoriam.libtex.user.fragments.AllLoansFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.loans.AllLoansFragment"
         android:label="Loans"
         tools:layout="@layout/fragment_all_loans">
         <action
