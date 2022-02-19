@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +22,16 @@ public class BookDetailsFragment extends Fragment {
     private View mainView;
 
     private FragmentActivity activity;
+
+    private TextView tTitle;
+    private TextView tAuthor;
+    private TextView tDescription;
+    private TextView tPublisher;
+    private TextView tNoOfPages;
+    private TextView tCategory;
+    private TextView tLocations;
+
+    private boolean isFav = false;
 
     public BookDetailsFragment() {
         // Required empty public constructor
@@ -39,8 +50,7 @@ public class BookDetailsFragment extends Fragment {
         activity = requireActivity();
 
         setTopAppBar();
-
-
+        setDetails();
 
         return mainView;
     }
@@ -60,10 +70,28 @@ public class BookDetailsFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.addToFav) {
-                    item.setIcon(AppCompatResources.getDrawable(activity, R.drawable.ic_heart_on_24));
+                    if (isFav) {
+                        // TODO: remove from user's favs
+                        item.setIcon(AppCompatResources.getDrawable(activity, R.drawable.ic_heart_24));
+                    } else {
+                        // TODO: add to user's favs
+                        item.setIcon(AppCompatResources.getDrawable(activity, R.drawable.ic_heart_on_24));
+                    }
+                    isFav = !isFav;
                 }
                 return false;
             }
         });
     }
+
+    private void setDetails() {
+        tTitle = mainView.findViewById(R.id.tTitle);
+        tAuthor = mainView.findViewById(R.id.tAuthor);
+        tDescription = mainView.findViewById(R.id.tDescription);
+        tPublisher = mainView.findViewById(R.id.tPublisher);
+        tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
+        tCategory = mainView.findViewById(R.id.tCategory);
+        tLocations = mainView.findViewById(R.id.tLocations);
+    }
+
 }

@@ -41,7 +41,7 @@ public class BooksFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private final List<LibtexLibrary> libraries = new ArrayList<>();
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
     private final Map<String, String> libraryNames = new HashMap<>();
     private BooksAdapter booksAdapter;
 
@@ -59,12 +59,11 @@ public class BooksFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         mainView = inflater.inflate(R.layout.fragment_books, container, false);
+        activity = requireActivity();
 
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
-
-        activity = requireActivity();
 
         setTopAppBar();
         setRecyclerView();
@@ -73,10 +72,8 @@ public class BooksFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                books = new ArrayList<>();
-                booksAdapter = new BooksAdapter(activity, books);
-                recyclerView.setAdapter(booksAdapter);
                 getLibrariesAndBooks();
+                booksAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -103,6 +100,8 @@ public class BooksFragment extends Fragment {
     }
 
     private void getLibrariesAndBooks() {
+        libraries.clear();
+        books.clear();
 
         // get libraries details
         databaseReference
