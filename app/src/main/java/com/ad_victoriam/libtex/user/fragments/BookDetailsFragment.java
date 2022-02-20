@@ -14,8 +14,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
 import com.ad_victoriam.libtex.user.models.Book;
+import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.List;
@@ -47,7 +47,6 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             book = getArguments().getParcelable("book");
-            System.out.println(book.toString());
         }
     }
 
@@ -66,9 +65,9 @@ public class BookDetailsFragment extends Fragment {
 
     private void setTopAppBar() {
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(activity, topAppBar);
-        TopAppBarState.get().setTitleMode(activity, topAppBar, "Book details");
-        TopAppBarState.get().setFavMode(activity, topAppBar);
+        TopAppBar.get().setChildMode(activity, topAppBar);
+        TopAppBar.get().setTitleMode(activity, topAppBar, "Book details");
+        TopAppBar.get().setFavMode(activity, topAppBar);
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,8 +127,6 @@ public class BookDetailsFragment extends Fragment {
             }
             listToString = listToString.concat(item);
         }
-
         return listToString;
     }
-
 }

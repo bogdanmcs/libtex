@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.adapters.AdminBookAdapter;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,7 +51,7 @@ public class BooksActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,11 +74,11 @@ public class BooksActivity extends AppCompatActivity {
         if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("BORROW")) {
             intentAction = "BORROW";
             addNewItem.setVisibility(View.GONE);
-            TopAppBarState.get().setTitleMode(this, topAppBar, "Assign book");
+            TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Assign book");
             adminBookAdapter = new AdminBookAdapter(this, adminBooks, intentAction, getIntent().getParcelableExtra("user"));
         } else {
             intentAction = "NONE";
-            TopAppBarState.get().setTitleMode(this, topAppBar, "Books");
+            TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Books");
             adminBookAdapter = new AdminBookAdapter(this, adminBooks, intentAction);
         }
         recyclerView = findViewById(R.id.recyclerView);

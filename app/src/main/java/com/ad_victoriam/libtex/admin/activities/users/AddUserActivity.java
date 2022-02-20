@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,13 +20,10 @@ import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.fragments.DatePickerFragment;
 import com.ad_victoriam.libtex.admin.utils.County;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -63,8 +59,8 @@ public class AddUserActivity extends AppCompatActivity implements DatePickerDial
         setContentView(R.layout.activity_admin_add_user);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Configure new user");
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Configure new user");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

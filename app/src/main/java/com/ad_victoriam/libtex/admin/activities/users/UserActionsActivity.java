@@ -23,7 +23,7 @@ import com.ad_victoriam.libtex.admin.activities.books.BooksActivity;
 import com.ad_victoriam.libtex.admin.fragments.DatePickerFragment;
 import com.ad_victoriam.libtex.admin.utils.County;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -72,8 +72,8 @@ public class UserActionsActivity extends AppCompatActivity implements DatePicker
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Actions");
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Actions");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -14,7 +14,7 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,8 +46,8 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
         setContentView(R.layout.activity_admin_add_book);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Add new book");
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Add new book");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

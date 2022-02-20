@@ -13,10 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.ad_victoriam.libtex.user.adapters.BooksAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
+import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -85,8 +86,8 @@ public class BooksFragment extends Fragment {
 
     private void setTopAppBar() {
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
-        TopAppBarState.get().setNormalMode(activity, topAppBar);
-        TopAppBarState.get().setTitleMode(activity, topAppBar, "Books");
+        TopAppBar.get().setNormalMode(activity, topAppBar);
+        TopAppBar.get().setTitleMode(activity, topAppBar, "Books");
     }
 
     private void setRecyclerView() {

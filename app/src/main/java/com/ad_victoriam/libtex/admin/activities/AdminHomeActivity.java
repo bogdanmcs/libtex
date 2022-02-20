@@ -10,7 +10,7 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.books.BooksActivity;
 import com.ad_victoriam.libtex.admin.activities.users.UsersActivity;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,8 +22,8 @@ public class AdminHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_home);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "Home");
-        TopAppBarState.get().setAdminHome(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Home");
+        TopAppBarAdmin.get().setAdminHome(this, topAppBar);
 
         findViewById(R.id.bViewUsers).setOnClickListener(this::viewUsers);
         findViewById(R.id.bViewBooks).setOnClickListener(this::viewBooks);

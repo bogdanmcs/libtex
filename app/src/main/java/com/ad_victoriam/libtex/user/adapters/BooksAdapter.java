@@ -9,14 +9,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.BundleCompat;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.models.Book;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     @NonNull
     @Override
     public BooksAdapter.BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_admin_book, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_book, parent, false);
         return new BookViewHolder(view);
     }
 
@@ -45,6 +42,10 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         String text = "by " + books.get(position).getAuthorName();
         holder.tBookAuthorName.setText(text);
         holder.tBookPublisher.setText(books.get(position).getPublisher());
+
+        if (position == books.size() - 1) {
+            holder.div.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -58,6 +59,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         TextView tBookTitle;
         TextView tBookAuthorName;
         TextView tBookPublisher;
+        View div;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +67,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
+            div = itemView.findViewById(R.id.div);
         }
     }
 

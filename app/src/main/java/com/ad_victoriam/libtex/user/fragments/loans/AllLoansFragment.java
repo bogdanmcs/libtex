@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.ad_victoriam.libtex.user.adapters.AllLoansAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,18 +68,21 @@ public class AllLoansFragment extends Fragment {
                 .getReference();
 
         mainView = inflater.inflate(R.layout.fragment_all_loans, container, false);
-
         activity = requireActivity();
-        MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
-        TopAppBarState.get().setNormalMode(activity, topAppBar);
-        TopAppBarState.get().setTitleMode(activity, topAppBar, "Loans");
 
-        initialize();
+        setTopAppBar();
+        setLoans();
 
         return mainView;
     }
 
-    private void initialize() {
+    private void setTopAppBar() {
+        MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
+        TopAppBarAdmin.get().setNormalMode(activity, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(activity, topAppBar, "Loans");
+    }
+
+    private void setLoans() {
         bActiveLoans = mainView.findViewById(R.id.bActiveLoans);
         bActiveLoans.setOnClickListener(this::switchToActive);
         bAllLoans = mainView.findViewById(R.id.bAllLoans);

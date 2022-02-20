@@ -19,7 +19,7 @@ import com.ad_victoriam.libtex.admin.adapters.AdminAllLoanAdapter;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -53,8 +53,8 @@ public class AllLoansActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_all_loans);
 
         MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
-        TopAppBarState.get().setChildMode(this, topAppBar);
-        TopAppBarState.get().setTitleMode(this, topAppBar, "All loans");
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "All loans");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
