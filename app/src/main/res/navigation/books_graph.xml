@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_bookDetailsFragment_to_booksFragment"
             app:destination="@id/booksFragment" />
+        <argument
+            android:name="book"
+            app:argType="com.ad_victoriam.libtex.user.models.Book" />
     </fragment>
 
 </navigation>

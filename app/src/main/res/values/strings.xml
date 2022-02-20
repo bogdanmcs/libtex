@@ -57,5 +57,6 @@
     <string name="sign_out">Sign out</string>
     <string name="active">Active</string>
     <string name="all">All</string>
+    <string name="no_data">No data</string>
 
 </resources>

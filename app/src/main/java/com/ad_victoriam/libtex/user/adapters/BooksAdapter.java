@@ -1,6 +1,7 @@
 package com.ad_victoriam.libtex.user.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.BundleCompat;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +69,8 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     }
 
     private void viewDetails(View view, int position) {
-        Navigation.findNavController(view).navigate(R.id.action_booksFragment_to_bookDetailsFragment);
+        Bundle book = new Bundle();
+        book.putParcelable("book", books.get(position));
+        Navigation.findNavController(view).navigate(R.id.action_booksFragment_to_bookDetailsFragment, book);
     }
 }

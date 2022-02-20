@@ -15,9 +15,14 @@ import androidx.navigation.Navigation;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.utils.TopAppBarState;
+import com.ad_victoriam.libtex.user.models.Book;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.List;
+
 public class BookDetailsFragment extends Fragment {
+
+    private Book book;
 
     private View mainView;
 
@@ -40,6 +45,10 @@ public class BookDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            book = getArguments().getParcelable("book");
+            System.out.println(book.toString());
+        }
     }
 
     @Override
@@ -92,6 +101,35 @@ public class BookDetailsFragment extends Fragment {
         tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
         tCategory = mainView.findViewById(R.id.tCategory);
         tLocations = mainView.findViewById(R.id.tLocations);
+
+        if (book == null) {
+            tTitle.setText(getString(R.string.no_data));
+        } else {
+            tTitle.setText(book.getTitle());
+            tAuthor.setText(book.getAuthorName());
+            tDescription.setText(book.getDescription());
+            tPublisher.setText(book.getPublisher());
+            tNoOfPages.setText(book.getNoOfPages());
+            tCategory.setText(beautifyList(book.getChosenCategories()));
+            tLocations.setText(beautifyList(book.getLocations()));
+        }
+    }
+
+    public String beautifyList(List<String> list) {
+
+        String listToString = "";
+
+        boolean first = true;
+        for (String item: list) {
+            if (first) {
+                first = false;
+            } else {
+                item = "; " + item;
+            }
+            listToString = listToString.concat(item);
+        }
+
+        return listToString;
     }
 
 }
