@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.books.BookDetailsActivity;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
-import com.ad_victoriam.libtex.common.models.BookLoan;
+import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -118,7 +118,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
                 .child("availableQuantity")
                 .setValue(adminBook.getAvailableQuantity() - 1);
 
-        BookLoan bookLoan = new BookLoan(adminBook.getUid());
+        AdminLoan adminLoan = new AdminLoan(adminBook.getUid());
         String bookLoanKey = databaseReference
                 .child("users")
                 .child(user.getUid())
@@ -133,7 +133,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
                 .child("current-loans")
                 .child(currentUser.getUid())
                 .child(bookLoanKey)
-                .setValue(bookLoan);
+                .setValue(adminLoan);
 
         databaseReference
                 .child("users")
@@ -142,7 +142,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
                 .child("loans-history")
                 .child(currentUser.getUid())
                 .child(bookLoanKey)
-                .setValue(bookLoan);
+                .setValue(adminLoan);
 
         Snackbar.make(view, "Book assigned successfully", Snackbar.LENGTH_SHORT).show();
     }

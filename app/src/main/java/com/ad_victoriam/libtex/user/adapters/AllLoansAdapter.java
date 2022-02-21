@@ -1,6 +1,7 @@
 package com.ad_victoriam.libtex.user.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.common.models.User;
-import com.google.android.material.snackbar.Snackbar;
+import com.ad_victoriam.libtex.user.models.Loan;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -24,15 +25,17 @@ import java.util.List;
 public class AllLoansAdapter extends RecyclerView.Adapter<AllLoansAdapter.LoanViewHolder> {
 
     private final Context context;
-    private final List<BookLoan> loans;
+    private final List<Loan> loans;
     private User user;
 
-    public AllLoansAdapter(Context context, List<BookLoan> loans) {
+    private static final String LOAN_TYPE_ALL = "all";
+
+    public AllLoansAdapter(Context context, List<Loan> loans) {
         this.context = context;
         this.loans = loans;
     }
 
-    public AllLoansAdapter(Context context, List<BookLoan> loans, User user) {
+    public AllLoansAdapter(Context context, List<Loan> loans, User user) {
         this.context = context;
         this.loans = loans;
         this.user = user;
@@ -73,7 +76,10 @@ public class AllLoansAdapter extends RecyclerView.Adapter<AllLoansAdapter.LoanVi
     }
 
     private void viewLoanDetails(View view, int position) {
-        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("book", loans.get(position).getBook());
+        bundle.putString("loanType", LOAN_TYPE_ALL);
+        Navigation.findNavController(view).navigate(R.id.action_allLoansFragment_to_loanDetailsFragment, bundle);
     }
 
     @Override

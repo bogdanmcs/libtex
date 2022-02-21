@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.models.AdminBook;
-import com.ad_victoriam.libtex.common.models.BookLoan;
-import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.ad_victoriam.libtex.user.adapters.AllLoansAdapter;
+import com.ad_victoriam.libtex.user.models.Book;
+import com.ad_victoriam.libtex.user.models.Loan;
+import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,7 +43,7 @@ public class AllLoansFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private AllLoansAdapter allLoansAdapter;
-    private final List<BookLoan> loans = new ArrayList<>();
+    private final List<Loan> loans = new ArrayList<>();
 
     private View mainView;
     private FragmentActivity activity;
@@ -78,8 +78,8 @@ public class AllLoansFragment extends Fragment {
 
     private void setTopAppBar() {
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
-        TopAppBarAdmin.get().setNormalMode(activity, topAppBar);
-        TopAppBarAdmin.get().setTitleMode(activity, topAppBar, "Loans");
+        TopAppBar.get().setNormalMode(activity, topAppBar);
+        TopAppBar.get().setTitleMode(activity, topAppBar, "Loans");
     }
 
     private void setLoans() {
@@ -119,14 +119,15 @@ public class AllLoansFragment extends Fragment {
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            BookLoan bookLoan = dataSnapshot.getValue(BookLoan.class);
+
+                            Loan loan = dataSnapshot.getValue(Loan.class);
 //                            if (!isFragmentAttached()) {
 //                                return;
 //                            }
                             // get the book
-                            if (bookLoan != null) {
+                            if (loan != null) {
                                 String libraryUid = snapshot.getKey();
-                                bookLoan.setBookLoanUid(dataSnapshot.getKey());
+                                loan.setBookLoanUid(dataSnapshot.getKey());
 
                                 databaseReference
                                         .child("books")
@@ -138,17 +139,18 @@ public class AllLoansFragment extends Fragment {
 
                                                 if (task.isSuccessful()) {
                                                     for (DataSnapshot dataSnapshot1: task.getResult().getChildren()) {
-                                                        AdminBook adminBook = dataSnapshot1.getValue(AdminBook.class);
 
-                                                        if (adminBook != null) {
-                                                            adminBook.setUid(dataSnapshot1.getKey());
+                                                        Book book = dataSnapshot1.getValue(Book.class);
 
-                                                            if (adminBook.getUid().equals(bookLoan.getBookUid())) {
-                                                                bookLoan.setBook(adminBook);
-                                                                bookLoan.setLibraryUid(libraryUid);
+                                                        if (book != null) {
+                                                            book.setUid(dataSnapshot1.getKey());
 
-                                                                if (!loans.contains(bookLoan)) {
-                                                                    loans.add(bookLoan);
+                                                            if (book.getUid().equals(loan.getBookUid())) {
+                                                                loan.setBook(book);
+                                                                loan.setLibraryUid(libraryUid);
+
+                                                                if (!loans.contains(loan)) {
+                                                                    loans.add(loan);
                                                                 }
                                                                 allLoansAdapter.notifyItemInserted(loans.size() - 1);
                                                                 break;
@@ -168,17 +170,17 @@ public class AllLoansFragment extends Fragment {
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            BookLoan bookLoan = dataSnapshot.getValue(BookLoan.class);
+                            Loan loan = dataSnapshot.getValue(Loan.class);
 
-                            if (bookLoan != null) {
-                                bookLoan.setBookLoanUid(dataSnapshot.getKey());
+                            if (loan != null) {
+                                loan.setBookLoanUid(dataSnapshot.getKey());
                                 int indexOfChangedLoan = -1;
 
-                                for (BookLoan b: loans) {
-                                    if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
+                                for (Loan b: loans) {
+                                    if (b.getBookLoanUid().equals(loan.getBookLoanUid())) {
                                         indexOfChangedLoan = loans.indexOf(b);
-                                        bookLoan.setBook(b.getBook());
-                                        loans.set(indexOfChangedLoan, bookLoan);
+                                        loan.setBook(b.getBook());
+                                        loans.set(indexOfChangedLoan, loan);
                                         break;
                                     }
                                 }

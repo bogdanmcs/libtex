@@ -16,7 +16,6 @@ public class Book implements Parcelable {
     private String noOfPages;
     private String description;
     private int availableQuantity;
-
     private List<String> locations = new ArrayList<>();
 
     public Book() {

@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.fragments;
+package com.ad_victoriam.libtex.user.fragments.books;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

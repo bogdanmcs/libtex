@@ -17,7 +17,7 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.adapters.AdminAllLoanAdapter;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
-import com.ad_victoriam.libtex.common.models.BookLoan;
+import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,7 +44,7 @@ public class AllLoansActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private User user;
-    private final List<BookLoan> bookLoans = new ArrayList<>();
+    private final List<AdminLoan> adminLoans = new ArrayList<>();
     private int recordsCounter = 0;
 
     @Override
@@ -76,7 +76,7 @@ public class AllLoansActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
         user = getIntent().getParcelableExtra("user");
-        adminAllLoanAdapter = new AdminAllLoanAdapter(this, bookLoans, user);
+        adminAllLoanAdapter = new AdminAllLoanAdapter(this, adminLoans, user);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adminAllLoanAdapter);
@@ -97,11 +97,11 @@ public class AllLoansActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                        BookLoan bookLoan = snapshot.getValue(BookLoan.class);
+                        AdminLoan adminLoan = snapshot.getValue(AdminLoan.class);
 
-                        if (bookLoan != null) {
+                        if (adminLoan != null) {
                             // get book loan uid and get book details from "books/currentLib/bookLoanUid"
-                            bookLoan.setBookLoanUid(snapshot.getKey());
+                            adminLoan.setBookLoanUid(snapshot.getKey());
                             tRecordsCounter.setText("");
                             databaseReference
                                     .child("books")
@@ -115,17 +115,17 @@ public class AllLoansActivity extends AppCompatActivity {
 
                                                     AdminBook adminBook = dataSnapshot.getValue(AdminBook.class);
 
-                                                    if (adminBook != null && bookLoan.getBookUid().equals(dataSnapshot.getKey())) {
+                                                    if (adminBook != null && adminLoan.getBookUid().equals(dataSnapshot.getKey())) {
                                                         // got the book
                                                         adminBook.setUid(dataSnapshot.getKey());
-                                                        bookLoan.setBook(adminBook);
-                                                        if (!bookLoans.contains(bookLoan)) {
-                                                            bookLoans.add(bookLoan);
+                                                        adminLoan.setBook(adminBook);
+                                                        if (!adminLoans.contains(adminLoan)) {
+                                                            adminLoans.add(adminLoan);
                                                             recordsCounter++;
                                                             String text = getResources().getString(R.string.records_found) + " " + recordsCounter;
                                                             tRecordsCounter.setText(text);
                                                         }
-                                                        adminAllLoanAdapter.notifyItemInserted(bookLoans.size() - 1);
+                                                        adminAllLoanAdapter.notifyItemInserted(adminLoans.size() - 1);
                                                         break;
                                                     }
                                                 }
@@ -140,20 +140,20 @@ public class AllLoansActivity extends AppCompatActivity {
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                        BookLoan bookLoan = snapshot.getValue(BookLoan.class);
+                        AdminLoan adminLoan = snapshot.getValue(AdminLoan.class);
 
-                        if (bookLoan != null) {
+                        if (adminLoan != null) {
 
-                            bookLoan.setBookLoanUid(snapshot.getKey());
+                            adminLoan.setBookLoanUid(snapshot.getKey());
 
                             int indexOfChangedBookLoan = -1;
-                            for (BookLoan b: bookLoans) {
-                                if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
-                                    indexOfChangedBookLoan = bookLoans.indexOf(b);
+                            for (AdminLoan b: adminLoans) {
+                                if (b.getBookLoanUid().equals(adminLoan.getBookLoanUid())) {
+                                    indexOfChangedBookLoan = adminLoans.indexOf(b);
                                     // keep book data - no need to query again
                                     AdminBook adminBookData = b.getBook();
-                                    bookLoan.setBook(adminBookData);
-                                    bookLoans.set(indexOfChangedBookLoan, bookLoan);
+                                    adminLoan.setBook(adminBookData);
+                                    adminLoans.set(indexOfChangedBookLoan, adminLoan);
                                     break;
                                 }
                             }
@@ -169,16 +169,16 @@ public class AllLoansActivity extends AppCompatActivity {
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-                        BookLoan bookLoan = snapshot.getValue(BookLoan.class);
+                        AdminLoan adminLoan = snapshot.getValue(AdminLoan.class);
 
-                        if (bookLoan != null) {
-                            bookLoan.setBookLoanUid(snapshot.getKey());
+                        if (adminLoan != null) {
+                            adminLoan.setBookLoanUid(snapshot.getKey());
 
                             int indexOfRemovedBookLoan = -1;
-                            for (BookLoan b: bookLoans) {
-                                if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
-                                    indexOfRemovedBookLoan = bookLoans.indexOf(b);
-                                    bookLoans.remove(indexOfRemovedBookLoan);
+                            for (AdminLoan b: adminLoans) {
+                                if (b.getBookLoanUid().equals(adminLoan.getBookLoanUid())) {
+                                    indexOfRemovedBookLoan = adminLoans.indexOf(b);
+                                    adminLoans.remove(indexOfRemovedBookLoan);
                                     recordsCounter--;
                                     String text;
                                     if (recordsCounter > 0) {

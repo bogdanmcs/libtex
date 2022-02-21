@@ -1,76 +1,74 @@
-package com.ad_victoriam.libtex.common.models;
+package com.ad_victoriam.libtex.user.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ad_victoriam.libtex.admin.models.AdminBook;
-
 import java.time.LocalDateTime;
 
-public class BookLoan implements Parcelable {
+public class Loan implements Parcelable {
 
     private String libraryUid;
-    private String bookLoanUid;
+    private String loanUid;
     private String bookUid;
     private String loanTimestamp;
     private String deadlineTimestamp;
     private String returnTimestamp;
 
-    private AdminBook adminBook;
+    private Book book;
 
-    public BookLoan() {
+    public Loan() {
     }
 
-    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, AdminBook adminBook) {
+    public Loan(String bookUid, String loanTimestamp, String deadlineTimestamp, Book book) {
         this.libraryUid = null;
-        this.bookLoanUid = null;
+        this.loanUid = null;
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
         this.returnTimestamp = null;
-        this.adminBook = adminBook;
+        this.book = book;
     }
 
-    public BookLoan(String bookUid, String loanTimestamp, String deadlineTimestamp, String returnTimestmap, AdminBook adminBook) {
+    public Loan(String bookUid, String loanTimestamp, String deadlineTimestamp, String returnTimestamp, Book book) {
         this.libraryUid = null;
-        this.bookLoanUid = null;
+        this.loanUid = null;
         this.bookUid = bookUid;
         this.loanTimestamp = loanTimestamp;
         this.deadlineTimestamp = deadlineTimestamp;
-        this.returnTimestamp = returnTimestmap;
-        this.adminBook = adminBook;
+        this.returnTimestamp = returnTimestamp;
+        this.book = book;
     }
 
-    public BookLoan(String bookUid) {
+    public Loan(String bookUid) {
         this.libraryUid = null;
-        this.bookLoanUid = null;
+        this.loanUid = null;
         this.bookUid = bookUid;
         LocalDateTime currentDateTime = LocalDateTime.now();
         this.loanTimestamp = currentDateTime.toString();
         this.deadlineTimestamp = currentDateTime.plusMonths(3).toString();
         this.returnTimestamp = null;
-        this.adminBook = null;
+        this.book = null;
     }
 
-    protected BookLoan(Parcel in) {
+    protected Loan(Parcel in) {
         libraryUid = in.readString();
-        bookLoanUid = in.readString();
+        loanUid = in.readString();
         bookUid = in.readString();
         loanTimestamp = in.readString();
         deadlineTimestamp = in.readString();
         returnTimestamp = in.readString();
-        adminBook = in.readParcelable(AdminBook.class.getClassLoader());
+        book = in.readParcelable(Book.class.getClassLoader());
     }
 
-    public static final Creator<BookLoan> CREATOR = new Creator<BookLoan>() {
+    public static final Creator<Loan> CREATOR = new Creator<Loan>() {
         @Override
-        public BookLoan createFromParcel(Parcel in) {
-            return new BookLoan(in);
+        public Loan createFromParcel(Parcel in) {
+            return new Loan(in);
         }
 
         @Override
-        public BookLoan[] newArray(int size) {
-            return new BookLoan[size];
+        public Loan[] newArray(int size) {
+            return new Loan[size];
         }
     };
 
@@ -98,20 +96,20 @@ public class BookLoan implements Parcelable {
         return returnTimestamp;
     }
 
-    public AdminBook getBook() {
-        return adminBook;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBook(AdminBook adminBook) {
-        this.adminBook = adminBook;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public String getBookLoanUid() {
-        return bookLoanUid;
+        return loanUid;
     }
 
-    public void setBookLoanUid(String bookLoanUid) {
-        this.bookLoanUid = bookLoanUid;
+    public void setBookLoanUid(String loanUid) {
+        this.loanUid = loanUid;
     }
 
     @Override
@@ -122,11 +120,12 @@ public class BookLoan implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(libraryUid);
-        parcel.writeString(bookLoanUid);
+        parcel.writeString(loanUid);
         parcel.writeString(bookUid);
         parcel.writeString(loanTimestamp);
         parcel.writeString(deadlineTimestamp);
         parcel.writeString(returnTimestamp);
-        parcel.writeParcelable(adminBook, i);
+        parcel.writeParcelable(book, i);
     }
 }
+

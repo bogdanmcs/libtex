@@ -254,7 +254,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/indian_red"
-                android:text="Delete this adminBook"
+                android:text="Delete this book"
                 android:textColor="@color/white"
                 app:cornerRadius="@dimen/normal_corners"
                 app:icon="@drawable/ic_trash_24"

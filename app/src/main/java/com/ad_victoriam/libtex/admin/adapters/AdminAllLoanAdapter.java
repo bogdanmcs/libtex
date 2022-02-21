@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.models.BookLoan;
+import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -24,17 +24,17 @@ import java.util.List;
 public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapter.BookLoanViewHolder> {
 
     private final Context context;
-    private final List<BookLoan> bookLoans;
+    private final List<AdminLoan> adminLoans;
     private User user;
 
-    public AdminAllLoanAdapter(Context context, List<BookLoan> bookLoans) {
+    public AdminAllLoanAdapter(Context context, List<AdminLoan> adminLoans) {
         this.context = context;
-        this.bookLoans = bookLoans;
+        this.adminLoans = adminLoans;
     }
 
-    public AdminAllLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
+    public AdminAllLoanAdapter(Context context, List<AdminLoan> adminLoans, User user) {
         this.context = context;
-        this.bookLoans = bookLoans;
+        this.adminLoans = adminLoans;
         this.user = user;
     }
 
@@ -48,20 +48,20 @@ public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapte
     @Override
     public void onBindViewHolder(@NonNull AdminAllLoanAdapter.BookLoanViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> viewLoanDetails(view, position));
-        holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
-        holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());
-        holder.tBookPublisher.setText(bookLoans.get(position).getBook().getPublisher());
+        holder.tBookTitle.setText(adminLoans.get(position).getBook().getTitle());
+        holder.tBookAuthorName.setText(adminLoans.get(position).getBook().getAuthorName());
+        holder.tBookPublisher.setText(adminLoans.get(position).getBook().getPublisher());
 
         DateFormat Date = DateFormat.getDateInstance();
         Calendar calendar = Calendar.getInstance();
 
-        String loanedOnText = bookLoans.get(position).getLoanTimestamp();
+        String loanedOnText = adminLoans.get(position).getLoanTimestamp();
         LocalDateTime loanedOnDateTime = LocalDateTime.parse(loanedOnText);
         calendar.set(loanedOnDateTime.getYear(), loanedOnDateTime.getMonthValue() - 1, loanedOnDateTime.getDayOfMonth());
         String loanedOnTextFormatted = Date.format(calendar.getTime());
         holder.tLoanedOn.setText(loanedOnTextFormatted);
 
-        String returnedOnText = bookLoans.get(position).getReturnTimestamp();
+        String returnedOnText = adminLoans.get(position).getReturnTimestamp();
         if (returnedOnText != null) {
             LocalDateTime returnedOnDateTime = LocalDateTime.parse(returnedOnText);
             calendar.set(returnedOnDateTime.getYear(), returnedOnDateTime.getMonthValue() - 1, returnedOnDateTime.getDayOfMonth());
@@ -74,8 +74,8 @@ public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapte
 
     @Override
     public int getItemCount() {
-        if (bookLoans != null) {
-            return bookLoans.size();
+        if (adminLoans != null) {
+            return adminLoans.size();
         } else {
             return 0;
         }

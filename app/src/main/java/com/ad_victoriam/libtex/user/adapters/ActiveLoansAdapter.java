@@ -1,6 +1,7 @@
 package com.ad_victoriam.libtex.user.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.models.BookLoan;
 import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.user.models.Loan;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -25,15 +26,17 @@ import java.util.List;
 public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.LoanViewHolder> {
 
     private final Context context;
-    private final List<BookLoan> loans;
+    private final List<Loan> loans;
     private User user;
 
-    public ActiveLoansAdapter(Context context, List<BookLoan> bookLoans) {
+    private static final String LOAN_TYPE_ACTIVE = "active";
+
+    public ActiveLoansAdapter(Context context, List<Loan> loans) {
         this.context = context;
-        this.loans = bookLoans;
+        this.loans = loans;
     }
 
-    public ActiveLoansAdapter(Context context, List<BookLoan> loans, User user) {
+    public ActiveLoansAdapter(Context context, List<Loan> loans, User user) {
         this.context = context;
         this.loans = loans;
         this.user = user;
@@ -48,7 +51,7 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ActiveLoansAdapter.LoanViewHolder holder, int position) {
-        holder.constraintLayout.setOnClickListener(view -> viewLoanDetails(view, position));
+        holder.constraintLayout.setOnClickListener(view -> viewBookDetails(view, position));
         holder.tBookTitle.setText(loans.get(position).getBook().getTitle());
         holder.tBookAuthorName.setText(loans.get(position).getBook().getAuthorName());
         holder.tBookPublisher.setText(loans.get(position).getBook().getPublisher());
@@ -80,8 +83,11 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
         }
     }
 
-    private void viewLoanDetails(View view, int position) {
-        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
+    private void viewBookDetails(View view, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("book", loans.get(position).getBook());
+        bundle.putString("loanType", LOAN_TYPE_ACTIVE);
+        Navigation.findNavController(view).navigate(R.id.action_activeLoansFragment_to_loanDetailsFragment, bundle);
     }
 
     @Override

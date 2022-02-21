@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.common.models.BookLoan;
+import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,17 +34,17 @@ import java.util.List;
 public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoanAdapter.BookLoanViewHolder> {
 
     private final Context context;
-    private final List<BookLoan> bookLoans;
+    private final List<AdminLoan> adminLoans;
     private User user;
 
-    public AdminActiveLoanAdapter(Context context, List<BookLoan> bookLoans) {
+    public AdminActiveLoanAdapter(Context context, List<AdminLoan> adminLoans) {
         this.context = context;
-        this.bookLoans = bookLoans;
+        this.adminLoans = adminLoans;
     }
 
-    public AdminActiveLoanAdapter(Context context, List<BookLoan> bookLoans, User user) {
+    public AdminActiveLoanAdapter(Context context, List<AdminLoan> adminLoans, User user) {
         this.context = context;
-        this.bookLoans = bookLoans;
+        this.adminLoans = adminLoans;
         this.user = user;
     }
 
@@ -58,20 +58,20 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
     @Override
     public void onBindViewHolder(@NonNull AdminActiveLoanAdapter.BookLoanViewHolder holder, int position) {
         holder.constraintLayout.setOnClickListener(view -> viewLoanDetails(view, position));
-        holder.tBookTitle.setText(bookLoans.get(position).getBook().getTitle());
-        holder.tBookAuthorName.setText(bookLoans.get(position).getBook().getAuthorName());
-        holder.tBookPublisher.setText(bookLoans.get(position).getBook().getPublisher());
+        holder.tBookTitle.setText(adminLoans.get(position).getBook().getTitle());
+        holder.tBookAuthorName.setText(adminLoans.get(position).getBook().getAuthorName());
+        holder.tBookPublisher.setText(adminLoans.get(position).getBook().getPublisher());
 
         DateFormat Date = DateFormat.getDateInstance();
         Calendar calendar = Calendar.getInstance();
 
-        String deadlineText = bookLoans.get(position).getDeadlineTimestamp();
+        String deadlineText = adminLoans.get(position).getDeadlineTimestamp();
         LocalDateTime deadlineDateTime = LocalDateTime.parse(deadlineText);
         calendar.set(deadlineDateTime.getYear(), deadlineDateTime.getMonthValue() - 1, deadlineDateTime.getDayOfMonth());
         String deadlineTextFormatted = Date.format(calendar.getTime());
         holder.tDeadline.setText(deadlineTextFormatted);
 
-        String loanedOnText = bookLoans.get(position).getLoanTimestamp();
+        String loanedOnText = adminLoans.get(position).getLoanTimestamp();
         LocalDateTime loanedOnDateTime = LocalDateTime.parse(loanedOnText);
         calendar.set(loanedOnDateTime.getYear(), loanedOnDateTime.getMonthValue() - 1, loanedOnDateTime.getDayOfMonth());
         String loanedOnTextFormatted = Date.format(calendar.getTime());
@@ -92,8 +92,8 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
 
     @Override
     public int getItemCount() {
-        if (bookLoans != null) {
-            return bookLoans.size();
+        if (adminLoans != null) {
+            return adminLoans.size();
         } else {
             return 0;
         }
@@ -127,8 +127,8 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
         new AlertDialog.Builder(context)
                 .setMessage(
                         "Are you sure you want to return " +
-                                bookLoans.get(position).getBook().getTitle() + " - " +
-                                bookLoans.get(position).getBook().getAuthorName() + " " +
+                                adminLoans.get(position).getBook().getTitle() + " - " +
+                                adminLoans.get(position).getBook().getAuthorName() + " " +
                                 "by user " +
                                 user.getFullName() + " ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
@@ -158,7 +158,7 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
                                 if (adminBook != null) {
                                     adminBook.setUid(dataSnapshot.getKey());
 
-                                    if (adminBook.getUid().equals(bookLoans.get(position).getBookUid())) {
+                                    if (adminBook.getUid().equals(adminLoans.get(position).getBookUid())) {
                                         // found the book, increase AQ by 1
                                         databaseReference
                                                 .child("books")
@@ -182,7 +182,7 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
                 .child("book-loans")
                 .child("current-loans")
                 .child(currentUser.getUid())
-                .child(bookLoans.get(position).getBookLoanUid())
+                .child(adminLoans.get(position).getBookLoanUid())
                 .removeValue();
         // update book loan in loans history - return date
         LocalDateTime returnTimestamp = LocalDateTime.now();
@@ -192,7 +192,7 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
                 .child("book-loans")
                 .child("loans-history")
                 .child(currentUser.getUid())
-                .child(bookLoans.get(position).getBookLoanUid())
+                .child(adminLoans.get(position).getBookLoanUid())
                 .child("returnTimestamp")
                 .setValue(returnTimestamp.toString());
 

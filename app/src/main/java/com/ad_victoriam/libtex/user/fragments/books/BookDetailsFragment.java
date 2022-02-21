@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.fragments;
+package com.ad_victoriam.libtex.user.fragments.books;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +17,8 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -81,9 +83,11 @@ public class BookDetailsFragment extends Fragment {
                     if (isFav) {
                         // TODO: remove from user's favs
                         item.setIcon(AppCompatResources.getDrawable(activity, R.drawable.ic_heart_24));
+                        Snackbar.make(mainView, "removed from favs", Snackbar.LENGTH_SHORT).show();
                     } else {
                         // TODO: add to user's favs
                         item.setIcon(AppCompatResources.getDrawable(activity, R.drawable.ic_heart_on_24));
+                        Snackbar.make(mainView, "added to favs", Snackbar.LENGTH_SHORT).show();
                     }
                     isFav = !isFav;
                 }
@@ -100,6 +104,8 @@ public class BookDetailsFragment extends Fragment {
         tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
         tCategory = mainView.findViewById(R.id.tCategory);
         tLocations = mainView.findViewById(R.id.tLocations);
+        final MaterialButton bReserve = mainView.findViewById(R.id.bReserve);
+        bReserve.setOnClickListener(this::reserveBook);
 
         if (book == null) {
             tTitle.setText(getString(R.string.no_data));
@@ -112,6 +118,10 @@ public class BookDetailsFragment extends Fragment {
             tCategory.setText(beautifyList(book.getChosenCategories()));
             tLocations.setText(beautifyList(book.getLocations()));
         }
+    }
+
+    private void reserveBook(View view) {
+        Snackbar.make(mainView, "reserve this book", Snackbar.LENGTH_SHORT).show();
     }
 
     public String beautifyList(List<String> list) {
