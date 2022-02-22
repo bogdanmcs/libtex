@@ -51,8 +51,15 @@ public class TopAppBar {
         materialToolbar.setTitleTextColor(colorResId);
     }
 
-    public void setFavMode(Context context, MaterialToolbar materialToolbar) {
-        ActionMenuItemView addToFav = materialToolbar.findViewById(R.id.addToFav);
-        addToFav.setVisibility(View.VISIBLE);
+    @SuppressLint("RestrictedApi")
+    public void setFavMode(Context context, MaterialToolbar materialToolbar, boolean favIsOn) {
+
+        ActionMenuItemView menuItem = materialToolbar.findViewById(R.id.addToFav);
+        if (favIsOn) {
+            menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_on_24));
+        } else {
+            menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_24));
+        }
+        menuItem.setVisibility(View.VISIBLE);
     }
 }

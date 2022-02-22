@@ -60,6 +60,10 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
         String text = "by " + adminBooks.get(position).getAuthorName();
         holder.tBookAuthorName.setText(text);
         holder.tBookPublisher.setText(adminBooks.get(position).getPublisher());
+
+        if (position == adminBooks.size() - 1) {
+            holder.div.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void clicked(View view, int position) {
@@ -84,6 +88,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
         TextView tBookTitle;
         TextView tBookAuthorName;
         TextView tBookPublisher;
+        View div;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +96,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
+            div = itemView.findViewById(R.id.div);
         }
     }
 

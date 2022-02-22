@@ -121,9 +121,6 @@ public class ActiveLoansFragment extends Fragment {
                         for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
 
                             Loan loan = dataSnapshot.getValue(Loan.class);
-//                            if (!isFragmentAttached()) {
-//                                return;
-//                            }
                             // get the book
                             if (loan != null) {
                                 String libraryUid = snapshot.getKey();
