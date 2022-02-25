@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -16,7 +17,10 @@ import androidx.navigation.Navigation;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
+import com.ad_victoriam.libtex.user.models.LibtexLibrary;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,10 +82,12 @@ public class BookDetailsFragment extends Fragment {
 
         setTopAppBar();
         setFavouriteKeyValue();
+        getLibrariesAndBooks();
         setDetails();
 
         return mainView;
     }
+
 
     private void setTopAppBar() {
         if (favKey != null) {
@@ -222,5 +229,83 @@ public class BookDetailsFragment extends Fragment {
                         System.out.println(task.getResult());
                     }
                 });
+    }
+
+    private void getLibrariesAndBooks() {
+        if (book.getLocations().isEmpty()) {
+
+            List<LibtexLibrary> libraries = new ArrayList<>();
+            Map<String, String> libraryNames = new HashMap<>();
+
+            // get libraries details
+            databaseReference
+                    .child(getString(R.string.n_admins))
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                            if (task.isSuccessful()) {
+                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                                    String libraryName = dataSnapshot
+                                            .child(getString(R.string.n_location))
+                                            .child(getString(R.string.p_location_name))
+                                            .getValue(String.class);
+
+                                    libraryNames.put(dataSnapshot.getKey(), libraryName);
+                                }
+                            } else {
+                                System.out.println(task.getResult());
+                            }
+                        }
+                    });
+
+            // get all books
+            databaseReference
+                    .child(getString(R.string.n_books))
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+
+                                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+
+                                    LibtexLibrary libtexLibrary = new LibtexLibrary();
+                                    libtexLibrary.setUid(dataSnapshot.getKey());
+                                    libtexLibrary.setName(libraryNames.get(dataSnapshot.getKey()));
+
+                                    for (DataSnapshot b: dataSnapshot.getChildren()) {
+
+                                        Book book = b.getValue(Book.class);
+
+                                        if (book != null) {
+                                            book.setUid(b.getKey());
+                                            libtexLibrary.addBook(book);
+                                        }
+                                    }
+
+                                    libraries.add(libtexLibrary);
+                                }
+                                setLocations(libraries);
+                                setDetails();
+
+                            } else {
+                                System.out.println(task.getResult());
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void setLocations(List<LibtexLibrary> libraries) {
+        for (LibtexLibrary library: libraries) {
+            for (Book b: library.getBooks()) {
+                if (b.isSame(book)) {
+                    book.addLocation(library.getName());
+                }
+            }
+        }
     }
 }
