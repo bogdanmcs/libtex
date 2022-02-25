@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.user.fragments.loans.AllLoansFragment;
-import com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment;
+import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Loan;
 
 import java.text.DateFormat;
@@ -79,13 +78,16 @@ public class AllLoansAdapter extends RecyclerView.Adapter<AllLoansAdapter.LoanVi
     private void viewLoanDetails(View view, int position) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("book", loans.get(position).getBook());
-        bundle.putString("loanType", LOAN_TYPE_ALL);
 
-        LoanDetailsFragment loanDetailsFragment = new LoanDetailsFragment();
-        loanDetailsFragment.setArguments(bundle);
+        BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
+        bookDetailsFragment.setArguments(bundle);
 
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
-                loanDetailsFragment).commit();
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, bookDetailsFragment)
+                .addToBackStack("allLoansFragment")
+                .commit();
     }
 
     @Override

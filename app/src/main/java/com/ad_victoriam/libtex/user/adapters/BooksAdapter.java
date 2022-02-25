@@ -78,7 +78,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
         bookDetailsFragment.setArguments(book);
 
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
-                bookDetailsFragment).commit();
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, bookDetailsFragment)
+                .addToBackStack("booksFragment")
+                .commit();
     }
 }

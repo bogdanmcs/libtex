@@ -1,6 +1,5 @@
 package com.ad_victoriam.libtex.user.adapters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.user.fragments.loans.ActiveLoansFragment;
-import com.ad_victoriam.libtex.user.fragments.loans.AllLoansFragment;
-import com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment;
+import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.google.android.material.button.MaterialButton;
 
@@ -91,13 +86,16 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
     private void viewBookDetails(View view, int position) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("book", loans.get(position).getBook());
-        bundle.putString("loanType", LOAN_TYPE_ACTIVE);
 
-        LoanDetailsFragment loanDetailsFragment = new LoanDetailsFragment();
-        loanDetailsFragment.setArguments(bundle);
+        BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
+        bookDetailsFragment.setArguments(bundle);
 
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
-                loanDetailsFragment).commit();
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, bookDetailsFragment)
+                .addToBackStack("activeLoansFragment")
+                .commit();
     }
 
     @Override

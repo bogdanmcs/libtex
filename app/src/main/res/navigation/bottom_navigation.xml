@@ -25,14 +25,7 @@
         android:label="Loans"
         tools:layout="@layout/fragment_all_loans">
     </fragment>
-
-    <fragment
-        android:id="@+id/loanDetailsFragment"
-        android:name="com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment"
-        android:label="fragment_loan_details"
-        tools:layout="@layout/fragment_loan_details" >
-    </fragment>
-
+    
     <fragment
         android:id="@+id/booksFragment"
         android:name="com.ad_victoriam.libtex.user.fragments.books.BooksFragment"

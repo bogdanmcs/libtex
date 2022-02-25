@@ -22,9 +22,6 @@
         <action
             android:id="@+id/action_activeLoansFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
-        <action
-            android:id="@+id/action_activeLoansFragment_to_loanDetailsFragment"
-            app:destination="@id/loanDetailsFragment" />
     </fragment>
 
     <fragment
@@ -44,21 +41,6 @@
         <action
             android:id="@+id/action_allLoansFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
-        <action
-            android:id="@+id/action_allLoansFragment_to_loanDetailsFragment"
-            app:destination="@id/loanDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loanDetailsFragment"
-        android:name="com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment"
-        android:label="fragment_loan_details"
-        tools:layout="@layout/fragment_loan_details" >
-        <action
-            android:id="@+id/action_loanDetailsFragment_to_allLoansFragment"
-            app:destination="@id/allLoansFragment" />
-        <action
-            android:id="@+id/action_loanDetailsFragment_to_activeLoansFragment"
-            app:destination="@id/activeLoansFragment" />
     </fragment>
 
 </navigation>

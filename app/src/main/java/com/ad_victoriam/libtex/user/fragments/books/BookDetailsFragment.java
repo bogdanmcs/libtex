@@ -93,8 +93,9 @@ public class BookDetailsFragment extends Fragment {
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
-                        new BooksFragment()).commit();
+                activity
+                        .getSupportFragmentManager()
+                        .popBackStack();
             }
         });
 
