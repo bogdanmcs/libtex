@@ -44,6 +44,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_user_details.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_user_details_2.xml" value="0.18" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_admin_users.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_book_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_home_admin.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_home_user.xml" value="0.3125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/activity_login.xml" value="0.22" />
@@ -63,12 +64,14 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_adapter_row_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/book_loan_adapter_row.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_book_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_category.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_account.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_active_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_all_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_book_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_books.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_favourite_books.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home2.xml" value="0.1390625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loan_details.xml" value="0.234375" />

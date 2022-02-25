@@ -1,6 +1,5 @@
 package com.ad_victoriam.libtex.user.adapters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.user.fragments.loans.AllLoansFragment;
+import com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Loan;
 
 import java.text.DateFormat;
@@ -24,19 +25,19 @@ import java.util.List;
 
 public class AllLoansAdapter extends RecyclerView.Adapter<AllLoansAdapter.LoanViewHolder> {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final List<Loan> loans;
     private User user;
 
     private static final String LOAN_TYPE_ALL = "all";
 
-    public AllLoansAdapter(Context context, List<Loan> loans) {
-        this.context = context;
+    public AllLoansAdapter(FragmentActivity activity, List<Loan> loans) {
+        this.activity = activity;
         this.loans = loans;
     }
 
-    public AllLoansAdapter(Context context, List<Loan> loans, User user) {
-        this.context = context;
+    public AllLoansAdapter(FragmentActivity activity, List<Loan> loans, User user) {
+        this.activity = activity;
         this.loans = loans;
         this.user = user;
     }
@@ -79,7 +80,12 @@ public class AllLoansAdapter extends RecyclerView.Adapter<AllLoansAdapter.LoanVi
         Bundle bundle = new Bundle();
         bundle.putParcelable("book", loans.get(position).getBook());
         bundle.putString("loanType", LOAN_TYPE_ALL);
-        Navigation.findNavController(view).navigate(R.id.action_allLoansFragment_to_loanDetailsFragment, bundle);
+
+        LoanDetailsFragment loanDetailsFragment = new LoanDetailsFragment();
+        loanDetailsFragment.setArguments(bundle);
+
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                loanDetailsFragment).commit();
     }
 
     @Override

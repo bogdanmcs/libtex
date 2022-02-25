@@ -89,7 +89,7 @@ public class AllLoansFragment extends Fragment {
 
         recyclerView = mainView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        allLoansAdapter = new AllLoansAdapter(getContext(), loans);
+        allLoansAdapter = new AllLoansAdapter(activity, loans);
         recyclerView.setAdapter(allLoansAdapter);
 
         setAllUi();
@@ -104,7 +104,8 @@ public class AllLoansFragment extends Fragment {
     }
 
     private void switchToActive(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_allLoansFragment_to_activeLoansFragment);
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                new ActiveLoansFragment()).commit();
     }
 
     private void attachLoansListener() {

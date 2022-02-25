@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.admin.activities.books.BookDetailsActivity;
+import com.ad_victoriam.libtex.admin.activities.books.AdminBookDetailsActivity;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.common.models.User;
@@ -68,7 +68,7 @@ public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.Book
 
     private void clicked(View view, int position) {
         if (!intentAction.equals("BORROW")) {
-            Intent intent = new Intent(context, BookDetailsActivity.class);
+            Intent intent = new Intent(context, AdminBookDetailsActivity.class);
             intent.putExtra("book", adminBooks.get(position));
             context.startActivity(intent);
         } else {

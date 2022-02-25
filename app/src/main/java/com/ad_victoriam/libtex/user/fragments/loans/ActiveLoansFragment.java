@@ -104,7 +104,8 @@ public class ActiveLoansFragment extends Fragment {
     }
 
     private void switchToAll(View view) {
-        Navigation.findNavController(view).navigate(R.id.action_activeLoansFragment_to_allLoansFragment);
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                new AllLoansFragment()).commit();
     }
 
     private void attachLoansListener() {

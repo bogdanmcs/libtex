@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accountGraph"
+    app:startDestination="@id/accountFragment">
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.account.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account">
+        <action
+            android:id="@+id/action_accountFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_loansGraph"
+            app:destination="@id/loansGraph" />
+        <action
+            android:id="@+id/action_accountFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
+        <action
+            android:id="@+id/action_accountFragment_to_favouriteBooksFragment"
+            app:destination="@id/favouriteBooksFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteBooksFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.account.FavouriteBooksFragment"
+        android:label="fragment_favourite_books"
+        tools:layout="@layout/fragment_favourite_books">
+        <action
+            android:id="@+id/action_favouriteBooksFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_favouriteBooksFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_favouriteBooksFragment_to_loansGraph"
+            app:destination="@id/loansGraph" />
+        <action
+            android:id="@+id/action_favouriteBooksFragment_to_booksGraph"
+            app:destination="@id/booksGraph" />
+    </fragment>
+
+</navigation>

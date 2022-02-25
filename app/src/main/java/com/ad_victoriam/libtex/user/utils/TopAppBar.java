@@ -36,6 +36,18 @@ public class TopAppBar {
     }
 
     @SuppressLint("RestrictedApi")
+    public void setBookDetailsMode(Context context, MaterialToolbar materialToolbar) {
+        int backArrowResId = R.drawable.ic_baseline_cancel_24;
+        materialToolbar.setNavigationIcon(backArrowResId);
+        materialToolbar.setNavigationIconTint(Color.WHITE);
+        materialToolbar.setBackgroundColor(Color.DKGRAY);
+        ActionMenuItemView menuItem = materialToolbar.findViewById(R.id.addToFav);
+        menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_24));
+        menuItem.setVisibility(View.GONE);
+        materialToolbar.setTitleTextColor(Color.WHITE);
+    }
+
+    @SuppressLint("RestrictedApi")
     private void setAux(Context context, MaterialToolbar materialToolbar) {
         materialToolbar.setBackgroundColor(Color.WHITE);
         materialToolbar.setElevation(0);

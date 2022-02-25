@@ -7,12 +7,12 @@
         android:icon="@drawable/ic_baseline_home_24" />
 
     <item
-        android:id="@+id/loansGraph"
+        android:id="@+id/activeLoansFragment"
         android:title="Loans"
         android:icon="@drawable/ic_baseline_loan_24" />
 
     <item
-        android:id="@+id/booksGraph"
+        android:id="@+id/booksFragment"
         android:title="Books"
         android:icon="@drawable/ic_baseline_menu_book_24" />
 

@@ -105,9 +105,11 @@ public class LoanDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (loanType.equals(LOAN_TYPE_ACTIVE)) {
-                    Navigation.findNavController(mainView).navigate(R.id.action_loanDetailsFragment_to_activeLoansFragment);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                            new ActiveLoansFragment()).commit();
                 } else if (loanType.equals(LOAN_TYPE_ALL)) {
-                    Navigation.findNavController(mainView).navigate(R.id.action_loanDetailsFragment_to_allLoansFragment);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                            new AllLoansFragment()).commit();
                 }
             }
         });
@@ -282,6 +284,7 @@ public class LoanDetailsFragment extends Fragment {
     }
 
     private void setLocations(List<LibtexLibrary> libraries) {
+        book.setLocations(new ArrayList<>());
         for (LibtexLibrary library: libraries) {
             for (Book b: library.getBooks()) {
                 if (b.isSame(book)) {

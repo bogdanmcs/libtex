@@ -10,11 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.user.fragments.loans.ActiveLoansFragment;
+import com.ad_victoriam.libtex.user.fragments.loans.AllLoansFragment;
+import com.ad_victoriam.libtex.user.fragments.loans.LoanDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.google.android.material.button.MaterialButton;
 
@@ -25,19 +30,19 @@ import java.util.List;
 
 public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.LoanViewHolder> {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final List<Loan> loans;
     private User user;
 
     private static final String LOAN_TYPE_ACTIVE = "active";
 
-    public ActiveLoansAdapter(Context context, List<Loan> loans) {
-        this.context = context;
+    public ActiveLoansAdapter(FragmentActivity activity, List<Loan> loans) {
+        this.activity = activity;
         this.loans = loans;
     }
 
-    public ActiveLoansAdapter(Context context, List<Loan> loans, User user) {
-        this.context = context;
+    public ActiveLoansAdapter(FragmentActivity activity, List<Loan> loans, User user) {
+        this.activity = activity;
         this.loans = loans;
         this.user = user;
     }
@@ -72,13 +77,13 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
         holder.tLoanedOn.setText(loanedOnTextFormatted);
 
         if (deadlineDateTime.isBefore(LocalDateTime.now())) {
-            int color = context.getResources().getColor(R.color.indian_red, context.getTheme());
+            int color = activity.getResources().getColor(R.color.indian_red, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         } else if (deadlineDateTime.minusDays(3).isBefore(LocalDateTime.now())) {
-            int color = context.getResources().getColor(R.color.yellow, context.getTheme());
+            int color = activity.getResources().getColor(R.color.yellow, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         } else {
-            int color = context.getResources().getColor(R.color.light_green, context.getTheme());
+            int color = activity.getResources().getColor(R.color.light_green, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         }
     }
@@ -87,7 +92,12 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
         Bundle bundle = new Bundle();
         bundle.putParcelable("book", loans.get(position).getBook());
         bundle.putString("loanType", LOAN_TYPE_ACTIVE);
-        Navigation.findNavController(view).navigate(R.id.action_activeLoansFragment_to_loanDetailsFragment, bundle);
+
+        LoanDetailsFragment loanDetailsFragment = new LoanDetailsFragment();
+        loanDetailsFragment.setArguments(bundle);
+
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                loanDetailsFragment).commit();
     }
 
     @Override

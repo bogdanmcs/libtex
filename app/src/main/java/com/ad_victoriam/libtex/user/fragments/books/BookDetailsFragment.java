@@ -93,7 +93,8 @@ public class BookDetailsFragment extends Fragment {
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(mainView).navigate(R.id.action_bookDetailsFragment_to_booksFragment);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                        new BooksFragment()).commit();
             }
         });
 

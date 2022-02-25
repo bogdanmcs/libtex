@@ -102,6 +102,10 @@ public class Book implements Parcelable {
         return locations;
     }
 
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
+    }
+
     public void addLocation(String libraryLocation) {
         locations.add(libraryLocation);
     }

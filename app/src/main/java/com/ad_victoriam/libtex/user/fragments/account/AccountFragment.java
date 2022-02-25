@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.fragments;
+package com.ad_victoriam.libtex.user.fragments.account;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +13,11 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class AccountFragment extends Fragment {
 
+    private View mainView;
     private FragmentActivity activity;
 
     public AccountFragment() {
@@ -33,15 +33,27 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
-
+        mainView = inflater.inflate(R.layout.fragment_account, container, false);
         activity = requireActivity();
+
         setTopAppBar();
+        setActions();
 
-        final MaterialButton bSignOut = view.findViewById(R.id.bSignOut);
-        bSignOut.setOnClickListener(this::signOut);
+        return mainView;
+    }
 
-        return view;
+    private void setActions() {
+        mainView.findViewById(R.id.bFavouriteBooks).setOnClickListener(this::viewFavouriteBooks);
+        mainView.findViewById(R.id.bSignOut).setOnClickListener(this::signOut);
+    }
+
+    private void viewFavouriteBooks(View view) {
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, new FavouriteBooksFragment())
+                .addToBackStack("accountFragment")
+                .commit();
     }
 
     private void setTopAppBar() {

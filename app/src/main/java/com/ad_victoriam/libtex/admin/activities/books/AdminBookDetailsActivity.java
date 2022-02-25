@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BookDetailsActivity extends AppCompatActivity implements CategoryDialog.CategoryDialogListener {
+public class AdminBookDetailsActivity extends AppCompatActivity implements CategoryDialog.CategoryDialogListener {
 
     DatabaseReference databaseReference;
 

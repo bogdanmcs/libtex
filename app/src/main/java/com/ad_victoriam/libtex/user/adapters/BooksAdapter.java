@@ -1,6 +1,5 @@
 package com.ad_victoriam.libtex.user.adapters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,21 +8,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Book;
 
 import java.util.List;
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final List<Book> books;
 
-    public BooksAdapter(Context context, List<Book> books) {
-        this.context = context;
+    public BooksAdapter(FragmentActivity activity, List<Book> books) {
+        this.activity = activity;
         this.books = books;
     }
 
@@ -74,6 +74,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     private void viewDetails(View view, int position) {
         Bundle book = new Bundle();
         book.putParcelable("book", books.get(position));
-        Navigation.findNavController(view).navigate(R.id.action_booksFragment_to_bookDetailsFragment, book);
+
+        BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
+        bookDetailsFragment.setArguments(book);
+
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
+                bookDetailsFragment).commit();
     }
 }
