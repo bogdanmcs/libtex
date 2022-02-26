@@ -60,5 +60,7 @@
     <string name="all">All</string>
     <string name="no_data">No data</string>
     <string name="reserve_now">Reserve now</string>
+    <string name="in_stock">IN STOCK</string>
+    <string name="out_of_stock">OUT OF STOCK</string>
 
 </resources>

@@ -59,13 +59,23 @@
                 app:layout_constraintStart_toStartOf="@+id/tTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tTitle" />
 
+            <TextView
+                android:id="@+id/tStockStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/out_of_stock"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="@+id/tAuthor"
+                app:layout_constraintTop_toBottomOf="@+id/tAuthor" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bReserve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/white_smoke"
                 android:stateListAnimator="@null"
@@ -75,7 +85,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tAuthor"
+                app:layout_constraintTop_toBottomOf="@id/tStockStatus"
                 app:strokeColor="@color/grey"
                 app:strokeWidth="1dp" />
 

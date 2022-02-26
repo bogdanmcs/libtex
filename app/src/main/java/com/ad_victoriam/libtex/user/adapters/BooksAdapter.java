@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.user.adapters;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +46,16 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         holder.tBookAuthorName.setText(text);
         holder.tBookPublisher.setText(books.get(position).getPublisher());
 
+        if (books.get(position).getAvailableQuantity() > 0) {
+            holder.tStockStatus.setText(activity.getString(R.string.in_stock));
+            int color = ContextCompat.getColor(activity, R.color.green);
+            holder.tStockStatus.setTextColor(color);
+        } else {
+            holder.tStockStatus.setText(activity.getString(R.string.out_of_stock));
+            int color = ContextCompat.getColor(activity, R.color.red);
+            holder.tStockStatus.setTextColor(color);
+        }
+
         if (position == books.size() - 1) {
             holder.div.setVisibility(View.INVISIBLE);
         }
@@ -59,6 +72,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         TextView tBookTitle;
         TextView tBookAuthorName;
         TextView tBookPublisher;
+        TextView tStockStatus;
         View div;
 
         public BookViewHolder(@NonNull View itemView) {
@@ -67,6 +81,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
+            tStockStatus = itemView.findViewById(R.id.tStockStatus);
             div = itemView.findViewById(R.id.div);
         }
     }

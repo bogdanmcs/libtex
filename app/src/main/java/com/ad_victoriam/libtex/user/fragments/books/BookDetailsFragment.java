@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.navigation.Navigation;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.models.Book;
@@ -53,6 +52,7 @@ public class BookDetailsFragment extends Fragment {
     private TextView tNoOfPages;
     private TextView tCategory;
     private TextView tLocations;
+    private TextView tStockStatus;
 
     private boolean isFav = false;
     private String favKey = null;
@@ -67,6 +67,11 @@ public class BookDetailsFragment extends Fragment {
         if (getArguments() != null) {
             book = getArguments().getParcelable("book");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -109,13 +114,14 @@ public class BookDetailsFragment extends Fragment {
         topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.addToFav) {
+
+                if (item.getItemId() == 1) {
                     if (isFav) {
                         if (favKey != null) {
                             databaseReference
-                                    .child(getString(R.string.n_users))
+                                    .child(activity.getString(R.string.n_users))
                                     .child(firebaseUser.getUid())
-                                    .child(getString(R.string.n_favourite_books))
+                                    .child(activity.getString(R.string.n_favourite_books))
                                     .child(favKey)
                                     .removeValue()
                                     .addOnCompleteListener(task -> {
@@ -134,15 +140,15 @@ public class BookDetailsFragment extends Fragment {
                     } else {
                         BookFav bookFav = new BookFav(book.getTitle(), book.getAuthorName(), book.getPublisher());
                         favKey = databaseReference
-                                .child(getString(R.string.n_users))
+                                .child(activity.getString(R.string.n_users))
                                 .child(firebaseUser.getUid())
-                                .child(getString(R.string.n_favourite_books))
+                                .child(activity.getString(R.string.n_favourite_books))
                                 .push()
                                 .getKey();
                         databaseReference
-                                .child(getString(R.string.n_users))
+                                .child(activity.getString(R.string.n_users))
                                 .child(firebaseUser.getUid())
-                                .child(getString(R.string.n_favourite_books))
+                                .child(activity.getString(R.string.n_favourite_books))
                                 .child(favKey)
                                 .setValue(bookFav)
                                 .addOnCompleteListener(task -> {
@@ -171,11 +177,12 @@ public class BookDetailsFragment extends Fragment {
         tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
         tCategory = mainView.findViewById(R.id.tCategory);
         tLocations = mainView.findViewById(R.id.tLocations);
+        tStockStatus = mainView.findViewById(R.id.tStockStatus);
         final MaterialButton bReserve = mainView.findViewById(R.id.bReserve);
         bReserve.setOnClickListener(this::reserveBook);
 
         if (book == null) {
-            tTitle.setText(getString(R.string.no_data));
+            tTitle.setText(activity.getString(R.string.no_data));
         } else {
             tTitle.setText(book.getTitle());
             tAuthor.setText(book.getAuthorName());
@@ -184,6 +191,15 @@ public class BookDetailsFragment extends Fragment {
             tNoOfPages.setText(book.getNoOfPages());
             tCategory.setText(beautifyList(book.getChosenCategories()));
             tLocations.setText(beautifyList(book.getLocations()));
+            if (book.getAvailableQuantity() > 0) {
+                tStockStatus.setText(activity.getString(R.string.in_stock));
+                int color = ContextCompat.getColor(activity, R.color.green);
+                tStockStatus.setTextColor(color);
+            } else {
+                tStockStatus.setText(activity.getString(R.string.out_of_stock));
+                int color = ContextCompat.getColor(activity, R.color.red);
+                tStockStatus.setTextColor(color);
+            }
         }
     }
 
@@ -209,9 +225,9 @@ public class BookDetailsFragment extends Fragment {
 
     private void setFavouriteKeyValue() {
         databaseReference
-                .child(getString(R.string.n_users))
+                .child(activity.getString(R.string.n_users))
                 .child(firebaseUser.getUid())
-                .child(getString(R.string.n_favourite_books))
+                .child(activity.getString(R.string.n_favourite_books))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -239,7 +255,7 @@ public class BookDetailsFragment extends Fragment {
 
             // get libraries details
             databaseReference
-                    .child(getString(R.string.n_admins))
+                    .child(activity.getString(R.string.n_admins))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
@@ -249,8 +265,8 @@ public class BookDetailsFragment extends Fragment {
                                 for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                     String libraryName = dataSnapshot
-                                            .child(getString(R.string.n_location))
-                                            .child(getString(R.string.p_location_name))
+                                            .child(activity.getString(R.string.n_location))
+                                            .child(activity.getString(R.string.p_location_name))
                                             .getValue(String.class);
 
                                     libraryNames.put(dataSnapshot.getKey(), libraryName);
@@ -263,7 +279,7 @@ public class BookDetailsFragment extends Fragment {
 
             // get all books
             databaseReference
-                    .child(getString(R.string.n_books))
+                    .child(activity.getString(R.string.n_books))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override

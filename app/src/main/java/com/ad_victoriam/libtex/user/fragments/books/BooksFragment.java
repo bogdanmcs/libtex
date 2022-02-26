@@ -105,7 +105,7 @@ public class BooksFragment extends Fragment {
 
         // get libraries details
         databaseReference
-                .child(getString(R.string.n_admins))
+                .child(activity.getString(R.string.n_admins))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
@@ -115,8 +115,8 @@ public class BooksFragment extends Fragment {
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                 String libraryName = dataSnapshot
-                                        .child(getString(R.string.n_location))
-                                        .child(getString(R.string.p_location_name))
+                                        .child(activity.getString(R.string.n_location))
+                                        .child(activity.getString(R.string.p_location_name))
                                         .getValue(String.class);
 
                                 libraryNames.put(dataSnapshot.getKey(), libraryName);
@@ -129,7 +129,7 @@ public class BooksFragment extends Fragment {
 
         // get all books
         databaseReference
-                .child(getString(R.string.n_books))
+                .child(activity.getString(R.string.n_books))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override

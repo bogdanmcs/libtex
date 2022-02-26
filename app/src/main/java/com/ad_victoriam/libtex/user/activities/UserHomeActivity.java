@@ -49,8 +49,10 @@ public class UserHomeActivity extends AppCompatActivity {
                     }
 
                     if (fragment != null) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,
-                                fragment).commit();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.fragmentContainerView, fragment)
+                                .commit();
                     }
                     return true;
                 }

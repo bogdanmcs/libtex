@@ -8,5 +8,5 @@
     android:layout_height="?attr/actionBarSize"
     android:background="@color/libtex_background_primary"
     app:title="Title"
-    app:menu="@menu/top_bar_menu_user"
+    app:menu="@menu/top_bar_menu_user_fav"
     style="@style/Widget.MaterialComponents.Toolbar.Primary" />

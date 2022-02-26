@@ -1,12 +1,11 @@
 package com.ad_victoriam.libtex.user.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 
 import com.ad_victoriam.libtex.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -35,25 +34,19 @@ public class TopAppBar {
         setAux(context, materialToolbar);
     }
 
-    @SuppressLint("RestrictedApi")
     public void setBookDetailsMode(Context context, MaterialToolbar materialToolbar) {
         int backArrowResId = R.drawable.ic_baseline_cancel_24;
         materialToolbar.setNavigationIcon(backArrowResId);
         materialToolbar.setNavigationIconTint(Color.WHITE);
         materialToolbar.setBackgroundColor(Color.DKGRAY);
-        ActionMenuItemView menuItem = materialToolbar.findViewById(R.id.addToFav);
-        menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_24));
-        menuItem.setVisibility(View.GONE);
         materialToolbar.setTitleTextColor(Color.WHITE);
     }
 
-    @SuppressLint("RestrictedApi")
     private void setAux(Context context, MaterialToolbar materialToolbar) {
         materialToolbar.setBackgroundColor(Color.WHITE);
         materialToolbar.setElevation(0);
-        ActionMenuItemView menuItem = materialToolbar.findViewById(R.id.addToFav);
-        menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_24));
-        menuItem.setVisibility(View.GONE);
+        Menu menu = materialToolbar.getMenu();
+        menu.removeGroup(0);
     }
 
     public void setTitleMode(Context context, MaterialToolbar materialToolbar, String title) {
@@ -63,15 +56,16 @@ public class TopAppBar {
         materialToolbar.setTitleTextColor(colorResId);
     }
 
-    @SuppressLint("RestrictedApi")
     public void setFavMode(Context context, MaterialToolbar materialToolbar, boolean favIsOn) {
+        Menu menu = materialToolbar.getMenu();
+        menu.removeGroup(0);
+        MenuItem menuItem = menu.add(0, Menu.FIRST, 0, "Fav");
 
-        ActionMenuItemView menuItem = materialToolbar.findViewById(R.id.addToFav);
         if (favIsOn) {
             menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_on_24));
         } else {
             menuItem.setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_heart_24));
         }
-        menuItem.setVisibility(View.VISIBLE);
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 }
