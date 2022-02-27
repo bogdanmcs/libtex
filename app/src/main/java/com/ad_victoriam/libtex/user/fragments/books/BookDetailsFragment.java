@@ -1,10 +1,16 @@
 package com.ad_victoriam.libtex.user.fragments.books;
 
+import android.animation.ObjectAnimator;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.user.activities.ReservationDetailsActivity;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
@@ -56,6 +63,10 @@ public class BookDetailsFragment extends Fragment {
 
     private boolean isFav = false;
     private String favKey = null;
+
+    // dialogs
+    private boolean areTermsAccepted = false;
+    private String location;
 
     public BookDetailsFragment() {
         // Required empty public constructor
@@ -179,7 +190,7 @@ public class BookDetailsFragment extends Fragment {
         tLocations = mainView.findViewById(R.id.tLocations);
         tStockStatus = mainView.findViewById(R.id.tStockStatus);
         final MaterialButton bReserve = mainView.findViewById(R.id.bReserve);
-        bReserve.setOnClickListener(this::reserveBook);
+        bReserve.setOnClickListener(this::reserveBookPickLibrary);
 
         if (book == null) {
             tTitle.setText(activity.getString(R.string.no_data));
@@ -203,8 +214,123 @@ public class BookDetailsFragment extends Fragment {
         }
     }
 
-    private void reserveBook(View view) {
-        Snackbar.make(mainView, "reserve this book", Snackbar.LENGTH_SHORT).show();
+    private void reserveBookPickLibrary(View secondaryView) {
+
+        if (book.getAvailableQuantity() == 0) {
+            notifyBookUnavailable();
+            return;
+        }
+
+        Dialog reservationDialog1 = new Dialog(activity);
+        reservationDialog1.setContentView(R.layout.dialog_reservation_1);
+        reservationDialog1.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reservationDialog1.setCancelable(false);
+
+        Spinner spinner = reservationDialog1.findViewById(R.id.spinner);
+        List<String> locations = new ArrayList<>(book.getLocations());
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                activity,
+                R.layout.support_simple_spinner_dropdown_item,
+                locations);
+        spinner.setAdapter(arrayAdapter);
+
+        MaterialButton bCancel = reservationDialog1.findViewById(R.id.bCancel);
+        MaterialButton bProceed = reservationDialog1.findViewById(R.id.bProceed);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                location = adapterView.getItemAtPosition(i).toString();
+                bProceed.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        bCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reservationDialog1.dismiss();
+            }
+        });
+        bProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (location != null) {
+                    reserveBookConfirm(secondaryView, location);
+                    reservationDialog1.dismiss();
+                }
+            }
+        });
+        reservationDialog1.show();
+    }
+
+    private void reserveBookConfirm(View view, String location) {
+        Dialog reservationDialog2 = new Dialog(activity);
+        reservationDialog2.setContentView(R.layout.dialog_reservation_2);
+        reservationDialog2.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reservationDialog2.setCancelable(false);
+
+        TextView tReservationBook = reservationDialog2.findViewById(R.id.tReservationBook);
+        TextView tReservationLocation = reservationDialog2.findViewById(R.id.tReservationLocation);
+        TextView tReservationDescription = reservationDialog2.findViewById(R.id.tReservationDescription);
+
+        String text = activity.getString(R.string.reserve_2_alert_part_1) + " " + book.getTitle() + ".";
+        tReservationBook.setText(text);
+        text = activity.getString(R.string.reserve_2_alert_part_2) + " " + location;
+        tReservationLocation.setText(text);
+        tReservationDescription.setText(activity.getString(R.string.d_reserve_2_alert_part_3));
+
+        MaterialButton bReadMore = reservationDialog2.findViewById(R.id.bReadMore);
+        MaterialButton bAcceptTerms = reservationDialog2.findViewById(R.id.bAcceptTerms);
+        TextView tAcceptTermsHelper = reservationDialog2.findViewById(R.id.tAcceptTermsHelper);
+        MaterialButton bCancel = reservationDialog2.findViewById(R.id.bCancel);
+        MaterialButton bConfirm = reservationDialog2.findViewById(R.id.bConfirm);
+
+
+        bReadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.startActivity(new Intent(activity, ReservationDetailsActivity.class));
+            }
+        });
+        bAcceptTerms.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (!areTermsAccepted) {
+                    int color = ContextCompat.getColor(activity, R.color.light_green);
+                    bAcceptTerms.setBackgroundColor(color);
+                    tAcceptTermsHelper.setText(activity.getString(R.string.reservation_terms_accepted));
+                    color = ContextCompat.getColor(activity, R.color.dark_green);
+                    tAcceptTermsHelper.setTextColor(color);
+                    bConfirm.setEnabled(true);
+                    areTermsAccepted = true;
+                    ObjectAnimator.ofFloat(view, "rotation", 0, 360).start();
+                }
+                return true;
+            }
+        });
+        bCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reservationDialog2.dismiss();
+            }
+        });
+        bConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                areTermsAccepted = false;
+                reservationDialog2.dismiss();
+                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        reservationDialog2.show();
+    }
+
+    private void notifyBookUnavailable() {
+        Snackbar.make(mainView, "ce livre n'est pas disponible", Snackbar.LENGTH_SHORT).show();
     }
 
     public String beautifyList(List<String> list) {

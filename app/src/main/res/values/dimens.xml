@@ -20,6 +20,10 @@
     <dimen name="text_size_xxlarge">45sp</dimen>
     <dimen name="text_size_xxxlarge">56sp</dimen>
 
+    <!-- Paddings -->
+    <dimen name="details_actions_padding">10dp</dimen>
+    <dimen name="reservation_spinner_padding">10dp</dimen>
+
     <!-- Custom -->
     <dimen name="book_row_primary_height_size">40dp</dimen>
     <dimen name="book_row_secondary_height_size">20dp</dimen>
@@ -30,6 +34,5 @@
     <dimen name="normal_elevation">4dp</dimen>
     <dimen name="no_elevation">0dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="details_actions_padding">10dp</dimen>
 
 </resources>
