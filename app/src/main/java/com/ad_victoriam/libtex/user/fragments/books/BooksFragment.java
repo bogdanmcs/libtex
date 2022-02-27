@@ -169,13 +169,15 @@ public class BooksFragment extends Fragment {
             for (Book book: library.getBooks()) {
 
                 String libraryName = libraryNames.get(library.getUid());
+                library.setName(libraryName);
+
                 if (!isDuplicate(book)) {
-                    book.addLocation(libraryName);
+                    book.addLocation(library);
                     books.add(book);
                 } else {
                     for (Book b: books) {
                         if (b.isSame(book)) {
-                            b.addLocation(libraryName);
+                            b.addLocation(library);
                         }
                     }
                 }

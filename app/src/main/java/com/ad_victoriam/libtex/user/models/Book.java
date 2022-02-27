@@ -4,7 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Book implements Parcelable {
 
@@ -16,7 +19,7 @@ public class Book implements Parcelable {
     private String noOfPages;
     private String description;
     private int availableQuantity;
-    private List<String> locations = new ArrayList<>();
+    private Map<String, String> locations = new HashMap();
 
     public Book() {
         // Default constructor required for calls to DataSnapshot.getValue(Book.class)
@@ -98,16 +101,24 @@ public class Book implements Parcelable {
         this.availableQuantity = availableQuantity;
     }
 
-    public List<String> getLocations() {
+    public Map<String, String> getLocations() {
         return locations;
     }
 
-    public void setLocations(List<String> locations) {
+    public List<String> getLocationsList() {
+        List<String> locationsList = new ArrayList<>();
+        for (Map.Entry<String, String> entry: locations.entrySet()) {
+            locationsList.add(entry.getValue());
+        }
+        return locationsList;
+    }
+
+    public void setLocations(Map<String, String> locations) {
         this.locations = locations;
     }
 
-    public void addLocation(String libraryLocation) {
-        locations.add(libraryLocation);
+    public void addLocation(LibtexLibrary libtexLibrary) {
+        locations.put(libtexLibrary.getUid(), libtexLibrary.getName());
     }
 
     @Override
@@ -125,7 +136,8 @@ public class Book implements Parcelable {
         parcel.writeString(noOfPages);
         parcel.writeString(description);
         parcel.writeInt(availableQuantity);
-        parcel.writeList(locations);
+//        parcel.writeList(locations);
+        parcel.writeMap(locations);
     }
 
     protected Book(Parcel in) {
@@ -137,7 +149,8 @@ public class Book implements Parcelable {
         noOfPages = in.readString();
         description = in.readString();
         availableQuantity = in.readInt();
-        locations = in.readArrayList(null);
+//        locations = in.readArrayList(null);
+        locations = in.readHashMap(null);
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {

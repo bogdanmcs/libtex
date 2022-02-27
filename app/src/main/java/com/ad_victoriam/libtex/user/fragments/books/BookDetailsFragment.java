@@ -201,7 +201,7 @@ public class BookDetailsFragment extends Fragment {
             tPublisher.setText(book.getPublisher());
             tNoOfPages.setText(book.getNoOfPages());
             tCategory.setText(beautifyList(book.getChosenCategories()));
-            tLocations.setText(beautifyList(book.getLocations()));
+            tLocations.setText(beautifyList(book.getLocationsList()));
             if (book.getAvailableQuantity() > 0) {
                 tStockStatus.setText(activity.getString(R.string.in_stock));
                 int color = ContextCompat.getColor(activity, R.color.green);
@@ -227,7 +227,7 @@ public class BookDetailsFragment extends Fragment {
         reservationDialog1.setCancelable(false);
 
         Spinner spinner = reservationDialog1.findViewById(R.id.spinner);
-        List<String> locations = new ArrayList<>(book.getLocations());
+        List<String> locations = new ArrayList<>(book.getLocationsList());
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 activity,
                 R.layout.support_simple_spinner_dropdown_item,
@@ -288,7 +288,6 @@ public class BookDetailsFragment extends Fragment {
         TextView tAcceptTermsHelper = reservationDialog2.findViewById(R.id.tAcceptTermsHelper);
         MaterialButton bCancel = reservationDialog2.findViewById(R.id.bCancel);
         MaterialButton bConfirm = reservationDialog2.findViewById(R.id.bConfirm);
-
 
         bReadMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -445,7 +444,7 @@ public class BookDetailsFragment extends Fragment {
         for (LibtexLibrary library: libraries) {
             for (Book b: library.getBooks()) {
                 if (b.isSame(book)) {
-                    book.addLocation(library.getName());
+                    book.addLocation(library);
                 }
             }
         }
