@@ -42,7 +42,6 @@ public class BooksFragment extends Fragment {
 
     private final List<LibtexLibrary> libraries = new ArrayList<>();
     private final List<Book> books = new ArrayList<>();
-    private final Map<String, String> libraryNames = new HashMap<>();
     private BooksAdapter booksAdapter;
 
     public BooksFragment() {
@@ -77,7 +76,6 @@ public class BooksFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
         getLibrariesAndBooks();
 
         return mainView;
@@ -103,30 +101,6 @@ public class BooksFragment extends Fragment {
         libraries.clear();
         books.clear();
 
-        // get libraries details
-        databaseReference
-                .child(activity.getString(R.string.n_admins))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-
-                        if (task.isSuccessful()) {
-                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-
-                                String libraryName = dataSnapshot
-                                        .child(activity.getString(R.string.n_location))
-                                        .child(activity.getString(R.string.p_location_name))
-                                        .getValue(String.class);
-
-                                libraryNames.put(dataSnapshot.getKey(), libraryName);
-                            }
-                        } else {
-                            System.out.println(task.getResult());
-                        }
-                    }
-                });
-
         // get all books
         databaseReference
                 .child(activity.getString(R.string.n_books))
@@ -141,21 +115,19 @@ public class BooksFragment extends Fragment {
                                 LibtexLibrary libtexLibrary = new LibtexLibrary();
                                 libtexLibrary.setUid(dataSnapshot.getKey());
 
-                                for (DataSnapshot b: dataSnapshot.getChildren()) {
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
 
-                                    Book book = b.getValue(Book.class);
+                                    Book book = dataSnapshot1.getValue(Book.class);
 
                                     if (book != null) {
-                                        book.setUid(b.getKey());
+                                        book.setUid(dataSnapshot1.getKey());
                                         libtexLibrary.addBook(book);
                                     }
                                 }
 
                                 libraries.add(libtexLibrary);
                             }
-
                             setBooks();
-                            booksAdapter.notifyItemInserted(books.size() - 1);
 
                         } else {
                             System.out.println(task.getResult());
@@ -167,19 +139,9 @@ public class BooksFragment extends Fragment {
     private void setBooks() {
         for (LibtexLibrary library: libraries) {
             for (Book book: library.getBooks()) {
-
-                String libraryName = libraryNames.get(library.getUid());
-                library.setName(libraryName);
-
                 if (!isDuplicate(book)) {
-                    book.addLocation(library);
                     books.add(book);
-                } else {
-                    for (Book b: books) {
-                        if (b.isSame(book)) {
-                            b.addLocation(library);
-                        }
-                    }
+                    booksAdapter.notifyItemInserted(books.size() - 1);
                 }
             }
         }
@@ -188,6 +150,11 @@ public class BooksFragment extends Fragment {
     private boolean isDuplicate(Book book) {
         for (Book b: books) {
             if (b.isSame(book)) {
+                // if the new duplicated book is in stock (and the original one isn't),
+                // then replace it - stock status should always try to be positive
+                if (b.getAvailableQuantity() == 0 && book.getAvailableQuantity() > 0) {
+                    b.setUniqueDetails(book);
+                }
                 return true;
             }
         }

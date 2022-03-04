@@ -82,6 +82,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home2.xml" value="0.1390625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loan_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loans.xml" value="0.25" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_reservations.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_temp.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_user_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/loan_adapter_row.xml" value="0.22" />
@@ -93,6 +94,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_book.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_book_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_category.xml" value="0.22" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user_2.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/test.xml" value="0.234375" />

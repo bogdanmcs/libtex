@@ -5,15 +5,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
+import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountFragment extends Fragment {
 
@@ -44,6 +52,7 @@ public class AccountFragment extends Fragment {
 
     private void setActions() {
         mainView.findViewById(R.id.bFavouriteBooks).setOnClickListener(this::viewFavouriteBooks);
+        mainView.findViewById(R.id.bReservations).setOnClickListener(this::viewReservations);
         mainView.findViewById(R.id.bSignOut).setOnClickListener(this::signOut);
     }
 
@@ -52,6 +61,15 @@ public class AccountFragment extends Fragment {
                 .getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainerView, new FavouriteBooksFragment())
+                .addToBackStack("accountFragment")
+                .commit();
+    }
+
+    private void viewReservations(View view) {
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, new ReservationsFragment())
                 .addToBackStack("accountFragment")
                 .commit();
     }

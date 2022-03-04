@@ -15,7 +15,6 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.activities.BookDetailsActivity;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -43,6 +42,7 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
         holder.tBookTitle.setText(favouriteBooks.get(position).getTitle());
         holder.tBookAuthorName.setText(favouriteBooks.get(position).getAuthorName());
         holder.tBookPublisher.setText(favouriteBooks.get(position).getPublisher());
+        holder.tStockStatus.setVisibility(View.INVISIBLE);
 
         if (position == favouriteBooks.size() - 1) {
             holder.div.setVisibility(View.INVISIBLE);
@@ -71,6 +71,7 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
         TextView tBookTitle;
         TextView tBookAuthorName;
         TextView tBookPublisher;
+        TextView tStockStatus;
         View div;
 
         public BookViewHolder(@NonNull View itemView) {
@@ -79,9 +80,9 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
             tBookTitle = itemView.findViewById(R.id.tBookTitle);
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
+            tStockStatus = itemView.findViewById(R.id.tStockStatus);
             div = itemView.findViewById(R.id.div);
         }
     }
-
 }
 

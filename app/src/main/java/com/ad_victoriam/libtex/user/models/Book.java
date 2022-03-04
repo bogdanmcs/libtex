@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Book implements Parcelable {
 
@@ -19,7 +18,11 @@ public class Book implements Parcelable {
     private String noOfPages;
     private String description;
     private int availableQuantity;
-    private Map<String, String> locations = new HashMap();
+    // (library uid, location name)
+    private Map<String, String> locations = new HashMap<>();
+    private Map<String, String> locationsOutOfStock = new HashMap<>();
+    // (library uid, book uid)
+    private Map<String, String> sameBookUids = new HashMap<>();
 
     public Book() {
         // Default constructor required for calls to DataSnapshot.getValue(Book.class)
@@ -35,6 +38,14 @@ public class Book implements Parcelable {
         this.description = description;
         this.availableQuantity = availableQuantity;
         this.locations = null;
+        this.sameBookUids = null;
+    }
+
+    public void setUniqueDetails(Book book) {
+        this.chosenCategories = book.getChosenCategories();
+        this.noOfPages = book.getNoOfPages();
+        this.description = book.getDescription();
+        this.availableQuantity = book.getAvailableQuantity();
     }
 
     public String getUid() {
@@ -105,7 +116,11 @@ public class Book implements Parcelable {
         return locations;
     }
 
-    public List<String> getLocationsList() {
+    public void setLocations(Map<String, String> locations) {
+        this.locations = locations;
+    }
+
+    public List<String> getLocationsNames() {
         List<String> locationsList = new ArrayList<>();
         for (Map.Entry<String, String> entry: locations.entrySet()) {
             locationsList.add(entry.getValue());
@@ -113,12 +128,40 @@ public class Book implements Parcelable {
         return locationsList;
     }
 
-    public void setLocations(Map<String, String> locations) {
-        this.locations = locations;
-    }
-
     public void addLocation(LibtexLibrary libtexLibrary) {
         locations.put(libtexLibrary.getUid(), libtexLibrary.getName());
+    }
+
+    public Map<String, String> getLocationsOutOfStock() {
+        return locationsOutOfStock;
+    }
+
+    public void setLocationsOutOfStock(Map<String, String> locationsOutOfStock) {
+        this.locationsOutOfStock = locationsOutOfStock;
+    }
+
+    public List<String> getLocationsOutOfStockNames() {
+        List<String> locationsList = new ArrayList<>();
+        for (Map.Entry<String, String> entry: locationsOutOfStock.entrySet()) {
+            locationsList.add(entry.getValue());
+        }
+        return locationsList;
+    }
+
+    public void addLocationOutOfStock(LibtexLibrary libtexLibrary) {
+        locationsOutOfStock.put(libtexLibrary.getUid(), libtexLibrary.getName());
+    }
+
+    public Map<String, String> getSameBookUids() {
+        return sameBookUids;
+    }
+
+    public void setSameBookUids(Map<String, String> sameBookUids) {
+        this.sameBookUids = sameBookUids;
+    }
+
+    public void addSameBookUid(String libraryUid, String bookUid) {
+        this.sameBookUids.put(libraryUid, bookUid);
     }
 
     @Override
@@ -136,7 +179,6 @@ public class Book implements Parcelable {
         parcel.writeString(noOfPages);
         parcel.writeString(description);
         parcel.writeInt(availableQuantity);
-//        parcel.writeList(locations);
         parcel.writeMap(locations);
     }
 
@@ -149,7 +191,6 @@ public class Book implements Parcelable {
         noOfPages = in.readString();
         description = in.readString();
         availableQuantity = in.readInt();
-//        locations = in.readArrayList(null);
         locations = in.readHashMap(null);
     }
 

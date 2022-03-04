@@ -269,11 +269,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="Locations"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tLocations"
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="@+id/div3"
-                        app:layout_constraintTop_toBottomOf="@+id/div3" />
+                        app:layout_constraintTop_toBottomOf="@+id/div3"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
                         android:id="@+id/tLocations"
@@ -281,13 +284,48 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
                         android:text="Locations"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/div3"
                         app:layout_constraintHorizontal_weight="3"
                         app:layout_constraintStart_toEndOf="@+id/locations"
                         app:layout_constraintTop_toTopOf="@id/locations" />
+
+                    <View
+                        android:id="@+id/div4"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/dark_gray"
+                        app:layout_constraintEnd_toEndOf="@+id/tLocations"
+                        app:layout_constraintStart_toStartOf="@+id/tLocations"
+                        app:layout_constraintTop_toBottomOf="@+id/tLocations" />
+
+                    <TextView
+                        android:id="@+id/outOfStock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Out of stock: "
+                        android:textColor="@color/indian_red"
+                        app:layout_constraintEnd_toEndOf="@+id/div4"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintHorizontal_weight="3"
+                        app:layout_constraintStart_toStartOf="@+id/div4"
+                        app:layout_constraintTop_toBottomOf="@id/div4" />
+
+                    <TextView
+                        android:id="@+id/tLocationsOutOfStock"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Out of stock locations"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="3"
+                        app:layout_constraintStart_toStartOf="@+id/outOfStock"
+                        app:layout_constraintTop_toBottomOf="@id/outOfStock" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

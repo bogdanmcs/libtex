@@ -14,6 +14,7 @@
     <string name="n_current_loans">current-loans</string>
     <string name="n_loans_history">loans-history</string>
     <string name="n_favourite_books">favourite-books</string>
+    <string name="n_reservations">reservations</string>
 
     <!-- nodes props -->
     <string name="p_location_name">name</string>
@@ -79,9 +80,12 @@
     <string name="proceed">Continue</string>
     <string name="reservation_terms_accepted">Terms accepted</string>
     <string name="reservation_successful">You have successfully reserved this book</string>
+    <string name="reservation_unsuccessful">Reservation denied</string>
+    <string name="reservation_duplicated">Already reserved</string>
     <string name="reservation_accept_terms_first">Please accept the terms first</string>
     <string name="read_more">Read more</string>
     <string name="reserve_2_alert_part_1">You are about to reserve</string>
     <string name="reserve_2_alert_part_2">Location:</string>
+    <string name="no_reservations">You do not have any reservations.</string>
 
 </resources>

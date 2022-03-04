@@ -24,6 +24,7 @@ import com.ad_victoriam.libtex.user.activities.ReservationDetailsActivity;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
+import com.ad_victoriam.libtex.user.models.Reservation;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +37,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +61,9 @@ public class BookDetailsFragment extends Fragment {
     private TextView tNoOfPages;
     private TextView tCategory;
     private TextView tLocations;
+    private TextView tLocationsOutOfStock;
     private TextView tStockStatus;
+    private MaterialButton bReserve;
 
     private boolean isFav = false;
     private String favKey = null;
@@ -81,11 +85,6 @@ public class BookDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -97,11 +96,26 @@ public class BookDetailsFragment extends Fragment {
                 .getReference();
 
         setTopAppBar();
+        findViews();
         setFavouriteKeyValue();
         getLibrariesAndBooks();
         setDetails();
 
         return mainView;
+    }
+
+    private void findViews() {
+        tTitle = mainView.findViewById(R.id.tTitle);
+        tAuthor = mainView.findViewById(R.id.tAuthor);
+        tDescription = mainView.findViewById(R.id.tDescription);
+        tPublisher = mainView.findViewById(R.id.tPublisher);
+        tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
+        tCategory = mainView.findViewById(R.id.tCategory);
+        tLocations = mainView.findViewById(R.id.tLocations);
+        tLocationsOutOfStock = mainView.findViewById(R.id.tLocationsOutOfStock);
+        tStockStatus = mainView.findViewById(R.id.tStockStatus);
+        bReserve = mainView.findViewById(R.id.bReserve);
+        bReserve.setOnClickListener(this::reserveBookPickLibrary);
     }
 
 
@@ -181,17 +195,6 @@ public class BookDetailsFragment extends Fragment {
     }
 
     private void setDetails() {
-        tTitle = mainView.findViewById(R.id.tTitle);
-        tAuthor = mainView.findViewById(R.id.tAuthor);
-        tDescription = mainView.findViewById(R.id.tDescription);
-        tPublisher = mainView.findViewById(R.id.tPublisher);
-        tNoOfPages = mainView.findViewById(R.id.tNoOfPages);
-        tCategory = mainView.findViewById(R.id.tCategory);
-        tLocations = mainView.findViewById(R.id.tLocations);
-        tStockStatus = mainView.findViewById(R.id.tStockStatus);
-        final MaterialButton bReserve = mainView.findViewById(R.id.bReserve);
-        bReserve.setOnClickListener(this::reserveBookPickLibrary);
-
         if (book == null) {
             tTitle.setText(activity.getString(R.string.no_data));
         } else {
@@ -201,7 +204,21 @@ public class BookDetailsFragment extends Fragment {
             tPublisher.setText(book.getPublisher());
             tNoOfPages.setText(book.getNoOfPages());
             tCategory.setText(beautifyList(book.getChosenCategories()));
-            tLocations.setText(beautifyList(book.getLocationsList()));
+            if (book.getLocations().isEmpty()) {
+                tLocations.setText("-");
+            } else {
+                tLocations.setText(beautifyList(book.getLocationsNames()));
+            }
+            if (book.getLocationsOutOfStock().isEmpty()) {
+                mainView.findViewById(R.id.div4).setVisibility(View.GONE);
+                mainView.findViewById(R.id.outOfStock).setVisibility(View.GONE);
+                tLocationsOutOfStock.setVisibility(View.GONE);
+            } else {
+                mainView.findViewById(R.id.div4).setVisibility(View.VISIBLE);
+                mainView.findViewById(R.id.outOfStock).setVisibility(View.VISIBLE);
+                tLocationsOutOfStock.setVisibility(View.VISIBLE);
+                tLocationsOutOfStock.setText(beautifyList(book.getLocationsOutOfStockNames()));
+            }
             if (book.getAvailableQuantity() > 0) {
                 tStockStatus.setText(activity.getString(R.string.in_stock));
                 int color = ContextCompat.getColor(activity, R.color.green);
@@ -212,6 +229,59 @@ public class BookDetailsFragment extends Fragment {
                 tStockStatus.setTextColor(color);
             }
         }
+    }
+
+    private void setReservationStatus() {
+        databaseReference
+                .child(activity.getString(R.string.n_users))
+                .child(firebaseUser.getUid())
+                .child(activity.getString(R.string.n_reservations))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            boolean found = false;
+                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                                if (found) break;
+                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+
+                                    if (found) break;
+                                    Reservation reservation = dataSnapshot1.getValue(Reservation.class);
+
+                                    if (reservation != null &&
+                                        isSameBook(reservation.getBookUid())) {
+
+                                        LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
+
+                                        if (reservationEndDate.isAfter(LocalDateTime.now())) {
+                                            // active reservation
+                                            int color = ContextCompat.getColor(activity, R.color.red);
+                                            bReserve.setText(activity.getString(R.string.reservation_duplicated));
+                                            bReserve.setTextColor(color);
+                                            bReserve.setStrokeColorResource(R.color.red);
+                                            bReserve.setEnabled(false);
+                                            found = true;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            System.out.println(task.getResult());
+                        }
+                    }
+
+                    private boolean isSameBook(String bookUid) {
+                        for (Map.Entry<String, String> entry: book.getSameBookUids().entrySet()) {
+                            if (entry.getValue().equals(bookUid)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
     }
 
     private void reserveBookPickLibrary(View secondaryView) {
@@ -227,7 +297,7 @@ public class BookDetailsFragment extends Fragment {
         reservationDialog1.setCancelable(false);
 
         Spinner spinner = reservationDialog1.findViewById(R.id.spinner);
-        List<String> locations = new ArrayList<>(book.getLocationsList());
+        List<String> locations = new ArrayList<>(book.getLocationsNames());
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                 activity,
                 R.layout.support_simple_spinner_dropdown_item,
@@ -314,15 +384,62 @@ public class BookDetailsFragment extends Fragment {
         bCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                areTermsAccepted = false;
                 reservationDialog2.dismiss();
             }
         });
         bConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 areTermsAccepted = false;
                 reservationDialog2.dismiss();
-                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
+
+                String libraryUid = getLibraryUid(location);
+                Reservation reservation = createNewReservation(libraryUid);
+
+                databaseReference
+                        .child(activity.getString(R.string.n_users))
+                        .child(firebaseUser.getUid())
+                        .child(activity.getString(R.string.n_reservations))
+                        .child(libraryUid)
+                        .push()
+                        .setValue(reservation)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    setReservationStatus();
+                                    Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    System.out.println(task.getResult());
+                                    Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+
+            private String getLibraryUid(String location) {
+                for (Map.Entry<String, String> entry: book.getLocations().entrySet()) {
+                    if (location.equals(entry.getValue())) {
+                        return entry.getKey();
+                    }
+                }
+                return null;
+            }
+
+            private Reservation createNewReservation(String libraryUid) {
+
+                String bookUid = getActualBookUid(libraryUid);
+                LocalDateTime date = LocalDateTime.now();
+                String startDate = date.toString();
+                String endDate = date.plusHours(24).toString();
+
+                return new Reservation(bookUid, startDate, endDate);
+            }
+
+            private String getActualBookUid(String libraryUid) {
+                return book.getSameBookUids().get(libraryUid);
             }
         });
         reservationDialog2.show();
@@ -417,21 +534,19 @@ public class BookDetailsFragment extends Fragment {
                                     libtexLibrary.setUid(dataSnapshot.getKey());
                                     libtexLibrary.setName(libraryNames.get(dataSnapshot.getKey()));
 
-                                    for (DataSnapshot b: dataSnapshot.getChildren()) {
+                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
 
-                                        Book book = b.getValue(Book.class);
+                                        Book book = dataSnapshot1.getValue(Book.class);
 
                                         if (book != null) {
-                                            book.setUid(b.getKey());
+                                            book.setUid(dataSnapshot1.getKey());
                                             libtexLibrary.addBook(book);
                                         }
                                     }
-
                                     libraries.add(libtexLibrary);
                                 }
                                 setLocations(libraries);
                                 setDetails();
-
                             } else {
                                 System.out.println(task.getResult());
                             }
@@ -444,9 +559,15 @@ public class BookDetailsFragment extends Fragment {
         for (LibtexLibrary library: libraries) {
             for (Book b: library.getBooks()) {
                 if (b.isSame(book)) {
-                    book.addLocation(library);
+                    if (b.getAvailableQuantity() > 0) {
+                        book.addLocation(library);
+                    } else {
+                        book.addLocationOutOfStock(library);
+                    }
+                    book.addSameBookUid(library.getUid(), b.getUid());
                 }
             }
         }
+        setReservationStatus();
     }
 }
