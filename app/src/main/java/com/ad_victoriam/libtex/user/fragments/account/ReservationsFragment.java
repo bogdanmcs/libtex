@@ -124,8 +124,31 @@ public class ReservationsFragment extends Fragment {
                                                         book.setUid(reservation.getBookUid());
                                                         reservation.setBook(book);
                                                         mainView.findViewById(R.id.tNoReservations).setVisibility(View.GONE);
-                                                        reservations.add(reservation);
-                                                        reservationsAdapter.notifyItemInserted(reservations.size() - 1);
+
+                                                        // set the location name
+                                                        databaseReference
+                                                                .child(activity.getString(R.string.n_admins))
+                                                                .child(reservation.getLibraryUid())
+                                                                .child(activity.getString(R.string.n_location))
+                                                                .child(activity.getString(R.string.p_location_name))
+                                                                .get()
+                                                                .addOnCompleteListener(task2 -> {
+                                                                    if (task2.isSuccessful()) {
+
+                                                                        DataSnapshot dataSnapshot3 = task2.getResult();
+                                                                        String locationName = dataSnapshot3.getValue(String.class);
+
+                                                                        if (locationName != null) {
+                                                                            reservation.setLocationName(locationName);
+
+                                                                            reservations.add(reservation);
+                                                                            reservationsAdapter.notifyItemInserted(reservations.size() - 1);
+                                                                        }
+
+                                                                    } else {
+                                                                        System.out.println(task2.getResult());
+                                                                    }
+                                                                });
                                                     }
                                                 } else {
                                                     System.out.println(task1.getResult());

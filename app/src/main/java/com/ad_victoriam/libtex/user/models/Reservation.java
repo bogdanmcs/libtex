@@ -5,6 +5,7 @@ import com.ad_victoriam.libtex.user.utils.ReservationStatus;
 public class Reservation {
 
     private String libraryUid;
+    private String locationName;
     private Book book;
 
     private String uid;
@@ -30,6 +31,14 @@ public class Reservation {
 
     public void setLibraryUid(String libraryUid) {
         this.libraryUid = libraryUid;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     public Book getBook() {

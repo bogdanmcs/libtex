@@ -62,6 +62,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
         String text = reservation.getBook().getTitle() + " - " +
                 reservation.getBook().getAuthorName();
         holder.tBookDetails.setText(text);
+        holder.tLocation.setText(reservation.getLocationName());
 
         LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
 
@@ -204,6 +205,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
     public static class ReservationViewHolder extends RecyclerView.ViewHolder {
 
         TextView tBookDetails;
+        TextView tLocation;
         View div;
         ImageView iReservationStatus;
         TextView tReservationStatus;
@@ -214,6 +216,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
         public ReservationViewHolder(@NonNull View itemView) {
             super(itemView);
             tBookDetails = itemView.findViewById(R.id.tBookDetails);
+            tLocation = itemView.findViewById(R.id.tLocation);
             div = itemView.findViewById(R.id.div);
             iReservationStatus = itemView.findViewById(R.id.iReservationStatus);
             tReservationStatus = itemView.findViewById(R.id.tReservationStatus);
