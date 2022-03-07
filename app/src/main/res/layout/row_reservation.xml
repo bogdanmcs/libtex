@@ -25,95 +25,14 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iBookImage"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="book_image"
-                app:layout_constraintEnd_toStartOf="@+id/tBookTitle"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_book_row_80" />
-
-            <TextView
-                android:id="@+id/tBookTitle"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/book_row_primary_height_size"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="Book title"
-                android:textAlignment="viewStart"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/tBookAuthorName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="4"
-                app:layout_constraintStart_toEndOf="@+id/iBookImage"
-                app:layout_constraintTop_toTopOf="@+id/iBookImage"
-                app:layout_constraintVertical_weight="1" />
-
-            <TextView
-                android:id="@+id/tBookAuthorName"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/book_row_secondary_height_size"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Book author name"
-                android:textAlignment="textStart"
-                android:textSize="14sp"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/tBookPublisher"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/iBookImage"
-                app:layout_constraintTop_toBottomOf="@+id/tBookTitle"
-                app:layout_constraintVertical_weight="1" />
-
-            <TextView
-                android:id="@+id/tBookPublisher"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/book_row_secondary_height_size"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="16dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Book publisher"
-                android:textAlignment="textStart"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/iBookImage"
-                app:layout_constraintTop_toBottomOf="@+id/tBookAuthorName"
-                app:layout_constraintVertical_weight="1" />
-
-            <View
-                android:id="@+id/div"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/dark_gray"
-                app:layout_constraintEnd_toEndOf="@id/tBookPublisher"
-                app:layout_constraintStart_toEndOf="@+id/iBookImage"
-                app:layout_constraintTop_toBottomOf="@id/tBookPublisher" />
-
-            <ImageView
                 android:id="@+id/iReservationStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_baseline_check_circle_outline_24"
+                android:src="@drawable/ic_baseline_flag_circle_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/div" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tReservationStatus"
@@ -122,39 +41,129 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
-                android:text="ACCEPTED"
+                android:text="@string/reservation_status_approved"
                 android:textAlignment="center"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iReservationStatus" />
 
             <TextView
-                android:id="@+id/tExpirationDate"
-                android:layout_width="match_parent"
+                android:id="@+id/bookDetails"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:text="Expires at: "
+                android:layout_marginTop="16dp"
+                android:text="Book: "
                 android:textAlignment="viewStart"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tBookDetails"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tReservationStatus" />
 
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tBookDetails"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:text="book details"
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@+id/bookDetails"
+                app:layout_constraintTop_toTopOf="@+id/bookDetails" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Location: "
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toStartOf="@+id/tLocation"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tBookDetails" />
+
+
+            <TextView
+                android:id="@+id/tLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="location"
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@+id/location"
+                app:layout_constraintTop_toTopOf="@+id/location" />
+
+
+            <TextView
+                android:id="@+id/expirationDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Expires at: "
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toStartOf="@+id/tExpirationDate"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tLocation" />
+
+
+            <TextView
+                android:id="@+id/tExpirationDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Reservation end date"
+                android:textAlignment="viewStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@+id/expirationDate"
+                app:layout_constraintTop_toTopOf="@+id/expirationDate"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <!-- DIV? -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/indian_red"
                 android:text="Cancel"
                 app:cornerRadius="@dimen/normal_corners"
+                app:layout_constraintEnd_toStartOf="@+id/bViewBookDetails"
+                app:layout_constraintTop_toTopOf="@+id/bViewBookDetails" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bViewBookDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/libtex_primary"
+                android:paddingStart="25dp"
+                android:paddingEnd="20dp"
+                app:icon="@drawable/ic_baseline_menu_book_24"
+                app:iconGravity="textStart"
+                app:cornerRadius="@dimen/normal_corners"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tExpirationDate" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

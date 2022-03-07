@@ -1,5 +1,7 @@
 package com.ad_victoriam.libtex.user.adapters;
 
+import android.app.AlertDialog;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,16 +9,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
+import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Reservation;
+import com.ad_victoriam.libtex.user.utils.ReservationStatus;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapter.ReservationViewHolder> {
 
+    private DatabaseReference databaseReference;
     private final FragmentActivity activity;
     private final List<Reservation> reservations;
 
@@ -29,22 +48,152 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
     @Override
     public ReservationsAdapter.ReservationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_reservation, parent, false);
+        databaseReference = FirebaseDatabase
+                .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
         return new ReservationsAdapter.ReservationViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReservationsAdapter.ReservationViewHolder holder, int position) {
-        holder.iBookImage.setOnClickListener(view -> viewBookDetails(view, position));
-        holder.tBookTitle.setOnClickListener(view -> viewBookDetails(view, position));
-        holder.tBookAuthorName.setOnClickListener(view -> viewBookDetails(view, position));
-        holder.tBookPublisher.setOnClickListener(view -> viewBookDetails(view, position));
 
-        holder.tBookTitle.setText(reservations.get(position).getBook().getTitle());
-        holder.tBookAuthorName.setText(reservations.get(position).getBook().getAuthorName());
-        holder.tBookPublisher.setText(reservations.get(position).getBook().getPublisher());
+        Reservation reservation = reservations.get(position);
+
+        String text = reservation.getBook().getTitle() + " - " +
+                reservation.getBook().getAuthorName();
+        holder.tBookDetails.setText(text);
+
+        LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
+
+        DateFormat Date = DateFormat.getDateInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(reservationEndDate.getYear(), reservationEndDate.getMonthValue() - 1, reservationEndDate.getDayOfMonth());
+
+        String reservationEndDateText = Date.format(calendar.getTime());
+        reservationEndDateText = reservationEndDateText.concat(
+                " " + reservationEndDate.getHour() + ":" + reservationEndDate.getMinute());
+
+        holder.tExpirationDate.setText(reservationEndDateText);
+
+        if (reservation.getStatus() == ReservationStatus.COMPLETED) {
+            holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_check_circle_outline_24));
+            holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_completed));
+            holder.bCancel.setVisibility(View.GONE);
+
+        } else if (reservation.getStatus() == ReservationStatus.CANCELLED ||
+                   reservation.getStatus() == ReservationStatus.APPROVED && reservationEndDate.isBefore(LocalDateTime.now())) {
+            holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_24));
+            holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
+            holder.bCancel.setVisibility(View.GONE);
+
+        } else if (reservation.getStatus() == ReservationStatus.APPROVED) {
+            holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_flag_circle_24));
+            holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_approved));
+            holder.bCancel.setOnClickListener(view -> confirmReservationCancellation(view, reservation, holder));
+        }
+        holder.bViewBookDetails.setOnClickListener(view -> viewBookDetails(reservation));
     }
 
-    private void viewBookDetails(View view, int position) {
+    private void confirmReservationCancellation(View view, Reservation reservation, ReservationViewHolder holder) {
+        new AlertDialog.Builder(activity)
+                .setMessage("Are you sure you want to cancel this reservation ?")
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+
+                    if (reservation.getStatus() == ReservationStatus.APPROVED) {
+                        cancelReservation(view, reservation, holder);
+                    }
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> {})
+                .show();
+    }
+
+    private void cancelReservation(View view, Reservation reservation, ReservationViewHolder holder) {
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Map<String, Object> reservationStatusUpdate =  new HashMap<>();
+
+        reservationStatusUpdate.put(
+                activity.getString(R.string.n_users) + "/" +
+                        firebaseUser.getUid() + "/" +
+                        activity.getString(R.string.n_reservations) + "/" +
+                        reservation.getLibraryUid() + "/" +
+                        reservation.getUid() + "/" +
+                        activity.getString(R.string.p_reservation_status),
+
+                ReservationStatus.CANCELLED
+        );
+        databaseReference
+                .child(activity.getString(R.string.n_books))
+                .child(reservation.getLibraryUid())
+                .child(reservation.getBookUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        DataSnapshot dataSnapshot = task.getResult();
+                        Book book = dataSnapshot.getValue(Book.class);
+
+                        if (book != null) {
+                            reservationStatusUpdate.put(
+                                    activity.getString(R.string.n_books) + "/" +
+                                            reservation.getLibraryUid() + "/" +
+                                            reservation.getBookUid() + "/" +
+                                            activity.getString(R.string.p_book_available_quantity),
+
+                                    book.getAvailableQuantity() + 1
+                            );
+                            databaseReference
+                                    .updateChildren(reservationStatusUpdate)
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+
+                                            holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_24));
+                                            holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
+                                            holder.bCancel.setVisibility(View.GONE);
+                                            Snackbar.make(view, "Reservation cancelled", Snackbar.LENGTH_SHORT).show();
+
+                                        } else {
+                                            System.out.println(task1.getResult());
+                                        }
+                                    });
+                        }
+                    } else {
+                        System.out.println(task.getResult());
+                    }
+                });
+    }
+
+    private void viewBookDetails(Reservation reservation) {
+        databaseReference
+                .child(activity.getString(R.string.n_books))
+                .child(reservation.getLibraryUid())
+                .child(reservation.getBookUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        DataSnapshot dataSnapshot = task.getResult();
+                        Book book = dataSnapshot.getValue(Book.class);
+
+                        if (book != null) {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("book", book);
+
+                            BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
+                            bookDetailsFragment.setArguments(bundle);
+
+                            activity
+                                    .getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragmentContainerView, bookDetailsFragment)
+                                    .addToBackStack("reservationsFragment")
+                                    .commit();
+                        }
+
+                    } else {
+                        System.out.println(task.getResult());
+                    }
+                });
     }
 
     @Override
@@ -54,20 +203,23 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
 
     public static class ReservationViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView iBookImage;
-        TextView tBookTitle;
-        TextView tBookAuthorName;
-        TextView tBookPublisher;
+        TextView tBookDetails;
         View div;
+        ImageView iReservationStatus;
+        TextView tReservationStatus;
+        TextView tExpirationDate;
+        MaterialButton bCancel;
+        MaterialButton bViewBookDetails;
 
         public ReservationViewHolder(@NonNull View itemView) {
             super(itemView);
-            iBookImage = itemView.findViewById(R.id.iBookImage);
-            tBookTitle = itemView.findViewById(R.id.tBookTitle);
-            tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
-            tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
+            tBookDetails = itemView.findViewById(R.id.tBookDetails);
             div = itemView.findViewById(R.id.div);
+            iReservationStatus = itemView.findViewById(R.id.iReservationStatus);
+            tReservationStatus = itemView.findViewById(R.id.tReservationStatus);
+            tExpirationDate = itemView.findViewById(R.id.tExpirationDate);
+            bCancel = itemView.findViewById(R.id.bCancel);
+            bViewBookDetails = itemView.findViewById(R.id.bViewBookDetails);
         }
     }
-
 }

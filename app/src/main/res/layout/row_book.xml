@@ -102,7 +102,7 @@
             <View
                 android:id="@+id/div"
                 android:layout_width="0dp"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/small_div"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/dark_gray"

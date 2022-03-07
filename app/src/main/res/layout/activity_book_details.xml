@@ -197,7 +197,7 @@
                     <View
                         android:id="@+id/div1"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/small_div"
                         android:layout_marginTop="8dp"
                         android:background="@color/dark_gray"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -231,7 +231,7 @@
                     <View
                         android:id="@+id/div2"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/small_div"
                         android:layout_marginTop="8dp"
                         android:background="@color/dark_gray"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -265,7 +265,7 @@
                     <View
                         android:id="@+id/div3"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/small_div"
                         android:layout_marginTop="8dp"
                         android:background="@color/dark_gray"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -15,9 +15,12 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_add_white_24.xml" value="0.3328125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.25729166666666664" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_arrow_back_24_royal_blue.xml" value="0.25729166666666664" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_check_circle_outline_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3328125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_loan_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_menu_book_24.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_pending_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_heart_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_heart_on_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_launcher_background.xml" value="0.13515625" />
@@ -72,7 +75,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation_1.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation_2.xml" value="0.234375" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_account.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_account.xml" value="0.1" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_active_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_all_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_book_details.xml" value="0.234375" />
@@ -95,6 +98,7 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_book_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_category.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user_2.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/test.xml" value="0.234375" />

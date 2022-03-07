@@ -41,7 +41,6 @@ public class ReservationsFragment extends Fragment {
     private ReservationsAdapter reservationsAdapter;
 
     private final List<Reservation> reservations = new ArrayList<>();
-    private boolean noReservations = false;
 
     public ReservationsFragment() {
         // Required empty public constructor
@@ -87,6 +86,7 @@ public class ReservationsFragment extends Fragment {
     private void setReservations() {
         recyclerView = mainView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        reservations.clear();
         reservationsAdapter = new ReservationsAdapter(activity, reservations);
         recyclerView.setAdapter(reservationsAdapter);
 
@@ -97,55 +97,45 @@ public class ReservationsFragment extends Fragment {
                 .child(currentUser.getUid())
                 .child(getString(R.string.n_reservations))
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                                    Reservation reservation = dataSnapshot1.getValue(Reservation.class);
+                                Reservation reservation = dataSnapshot1.getValue(Reservation.class);
 
-                                    if (reservation != null) {
-                                        reservation.setLibraryUid(dataSnapshot.getKey());
+                                if (reservation != null) {
+                                    reservation.setUid(dataSnapshot1.getKey());
+                                    reservation.setLibraryUid(dataSnapshot.getKey());
 
-                                        // get book
-                                        databaseReference
-                                                .child(getString(R.string.n_books))
-                                                .child(reservation.getLibraryUid())
-                                                .child(reservation.getBookUid())
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                                        if (task.isSuccessful()) {
+                                    // get book
+                                    databaseReference
+                                            .child(getString(R.string.n_books))
+                                            .child(reservation.getLibraryUid())
+                                            .child(reservation.getBookUid())
+                                            .get()
+                                            .addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
 
-                                                            DataSnapshot dataSnapshot2 = task.getResult();
-                                                            Book book = dataSnapshot2.getValue(Book.class);
+                                                    DataSnapshot dataSnapshot2 = task1.getResult();
+                                                    Book book = dataSnapshot2.getValue(Book.class);
 
-                                                            if (book != null) {
-                                                                book.setUid(reservation.getBookUid());
-                                                                reservation.setBook(book);
-                                                                if(!noReservations) noReservations = true;
-                                                                reservations.add(reservation);
-                                                                reservationsAdapter.notifyItemInserted(reservations.size() - 1);
-                                                            }
-
-                                                        } else {
-                                                            System.out.println(task.getResult());
-                                                        }
+                                                    if (book != null) {
+                                                        book.setUid(reservation.getBookUid());
+                                                        reservation.setBook(book);
+                                                        mainView.findViewById(R.id.tNoReservations).setVisibility(View.GONE);
+                                                        reservations.add(reservation);
+                                                        reservationsAdapter.notifyItemInserted(reservations.size() - 1);
                                                     }
-                                                });
-                                    }
+                                                } else {
+                                                    System.out.println(task1.getResult());
+                                                }
+                                            });
                                 }
                             }
-                            if (noReservations) {
-                                TextView tNoReservations = mainView.findViewById(R.id.tNoReservations);
-                                tNoReservations.setVisibility(View.VISIBLE);
-                            }
-                        } else {
-                            System.out.println(task.getResult());
                         }
+                    } else {
+                        System.out.println(task.getResult());
                     }
                 });
     }

@@ -18,6 +18,8 @@
 
     <!-- nodes props -->
     <string name="p_location_name">name</string>
+    <string name="p_book_available_quantity">availableQuantity</string>
+    <string name="p_reservation_status">status</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>
@@ -87,5 +89,9 @@
     <string name="reserve_2_alert_part_1">You are about to reserve</string>
     <string name="reserve_2_alert_part_2">Location:</string>
     <string name="no_reservations">You do not have any reservations.</string>
+    <string name="reservation_status_pending">Pending</string>
+    <string name="reservation_status_approved">Ready for pickup</string>
+    <string name="reservation_status_cancelled">Cancelled</string>
+    <string name="reservation_status_completed">Completed</string>
 
 </resources>

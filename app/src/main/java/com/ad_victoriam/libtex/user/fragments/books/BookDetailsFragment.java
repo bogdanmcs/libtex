@@ -25,6 +25,7 @@ import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
 import com.ad_victoriam.libtex.user.models.Reservation;
+import com.ad_victoriam.libtex.user.utils.ReservationStatus;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -252,7 +253,9 @@ public class BookDetailsFragment extends Fragment {
                                     Reservation reservation = dataSnapshot1.getValue(Reservation.class);
 
                                     if (reservation != null &&
-                                        isSameBook(reservation.getBookUid())) {
+                                        isSameBook(reservation.getBookUid()) &&
+                                        reservation.getStatus() != ReservationStatus.CANCELLED &&
+                                        reservation.getStatus() != ReservationStatus.COMPLETED) {
 
                                         LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
 
@@ -399,22 +402,69 @@ public class BookDetailsFragment extends Fragment {
                 Reservation reservation = createNewReservation(libraryUid);
 
                 databaseReference
-                        .child(activity.getString(R.string.n_users))
-                        .child(firebaseUser.getUid())
-                        .child(activity.getString(R.string.n_reservations))
+                        .child(activity.getString(R.string.n_books))
                         .child(libraryUid)
-                        .push()
-                        .setValue(reservation)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    setReservationStatus();
-                                    Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    System.out.println(task.getResult());
-                                    Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                        .child(reservation.getBookUid())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+
+                                DataSnapshot dataSnapshot = task.getResult();
+                                Book book = dataSnapshot.getValue(Book.class);
+
+                                if (book != null) {
+                                    if (book.getAvailableQuantity() == 0) {
+                                        getLibrariesAndBooks();
+                                        setDetails();
+                                        Snackbar.make(activity, mainView, activity.getString(R.string.out_of_stock), Snackbar.LENGTH_SHORT).show();
+                                    } else {
+                                        Map<String, Object> availableQuantityUpdate =  new HashMap<>();
+                                        availableQuantityUpdate.put(
+                                                activity.getString(R.string.n_books) + "/" +
+                                                libraryUid + "/" +
+                                                reservation.getBookUid() + "/" +
+                                                activity.getString(R.string.p_book_available_quantity),
+
+                                                book.getAvailableQuantity() - 1
+                                        );
+                                        setUserReservation(libraryUid, reservation, availableQuantityUpdate);
+                                    }
                                 }
+
+                            } else {
+                                System.out.println(task.getResult());
+                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            private void setUserReservation(String libraryUid, Reservation reservation, Map<String, Object> availableQuantityUpdate) {
+                databaseReference
+                        .updateChildren(availableQuantityUpdate)
+                        .addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+
+                                databaseReference
+                                        .child(activity.getString(R.string.n_users))
+                                        .child(firebaseUser.getUid())
+                                        .child(activity.getString(R.string.n_reservations))
+                                        .child(libraryUid)
+                                        .push()
+                                        .setValue(reservation)
+                                        .addOnCompleteListener(task2 -> {
+                                            if (task2.isSuccessful()) {
+                                                setReservationStatus();
+                                                getLibrariesAndBooks();
+                                                setDetails();
+                                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
+                                            } else {
+                                                System.out.println(task2.getResult());
+                                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                System.out.println(task1.getResult());
+                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -434,8 +484,9 @@ public class BookDetailsFragment extends Fragment {
                 LocalDateTime date = LocalDateTime.now();
                 String startDate = date.toString();
                 String endDate = date.plusHours(24).toString();
+                ReservationStatus status = ReservationStatus.APPROVED;
 
-                return new Reservation(bookUid, startDate, endDate);
+                return new Reservation(bookUid, startDate, endDate, status);
             }
 
             private String getActualBookUid(String libraryUid) {
