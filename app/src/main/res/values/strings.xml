@@ -89,6 +89,7 @@
     <string name="reserve_2_alert_part_1">You are about to reserve</string>
     <string name="reserve_2_alert_part_2">Location:</string>
     <string name="no_reservations">You do not have any reservations.</string>
+    <string name="admin_no_reservations">No reservations found.</string>
     <string name="reservation_status_pending">Pending</string>
     <string name="reservation_status_approved">Ready for pickup</string>
     <string name="reservation_status_cancelled">Cancelled</string>

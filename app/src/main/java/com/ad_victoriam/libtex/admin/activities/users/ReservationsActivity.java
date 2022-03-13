@@ -122,7 +122,7 @@ public class ReservationsActivity extends AppCompatActivity {
                                                     if (book != null) {
                                                         book.setUid(reservation.getBookUid());
                                                         reservation.setBook(book);
-//                                                        findViewById(R.id.tNoReservations).setVisibility(View.GONE);
+                                                        findViewById(R.id.tNoReservations).setVisibility(View.GONE);
 
                                                         // set the location name
                                                         databaseReference
