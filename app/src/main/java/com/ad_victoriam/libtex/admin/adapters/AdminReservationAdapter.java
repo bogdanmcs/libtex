@@ -1,7 +1,7 @@
-package com.ad_victoriam.libtex.user.adapters;
+package com.ad_victoriam.libtex.admin.adapters;
 
 import android.app.AlertDialog;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +14,13 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
-import com.ad_victoriam.libtex.user.models.Book;
+import com.ad_victoriam.libtex.admin.activities.books.AdminBookDetailsActivity;
+import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.Reservation;
+import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.common.utils.ReservationStatus;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,29 +32,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapter.ReservationViewHolder> {
+public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservationAdapter.ReservationViewHolder> {
 
     private DatabaseReference databaseReference;
     private final FragmentActivity activity;
     private final List<Reservation> reservations;
+    private final User user;
 
-    public ReservationsAdapter(FragmentActivity activity, List<Reservation> reservations) {
+    public AdminReservationAdapter(FragmentActivity activity, List<Reservation> reservations, User user) {
         this.activity = activity;
         this.reservations = reservations;
+        this.user = user;
     }
 
     @NonNull
     @Override
-    public ReservationsAdapter.ReservationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdminReservationAdapter.ReservationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_reservation, parent, false);
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
-        return new ReservationsAdapter.ReservationViewHolder(view);
+        return new AdminReservationAdapter.ReservationViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReservationsAdapter.ReservationViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdminReservationAdapter.ReservationViewHolder holder, int position) {
 
         Reservation reservation = reservations.get(position);
 
@@ -82,7 +83,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
             holder.bCancel.setVisibility(View.GONE);
 
         } else if (reservation.getStatus() == ReservationStatus.CANCELLED ||
-                   reservation.getStatus() == ReservationStatus.APPROVED && reservationEndDate.isBefore(LocalDateTime.now())) {
+                reservation.getStatus() == ReservationStatus.APPROVED && reservationEndDate.isBefore(LocalDateTime.now())) {
             holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_24));
             holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
             holder.bCancel.setVisibility(View.GONE);
@@ -95,7 +96,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
         holder.bViewBookDetails.setOnClickListener(view -> viewBookDetails(reservation));
     }
 
-    private void confirmReservationCancellation(View view, Reservation reservation, ReservationViewHolder holder) {
+    private void confirmReservationCancellation(View view, Reservation reservation, AdminReservationAdapter.ReservationViewHolder holder) {
         new AlertDialog.Builder(activity)
                 .setMessage("Are you sure you want to cancel this reservation ?")
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
@@ -108,14 +109,13 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                 .show();
     }
 
-    private void cancelReservation(View view, Reservation reservation, ReservationViewHolder holder) {
+    private void cancelReservation(View view, Reservation reservation, AdminReservationAdapter.ReservationViewHolder holder) {
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Map<String, Object> reservationStatusUpdate =  new HashMap<>();
 
         reservationStatusUpdate.put(
                 activity.getString(R.string.n_users) + "/" +
-                        firebaseUser.getUid() + "/" +
+                        user.getUid() + "/" +
                         activity.getString(R.string.n_reservations) + "/" +
                         reservation.getLibraryUid() + "/" +
                         reservation.getUid() + "/" +
@@ -132,14 +132,14 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                     if (task.isSuccessful()) {
 
                         DataSnapshot dataSnapshot = task.getResult();
-                        Book book = dataSnapshot.getValue(Book.class);
+                        AdminBook book = dataSnapshot.getValue(AdminBook.class);
 
                         if (book != null) {
                             reservationStatusUpdate.put(
                                     activity.getString(R.string.n_books) + "/" +
-                                            reservation.getLibraryUid() + "/" +
-                                            reservation.getBookUid() + "/" +
-                                            activity.getString(R.string.p_book_available_quantity),
+                                    reservation.getLibraryUid() + "/" +
+                                    reservation.getBookUid() + "/" +
+                                    activity.getString(R.string.p_book_available_quantity),
 
                                     book.getAvailableQuantity() + 1
                             );
@@ -174,23 +174,13 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                     if (task.isSuccessful()) {
 
                         DataSnapshot dataSnapshot = task.getResult();
-                        Book book = dataSnapshot.getValue(Book.class);
+                        AdminBook book = dataSnapshot.getValue(AdminBook.class);
 
                         if (book != null) {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("book", book);
-
-                            BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
-                            bookDetailsFragment.setArguments(bundle);
-
-                            activity
-                                    .getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.fragmentContainerView, bookDetailsFragment)
-                                    .addToBackStack("reservationsFragment")
-                                    .commit();
+                            Intent intent = new Intent(activity, AdminBookDetailsActivity.class);
+                            intent.putExtra("book", book);
+                            activity.startActivity(intent);
                         }
-
                     } else {
                         System.out.println(task.getResult());
                     }

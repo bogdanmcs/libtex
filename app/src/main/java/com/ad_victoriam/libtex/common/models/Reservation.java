@@ -1,6 +1,7 @@
-package com.ad_victoriam.libtex.user.models;
+package com.ad_victoriam.libtex.common.models;
 
-import com.ad_victoriam.libtex.user.utils.ReservationStatus;
+import com.ad_victoriam.libtex.user.models.Book;
+import com.ad_victoriam.libtex.common.utils.ReservationStatus;
 
 public class Reservation {
 

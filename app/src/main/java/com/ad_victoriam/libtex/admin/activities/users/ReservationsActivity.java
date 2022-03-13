@@ -1,22 +1,25 @@
-package com.ad_victoriam.libtex.user.fragments.account;
+package com.ad_victoriam.libtex.admin.activities.users;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
+import com.ad_victoriam.libtex.admin.adapters.AdminReservationAdapter;
+import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
+import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.common.models.Reservation;
-import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,83 +30,82 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationsFragment extends Fragment {
+public class ReservationsActivity extends AppCompatActivity {
+
+    private User user;
 
     private DatabaseReference databaseReference;
 
-    private View mainView;
-    private FragmentActivity activity;
-
     private RecyclerView recyclerView;
-    private ReservationsAdapter reservationsAdapter;
+    private AdminReservationAdapter reservationsAdapter;
 
     private final List<Reservation> reservations = new ArrayList<>();
 
-    public ReservationsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setContentView(R.layout.activity_admin_user_reservations);
 
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
 
-        mainView = inflater.inflate(R.layout.fragment_reservations, container, false);
-        activity = requireActivity();
-
         setTopAppBar();
-        setReservations();
 
-        return mainView;
+        if (user == null && getIntent().hasExtra("user")) {
+            user = getIntent().getParcelableExtra("user");
+
+            setReservations();
+        } else {
+            Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setTopAppBar() {
-        MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
-        TopAppBar.get().setNormalMode(activity, topAppBar);
-        TopAppBar.get().setChildMode(activity, topAppBar);
-        TopAppBar.get().setTitleMode(activity, topAppBar, "Reservations");
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        TopAppBarAdmin.get().setChildMode(this, topAppBar);
+        TopAppBarAdmin.get().setTitleMode(this, topAppBar, "Reservations");
         topAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity
-                        .getSupportFragmentManager()
-                        .popBackStack();
+                finish();
+            }
+        });
+        topAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.home) {
+                    startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+                }
+                return false;
             }
         });
     }
 
     private void setReservations() {
-        recyclerView = mainView.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         reservations.clear();
-        reservationsAdapter = new ReservationsAdapter(activity, reservations);
+        reservationsAdapter = new AdminReservationAdapter(this, reservations, user);
         recyclerView.setAdapter(reservationsAdapter);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference
                 .child(getString(R.string.n_users))
-                .child(currentUser.getUid())
+                .child(user.getUid())
                 .child(getString(R.string.n_reservations))
+                .child(currentUser.getUid())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                                Reservation reservation = dataSnapshot1.getValue(Reservation.class);
+                                Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
                                 if (reservation != null) {
-                                    reservation.setUid(dataSnapshot1.getKey());
-                                    reservation.setLibraryUid(dataSnapshot.getKey());
+                                    reservation.setUid(dataSnapshot.getKey());
+                                    reservation.setLibraryUid(currentUser.getUid());
 
                                     // get book
                                     databaseReference
@@ -120,20 +122,20 @@ public class ReservationsFragment extends Fragment {
                                                     if (book != null) {
                                                         book.setUid(reservation.getBookUid());
                                                         reservation.setBook(book);
-                                                        mainView.findViewById(R.id.tNoReservations).setVisibility(View.GONE);
+//                                                        findViewById(R.id.tNoReservations).setVisibility(View.GONE);
 
                                                         // set the location name
                                                         databaseReference
-                                                                .child(activity.getString(R.string.n_admins))
+                                                                .child(this.getString(R.string.n_admins))
                                                                 .child(reservation.getLibraryUid())
-                                                                .child(activity.getString(R.string.n_location))
-                                                                .child(activity.getString(R.string.p_location_name))
+                                                                .child(this.getString(R.string.n_location))
+                                                                .child(this.getString(R.string.p_location_name))
                                                                 .get()
                                                                 .addOnCompleteListener(task2 -> {
                                                                     if (task2.isSuccessful()) {
 
-                                                                        DataSnapshot dataSnapshot3 = task2.getResult();
-                                                                        String locationName = dataSnapshot3.getValue(String.class);
+                                                                        DataSnapshot dataSnapshot1 = task2.getResult();
+                                                                        String locationName = dataSnapshot1.getValue(String.class);
 
                                                                         if (locationName != null) {
                                                                             reservation.setLocationName(locationName);
@@ -151,7 +153,6 @@ public class ReservationsFragment extends Fragment {
                                                 }
                                             });
                                 }
-                            }
                         }
                     } else {
                         System.out.println(task.getResult());

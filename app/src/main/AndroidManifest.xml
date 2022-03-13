@@ -101,6 +101,10 @@
             android:name=".user.activities.ReservationDetailsActivity">
         </activity>
 
+        <activity
+            android:name=".admin.activities.users.ReservationsActivity">
+        </activity>
+
     </application>
 
 </manifest>

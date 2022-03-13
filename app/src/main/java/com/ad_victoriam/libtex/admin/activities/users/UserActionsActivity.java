@@ -118,10 +118,12 @@ public class UserActionsActivity extends AppCompatActivity implements DatePicker
         final MaterialButton bAddNewLoan = findViewById(R.id.bAddNewLoan);
         final MaterialButton bViewActiveLoans = findViewById(R.id.bViewActiveLoans);
         final MaterialButton bViewAllLoans = findViewById(R.id.bViewAllLoans);
+        final MaterialButton bViewReservations = findViewById(R.id.bViewReservations);
         final MaterialButton bDeleteUser = findViewById(R.id.bDeleteUser);
         bAddNewLoan.setOnClickListener(this::assignBook);
         bViewActiveLoans.setOnClickListener(this::viewActiveLoans);
         bViewAllLoans.setOnClickListener(this::viewAllLoans);
+        bViewReservations.setOnClickListener(this::viewReservations);
         bDeleteUser.setOnClickListener(this::deleteUser);
     }
 
@@ -251,6 +253,12 @@ public class UserActionsActivity extends AppCompatActivity implements DatePicker
     }
     private void viewAllLoans(View view) {
         Intent intent = new Intent(this, AllLoansActivity.class);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
+    private void viewReservations(View view) {
+        Intent intent = new Intent(this, ReservationsActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }

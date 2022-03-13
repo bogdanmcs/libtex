@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.utils;
+package com.ad_victoriam.libtex.common.utils;
 
 public enum ReservationStatus {
     APPROVED,
