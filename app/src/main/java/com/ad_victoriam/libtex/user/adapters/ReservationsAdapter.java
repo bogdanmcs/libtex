@@ -110,16 +110,12 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
 
     private void cancelReservation(View view, Reservation reservation, ReservationViewHolder holder) {
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Map<String, Object> reservationStatusUpdate =  new HashMap<>();
 
         reservationStatusUpdate.put(
-                activity.getString(R.string.n_users) + "/" +
-                        firebaseUser.getUid() + "/" +
-                        activity.getString(R.string.n_reservations) + "/" +
-                        reservation.getLibraryUid() + "/" +
-                        reservation.getUid() + "/" +
-                        activity.getString(R.string.p_reservation_status),
+                activity.getString(R.string.n_reservations_2) + "/" +
+                reservation.getUid() + "/" +
+                activity.getString(R.string.p_reservation_status),
 
                 ReservationStatus.CANCELLED
         );
@@ -137,9 +133,9 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                         if (book != null) {
                             reservationStatusUpdate.put(
                                     activity.getString(R.string.n_books) + "/" +
-                                            reservation.getLibraryUid() + "/" +
-                                            reservation.getBookUid() + "/" +
-                                            activity.getString(R.string.p_book_available_quantity),
+                                    reservation.getLibraryUid() + "/" +
+                                    reservation.getBookUid() + "/" +
+                                    activity.getString(R.string.p_book_available_quantity),
 
                                     book.getAvailableQuantity() + 1
                             );

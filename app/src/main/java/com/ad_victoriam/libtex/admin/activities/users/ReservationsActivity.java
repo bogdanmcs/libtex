@@ -16,10 +16,9 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.admin.adapters.AdminReservationAdapter;
 import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
-import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
-import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.common.models.Reservation;
+import com.ad_victoriam.libtex.common.models.User;
+import com.ad_victoriam.libtex.user.models.Book;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 public class ReservationsActivity extends AppCompatActivity {
 
@@ -89,23 +89,25 @@ public class ReservationsActivity extends AppCompatActivity {
         reservationsAdapter = new AdminReservationAdapter(this, reservations, user);
         recyclerView.setAdapter(reservationsAdapter);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
         databaseReference
-                .child(getString(R.string.n_users))
-                .child(user.getUid())
-                .child(getString(R.string.n_reservations))
-                .child(currentUser.getUid())
+                .child(getString(R.string.n_reservations_2))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+
+                        Iterable<DataSnapshot> dataSnapshots = task.getResult().getChildren();
+                        long reservationsSize = StreamSupport.stream(dataSnapshots.spliterator(), false).count();
+
+                        if (reservationsSize == 0) {
+                            findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
+                        }
+
                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                 Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
                                 if (reservation != null) {
                                     reservation.setUid(dataSnapshot.getKey());
-                                    reservation.setLibraryUid(currentUser.getUid());
 
                                     // get book
                                     databaseReference
@@ -116,13 +118,12 @@ public class ReservationsActivity extends AppCompatActivity {
                                             .addOnCompleteListener(task1 -> {
                                                 if (task1.isSuccessful()) {
 
-                                                    DataSnapshot dataSnapshot2 = task1.getResult();
-                                                    Book book = dataSnapshot2.getValue(Book.class);
+                                                    DataSnapshot dataSnapshot1 = task1.getResult();
+                                                    Book book = dataSnapshot1.getValue(Book.class);
 
                                                     if (book != null) {
                                                         book.setUid(reservation.getBookUid());
                                                         reservation.setBook(book);
-                                                        findViewById(R.id.tNoReservations).setVisibility(View.GONE);
 
                                                         // set the location name
                                                         databaseReference
@@ -134,8 +135,8 @@ public class ReservationsActivity extends AppCompatActivity {
                                                                 .addOnCompleteListener(task2 -> {
                                                                     if (task2.isSuccessful()) {
 
-                                                                        DataSnapshot dataSnapshot1 = task2.getResult();
-                                                                        String locationName = dataSnapshot1.getValue(String.class);
+                                                                        DataSnapshot dataSnapshot2 = task2.getResult();
+                                                                        String locationName = dataSnapshot2.getValue(String.class);
 
                                                                         if (locationName != null) {
                                                                             reservation.setLocationName(locationName);

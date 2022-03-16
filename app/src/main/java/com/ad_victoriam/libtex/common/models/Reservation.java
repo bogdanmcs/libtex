@@ -5,6 +5,8 @@ import com.ad_victoriam.libtex.common.utils.ReservationStatus;
 
 public class Reservation {
 
+    private String userUid;
+
     private String libraryUid;
     private String locationName;
     private Book book;
@@ -19,11 +21,21 @@ public class Reservation {
         // Default constructor required for calls to DataSnapshot.getValue(Reservation.class)
     }
 
-    public Reservation(String bookUid, String startDate, String endDate, ReservationStatus status) {
+    public Reservation(String userUid, String libraryUid, String bookUid, String startDate, String endDate, ReservationStatus status) {
+        this.userUid = userUid;
+        this.libraryUid = libraryUid;
         this.bookUid = bookUid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public String getLibraryUid() {

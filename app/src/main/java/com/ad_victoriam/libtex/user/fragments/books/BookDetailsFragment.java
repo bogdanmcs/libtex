@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class BookDetailsFragment extends Fragment {
 
-    FirebaseUser firebaseUser;
+    FirebaseUser currentUser;
     DatabaseReference databaseReference;
 
     private Book book;
@@ -91,7 +91,7 @@ public class BookDetailsFragment extends Fragment {
 
         mainView = inflater.inflate(R.layout.fragment_book_details, container, false);
         activity = requireActivity();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
@@ -101,6 +101,10 @@ public class BookDetailsFragment extends Fragment {
         setFavouriteKeyValue();
         getLibrariesAndBooks();
         setDetails();
+
+        /* * * * * * * * * * * * */
+        refreshBookAvailability();
+        /* * * * * * * * * * * * */
 
         return mainView;
     }
@@ -146,7 +150,7 @@ public class BookDetailsFragment extends Fragment {
                         if (favKey != null) {
                             databaseReference
                                     .child(activity.getString(R.string.n_users))
-                                    .child(firebaseUser.getUid())
+                                    .child(currentUser.getUid())
                                     .child(activity.getString(R.string.n_favourite_books))
                                     .child(favKey)
                                     .removeValue()
@@ -167,13 +171,13 @@ public class BookDetailsFragment extends Fragment {
                         BookFav bookFav = new BookFav(book.getTitle(), book.getAuthorName(), book.getPublisher());
                         favKey = databaseReference
                                 .child(activity.getString(R.string.n_users))
-                                .child(firebaseUser.getUid())
+                                .child(currentUser.getUid())
                                 .child(activity.getString(R.string.n_favourite_books))
                                 .push()
                                 .getKey();
                         databaseReference
                                 .child(activity.getString(R.string.n_users))
-                                .child(firebaseUser.getUid())
+                                .child(currentUser.getUid())
                                 .child(activity.getString(R.string.n_favourite_books))
                                 .child(favKey)
                                 .setValue(bookFav)
@@ -234,55 +238,40 @@ public class BookDetailsFragment extends Fragment {
 
     private void setReservationStatus() {
         databaseReference
-                .child(activity.getString(R.string.n_users))
-                .child(firebaseUser.getUid())
-                .child(activity.getString(R.string.n_reservations))
+                .child(activity.getString(R.string.n_reservations_2))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
 
-                            boolean found = false;
+                        if (task.isSuccessful()) {
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
-                                if (found) break;
-                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+                                Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
-                                    if (found) break;
-                                    Reservation reservation = dataSnapshot1.getValue(Reservation.class);
+                                if (reservation != null &&
+                                    reservation.getUserUid().equals(currentUser.getUid()) &&
+                                    isSameBook(reservation.getBookUid()) &&
+                                    reservation.getStatus() != ReservationStatus.CANCELLED &&
+                                    reservation.getStatus() != ReservationStatus.COMPLETED) {
 
-                                    if (reservation != null &&
-                                        isSameBook(reservation.getBookUid()) &&
-                                        reservation.getStatus() != ReservationStatus.CANCELLED &&
-                                        reservation.getStatus() != ReservationStatus.COMPLETED) {
+                                    LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
 
-                                        LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
-
-                                        if (reservationEndDate.isAfter(LocalDateTime.now())) {
-                                            // active reservation
-                                            int color = ContextCompat.getColor(activity, R.color.red);
-                                            bReserve.setText(activity.getString(R.string.reservation_duplicated));
-                                            bReserve.setTextColor(color);
-                                            bReserve.setStrokeColorResource(R.color.red);
-                                            bReserve.setEnabled(false);
-                                            found = true;
-                                        }
+                                    if (reservationEndDate.isAfter(LocalDateTime.now())) {
+                                        // active reservation
+                                        int color = ContextCompat.getColor(activity, R.color.red);
+                                        bReserve.setText(activity.getString(R.string.reservation_duplicated));
+                                        bReserve.setTextColor(color);
+                                        bReserve.setStrokeColorResource(R.color.red);
+                                        bReserve.setEnabled(false);
+                                        break;
                                     }
+
                                 }
                             }
                         } else {
                             System.out.println(task.getResult());
                         }
-                    }
-
-                    private boolean isSameBook(String bookUid) {
-                        for (Map.Entry<String, String> entry: book.getSameBookUids().entrySet()) {
-                            if (entry.getValue().equals(bookUid)) {
-                                return true;
-                            }
-                        }
-                        return false;
                     }
                 });
     }
@@ -427,7 +416,7 @@ public class BookDetailsFragment extends Fragment {
 
                                                 book.getAvailableQuantity() - 1
                                         );
-                                        setUserReservation(libraryUid, reservation, availableQuantityUpdate);
+                                        setUserReservation(reservation, availableQuantityUpdate);
                                     }
                                 }
 
@@ -438,17 +427,14 @@ public class BookDetailsFragment extends Fragment {
                         });
             }
 
-            private void setUserReservation(String libraryUid, Reservation reservation, Map<String, Object> availableQuantityUpdate) {
+            private void setUserReservation(Reservation reservation, Map<String, Object> availableQuantityUpdate) {
                 databaseReference
                         .updateChildren(availableQuantityUpdate)
                         .addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
 
                                 databaseReference
-                                        .child(activity.getString(R.string.n_users))
-                                        .child(firebaseUser.getUid())
-                                        .child(activity.getString(R.string.n_reservations))
-                                        .child(libraryUid)
+                                        .child(activity.getString(R.string.n_reservations_2))
                                         .push()
                                         .setValue(reservation)
                                         .addOnCompleteListener(task2 -> {
@@ -486,7 +472,7 @@ public class BookDetailsFragment extends Fragment {
                 String endDate = date.plusHours(24).toString();
                 ReservationStatus status = ReservationStatus.APPROVED;
 
-                return new Reservation(bookUid, startDate, endDate, status);
+                return new Reservation(currentUser.getUid(), libraryUid, bookUid, startDate, endDate, status);
             }
 
             private String getActualBookUid(String libraryUid) {
@@ -519,7 +505,7 @@ public class BookDetailsFragment extends Fragment {
     private void setFavouriteKeyValue() {
         databaseReference
                 .child(activity.getString(R.string.n_users))
-                .child(firebaseUser.getUid())
+                .child(currentUser.getUid())
                 .child(activity.getString(R.string.n_favourite_books))
                 .get()
                 .addOnCompleteListener(task -> {
@@ -620,5 +606,93 @@ public class BookDetailsFragment extends Fragment {
             }
         }
         setReservationStatus();
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    private void refreshBookAvailability() {
+         databaseReference
+                 .child(activity.getString(R.string.n_reservations_2))
+                 .get()
+                 .addOnCompleteListener(task -> {
+                     if (task.isSuccessful()) {
+
+                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                             Reservation reservation = dataSnapshot.getValue(Reservation.class);
+
+                             if (reservation != null &&
+                                 reservation.getStatus() == ReservationStatus.APPROVED) {
+
+                                 reservation.setUid(dataSnapshot.getKey());
+                                 LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
+
+                                 if (reservationEndDate.isBefore(LocalDateTime.now())) {
+                                     updateDetails(reservation);
+                                 }
+                             }
+                         }
+                     } else {
+                         System.out.println(task.getResult());
+                     }
+                 });
+    }
+
+    private void updateDetails(Reservation reservation) {
+
+        DatabaseReference reference = databaseReference
+                .child(activity.getString(R.string.n_books))
+                .child(reservation.getLibraryUid())
+                .child(reservation.getBookUid())
+                .child(activity.getString(R.string.p_book_available_quantity));
+        reference
+                .get()
+                .addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful()) {
+
+                        DataSnapshot dataSnapshot = task.getResult();
+                        Integer availableQuantity = dataSnapshot.getValue(Integer.class);
+
+                        if (availableQuantity != null) {
+
+                            Map<String, Object> childrenUpdates =  new HashMap<>();
+
+                            childrenUpdates.put(
+                                    activity.getString(R.string.n_reservations_2) + "/" +
+                                    reservation.getUid() + "/" +
+                                    activity.getString(R.string.p_reservation_status),
+
+                                    ReservationStatus.CANCELLED
+                            );
+                            childrenUpdates.put(
+                                    activity.getString(R.string.n_books) + "/" +
+                                    reservation.getLibraryUid() + "/" +
+                                    reservation.getBookUid() + "/" +
+                                    activity.getString(R.string.p_book_available_quantity),
+
+                                    availableQuantity + 1
+                            );
+                            databaseReference
+                                    .updateChildren(childrenUpdates)
+                                    .addOnCompleteListener(task1 -> {
+                                        if (!task1.isSuccessful()) {
+                                            System.out.println(task1.getResult());
+                                        }
+                                    });
+                        }
+                    } else {
+                        System.out.println(task.getResult());
+                    }
+        });
+    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    private boolean isSameBook(String bookUid) {
+        for (Map.Entry<String, String> entry: book.getSameBookUids().entrySet()) {
+            if (entry.getValue().equals(bookUid)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

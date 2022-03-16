@@ -114,12 +114,9 @@ public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservati
         Map<String, Object> reservationStatusUpdate =  new HashMap<>();
 
         reservationStatusUpdate.put(
-                activity.getString(R.string.n_users) + "/" +
-                        user.getUid() + "/" +
-                        activity.getString(R.string.n_reservations) + "/" +
-                        reservation.getLibraryUid() + "/" +
-                        reservation.getUid() + "/" +
-                        activity.getString(R.string.p_reservation_status),
+                activity.getString(R.string.n_reservations_2) + "/" +
+                reservation.getUid() + "/" +
+                activity.getString(R.string.p_reservation_status),
 
                 ReservationStatus.CANCELLED
         );

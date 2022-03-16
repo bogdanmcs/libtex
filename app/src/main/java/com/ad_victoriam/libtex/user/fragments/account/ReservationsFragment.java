@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 public class ReservationsFragment extends Fragment {
 
@@ -90,20 +91,27 @@ public class ReservationsFragment extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference
-                .child(getString(R.string.n_users))
-                .child(currentUser.getUid())
-                .child(getString(R.string.n_reservations))
+                .child(getString(R.string.n_reservations_2))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                                Reservation reservation = dataSnapshot1.getValue(Reservation.class);
+                        Iterable<DataSnapshot> dataSnapshots = task.getResult().getChildren();
+                        long reservationsSize = StreamSupport.stream(dataSnapshots.spliterator(), false).count();
 
-                                if (reservation != null) {
-                                    reservation.setUid(dataSnapshot1.getKey());
-                                    reservation.setLibraryUid(dataSnapshot.getKey());
+                        if (reservationsSize == 0) {
+                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
+
+                        } else {
+
+                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                                Reservation reservation = dataSnapshot.getValue(Reservation.class);
+
+                                if (reservation != null &&
+                                        reservation.getUserUid().equals(currentUser.getUid())) {
+
+                                    reservation.setUid(dataSnapshot.getKey());
 
                                     // get book
                                     databaseReference
@@ -114,13 +122,12 @@ public class ReservationsFragment extends Fragment {
                                             .addOnCompleteListener(task1 -> {
                                                 if (task1.isSuccessful()) {
 
-                                                    DataSnapshot dataSnapshot2 = task1.getResult();
-                                                    Book book = dataSnapshot2.getValue(Book.class);
+                                                    DataSnapshot dataSnapshot1 = task1.getResult();
+                                                    Book book = dataSnapshot1.getValue(Book.class);
 
                                                     if (book != null) {
                                                         book.setUid(reservation.getBookUid());
                                                         reservation.setBook(book);
-                                                        mainView.findViewById(R.id.tNoReservations).setVisibility(View.GONE);
 
                                                         // set the location name
                                                         databaseReference
@@ -132,11 +139,13 @@ public class ReservationsFragment extends Fragment {
                                                                 .addOnCompleteListener(task2 -> {
                                                                     if (task2.isSuccessful()) {
 
-                                                                        DataSnapshot dataSnapshot3 = task2.getResult();
-                                                                        String locationName = dataSnapshot3.getValue(String.class);
+                                                                        DataSnapshot dataSnapshot2 = task2.getResult();
+                                                                        String locationName = dataSnapshot2.getValue(String.class);
 
                                                                         if (locationName != null) {
                                                                             reservation.setLocationName(locationName);
+
+                                                                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.INVISIBLE);
 
                                                                             reservations.add(reservation);
                                                                             reservationsAdapter.notifyItemInserted(reservations.size() - 1);
@@ -152,6 +161,7 @@ public class ReservationsFragment extends Fragment {
                                             });
                                 }
                             }
+
                         }
                     } else {
                         System.out.println(task.getResult());
