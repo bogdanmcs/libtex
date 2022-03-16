@@ -102,10 +102,6 @@ public class BookDetailsFragment extends Fragment {
         getLibrariesAndBooks();
         setDetails();
 
-        /* * * * * * * * * * * * */
-        refreshBookAvailability();
-        /* * * * * * * * * * * * */
-
         return mainView;
     }
 
@@ -273,8 +269,18 @@ public class BookDetailsFragment extends Fragment {
                             System.out.println(task.getResult());
                         }
                     }
+
+                    private boolean isSameBook(String bookUid) {
+                        for (Map.Entry<String, String> entry: book.getSameBookUids().entrySet()) {
+                            if (entry.getValue().equals(bookUid)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
                 });
     }
+
 
     private void reserveBookPickLibrary(View secondaryView) {
 
@@ -606,93 +612,5 @@ public class BookDetailsFragment extends Fragment {
             }
         }
         setReservationStatus();
-    }
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    private void refreshBookAvailability() {
-         databaseReference
-                 .child(activity.getString(R.string.n_reservations_2))
-                 .get()
-                 .addOnCompleteListener(task -> {
-                     if (task.isSuccessful()) {
-
-                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
-
-                             Reservation reservation = dataSnapshot.getValue(Reservation.class);
-
-                             if (reservation != null &&
-                                 reservation.getStatus() == ReservationStatus.APPROVED) {
-
-                                 reservation.setUid(dataSnapshot.getKey());
-                                 LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
-
-                                 if (reservationEndDate.isBefore(LocalDateTime.now())) {
-                                     updateDetails(reservation);
-                                 }
-                             }
-                         }
-                     } else {
-                         System.out.println(task.getResult());
-                     }
-                 });
-    }
-
-    private void updateDetails(Reservation reservation) {
-
-        DatabaseReference reference = databaseReference
-                .child(activity.getString(R.string.n_books))
-                .child(reservation.getLibraryUid())
-                .child(reservation.getBookUid())
-                .child(activity.getString(R.string.p_book_available_quantity));
-        reference
-                .get()
-                .addOnCompleteListener(task -> {
-
-                    if (task.isSuccessful()) {
-
-                        DataSnapshot dataSnapshot = task.getResult();
-                        Integer availableQuantity = dataSnapshot.getValue(Integer.class);
-
-                        if (availableQuantity != null) {
-
-                            Map<String, Object> childrenUpdates =  new HashMap<>();
-
-                            childrenUpdates.put(
-                                    activity.getString(R.string.n_reservations_2) + "/" +
-                                    reservation.getUid() + "/" +
-                                    activity.getString(R.string.p_reservation_status),
-
-                                    ReservationStatus.CANCELLED
-                            );
-                            childrenUpdates.put(
-                                    activity.getString(R.string.n_books) + "/" +
-                                    reservation.getLibraryUid() + "/" +
-                                    reservation.getBookUid() + "/" +
-                                    activity.getString(R.string.p_book_available_quantity),
-
-                                    availableQuantity + 1
-                            );
-                            databaseReference
-                                    .updateChildren(childrenUpdates)
-                                    .addOnCompleteListener(task1 -> {
-                                        if (!task1.isSuccessful()) {
-                                            System.out.println(task1.getResult());
-                                        }
-                                    });
-                        }
-                    } else {
-                        System.out.println(task.getResult());
-                    }
-        });
-    }
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    private boolean isSameBook(String bookUid) {
-        for (Map.Entry<String, String> entry: book.getSameBookUids().entrySet()) {
-            if (entry.getValue().equals(bookUid)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
