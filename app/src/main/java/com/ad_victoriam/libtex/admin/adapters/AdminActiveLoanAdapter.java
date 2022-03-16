@@ -2,6 +2,7 @@ package com.ad_victoriam.libtex.admin.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.books.AdminBookDetailsActivity;
 import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.common.models.User;
@@ -33,17 +36,17 @@ import java.util.List;
 
 public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoanAdapter.BookLoanViewHolder> {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final List<AdminLoan> adminLoans;
     private User user;
 
-    public AdminActiveLoanAdapter(Context context, List<AdminLoan> adminLoans) {
-        this.context = context;
+    public AdminActiveLoanAdapter(FragmentActivity activity, List<AdminLoan> adminLoans) {
+        this.activity = activity;
         this.adminLoans = adminLoans;
     }
 
-    public AdminActiveLoanAdapter(Context context, List<AdminLoan> adminLoans, User user) {
-        this.context = context;
+    public AdminActiveLoanAdapter(FragmentActivity activity, List<AdminLoan> adminLoans, User user) {
+        this.activity = activity;
         this.adminLoans = adminLoans;
         this.user = user;
     }
@@ -78,13 +81,13 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
         holder.tLoanedOn.setText(loanedOnTextFormatted);
 
         if (deadlineDateTime.isBefore(LocalDateTime.now())) {
-            int color = context.getResources().getColor(R.color.indian_red, context.getTheme());
+            int color = activity.getResources().getColor(R.color.indian_red, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         } else if (deadlineDateTime.minusDays(3).isBefore(LocalDateTime.now())) {
-            int color = context.getResources().getColor(R.color.yellow, context.getTheme());
+            int color = activity.getResources().getColor(R.color.yellow, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         } else {
-            int color = context.getResources().getColor(R.color.light_green, context.getTheme());
+            int color = activity.getResources().getColor(R.color.light_green, activity.getTheme());
             holder.cardView.setCardBackgroundColor(color);
         }
         holder.bReturnBook.setOnClickListener(view -> confirmReturn(view, position));
@@ -124,7 +127,7 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
     }
 
     private void confirmReturn(View view, int position) {
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(activity)
                 .setMessage(
                         "Are you sure you want to return " +
                                 adminLoans.get(position).getBook().getTitle() + " - " +
@@ -196,10 +199,12 @@ public class AdminActiveLoanAdapter extends RecyclerView.Adapter<AdminActiveLoan
                 .child("returnTimestamp")
                 .setValue(returnTimestamp.toString());
 
-        Snackbar.make(context, view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(activity, view, "Operation was successful", Snackbar.LENGTH_SHORT).show();
     }
 
     private void viewLoanDetails(View view, int position) {
-        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(activity, AdminBookDetailsActivity.class);
+        intent.putExtra("book", adminLoans.get(position).getBook());
+        activity.startActivity(intent);
     }
 }

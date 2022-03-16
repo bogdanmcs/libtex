@@ -1,6 +1,6 @@
 package com.ad_victoriam.libtex.admin.adapters;
 
-import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.activities.books.AdminBookDetailsActivity;
 import com.ad_victoriam.libtex.admin.models.AdminLoan;
 import com.ad_victoriam.libtex.common.models.User;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -23,17 +24,17 @@ import java.util.List;
 
 public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapter.BookLoanViewHolder> {
 
-    private final Context context;
+    private final FragmentActivity activity;
     private final List<AdminLoan> adminLoans;
     private User user;
 
-    public AdminAllLoanAdapter(Context context, List<AdminLoan> adminLoans) {
-        this.context = context;
+    public AdminAllLoanAdapter(FragmentActivity activity, List<AdminLoan> adminLoans) {
+        this.activity = activity;
         this.adminLoans = adminLoans;
     }
 
-    public AdminAllLoanAdapter(Context context, List<AdminLoan> adminLoans, User user) {
-        this.context = context;
+    public AdminAllLoanAdapter(FragmentActivity activity, List<AdminLoan> adminLoans, User user) {
+        this.activity = activity;
         this.adminLoans = adminLoans;
         this.user = user;
     }
@@ -104,6 +105,8 @@ public class AdminAllLoanAdapter extends RecyclerView.Adapter<AdminAllLoanAdapte
     }
 
     private void viewLoanDetails(View view, int position) {
-        Snackbar.make(view, "details", Snackbar.LENGTH_SHORT).show();
+        Intent intent = new Intent(activity, AdminBookDetailsActivity.class);
+        intent.putExtra("book", adminLoans.get(position).getBook());
+        activity.startActivity(intent);
     }
 }
