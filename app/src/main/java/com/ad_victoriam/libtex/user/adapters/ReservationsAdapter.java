@@ -2,6 +2,7 @@ package com.ad_victoriam.libtex.user.adapters;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,12 @@ import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.common.utils.ReservationStatus;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
@@ -110,52 +112,67 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
 
     private void cancelReservation(View view, Reservation reservation, ReservationViewHolder holder) {
 
-        Map<String, Object> reservationStatusUpdate =  new HashMap<>();
-
-        reservationStatusUpdate.put(
-                activity.getString(R.string.n_reservations_2) + "/" +
-                reservation.getUid() + "/" +
-                activity.getString(R.string.p_reservation_status),
-
-                ReservationStatus.CANCELLED
-        );
         databaseReference
                 .child(activity.getString(R.string.n_books))
                 .child(reservation.getLibraryUid())
                 .child(reservation.getBookUid())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                .child(activity.getString(R.string.p_book_available_quantity))
+                .runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
 
-                        DataSnapshot dataSnapshot = task.getResult();
-                        Book book = dataSnapshot.getValue(Book.class);
+                        Integer bookAvailableQuantity = mutableData.getValue(Integer.class);
 
-                        if (book != null) {
-                            reservationStatusUpdate.put(
-                                    activity.getString(R.string.n_books) + "/" +
-                                    reservation.getLibraryUid() + "/" +
-                                    reservation.getBookUid() + "/" +
-                                    activity.getString(R.string.p_book_available_quantity),
-
-                                    book.getAvailableQuantity() + 1
-                            );
-                            databaseReference
-                                    .updateChildren(reservationStatusUpdate)
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-
-                                            holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_24));
-                                            holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
-                                            holder.bCancel.setVisibility(View.GONE);
-                                            Snackbar.make(view, "Reservation cancelled", Snackbar.LENGTH_SHORT).show();
-
-                                        } else {
-                                            System.out.println(task1.getResult());
-                                        }
-                                    });
+                        if (bookAvailableQuantity == null) {
+                            return Transaction.success(mutableData);
                         }
-                    } else {
-                        System.out.println(task.getResult());
+
+                        bookAvailableQuantity += 1;
+
+                        // Set value and report transaction success
+                        mutableData.setValue(bookAvailableQuantity);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean committed,
+                                           DataSnapshot currentData) {
+                        // Transaction completed
+                        if (committed) {
+                            updateReservationStatus(view, reservation, holder);
+
+                        } else {
+                            Snackbar.make(view, "An error occurred", Snackbar.LENGTH_SHORT).show();
+                            Log.e("BOOK_AVAILABILITY_UPDATE_ERROR", "postTransaction:onComplete:" + databaseError);
+                        }
+                    }
+
+                    private void updateReservationStatus(View view, Reservation reservation, ReservationViewHolder holder) {
+                        Map<String, Object> reservationStatusUpdate =  new HashMap<>();
+
+                        reservationStatusUpdate.put(
+                                activity.getString(R.string.n_reservations_2) + "/" +
+                                reservation.getUid() + "/" +
+                                activity.getString(R.string.p_reservation_status),
+
+                                ReservationStatus.CANCELLED
+                        );
+
+                        databaseReference
+                                .updateChildren(reservationStatusUpdate)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+
+                                        holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_24));
+                                        holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
+                                        holder.bCancel.setVisibility(View.GONE);
+                                        Snackbar.make(view, "Reservation cancelled", Snackbar.LENGTH_SHORT).show();
+
+                                    } else {
+                                        Log.e("RESERVATION_STATUS_UPDATE_ERROR", String.valueOf(task.getResult()));
+                                    }
+                                });
                     }
                 });
     }

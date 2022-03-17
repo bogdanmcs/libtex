@@ -1,9 +1,11 @@
 package com.ad_victoriam.libtex;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
 import com.ad_victoriam.libtex.common.activities.LoginActivity;
@@ -13,8 +15,11 @@ import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -83,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                                 LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
 
                                 if (reservationEndDate.isBefore(LocalDateTime.now())) {
-                                    updateDetails(databaseReference, reservation);
+                                    updateReservationStatus(databaseReference, reservation);
                                 }
                             }
                         }
@@ -93,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateDetails(DatabaseReference databaseReference, Reservation reservation) {
+    private void updateReservationStatus(DatabaseReference databaseReference, Reservation reservation) {
 
         DatabaseReference reference = databaseReference
                 .child(this.getString(R.string.n_books))
@@ -120,24 +125,49 @@ public class MainActivity extends AppCompatActivity {
 
                                     ReservationStatus.CANCELLED
                             );
-                            childrenUpdates.put(
-                                    this.getString(R.string.n_books) + "/" +
-                                    reservation.getLibraryUid() + "/" +
-                                    reservation.getBookUid() + "/" +
-                                    this.getString(R.string.p_book_available_quantity),
-
-                                    availableQuantity + 1
-                            );
                             databaseReference
                                     .updateChildren(childrenUpdates)
                                     .addOnCompleteListener(task1 -> {
-                                        if (!task1.isSuccessful()) {
+                                        if (task1.isSuccessful()) {
+                                            increaseBookAvailability(reference, reservation);
+                                        } else {
                                             System.out.println(task1.getResult());
                                         }
                                     });
                         }
                     } else {
                         System.out.println(task.getResult());
+                    }
+                });
+    }
+
+    private void increaseBookAvailability(DatabaseReference databaseReference, Reservation reservation) {
+        databaseReference
+                .runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                        Integer bookAvailableQuantity = mutableData.getValue(Integer.class);
+
+                        if (bookAvailableQuantity == null) {
+                            return Transaction.success(mutableData);
+                        }
+
+                        bookAvailableQuantity += 1;
+
+                        // Set value and report transaction success
+                        mutableData.setValue(bookAvailableQuantity);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean committed,
+                                           DataSnapshot currentData) {
+                        // Transaction completed
+                        if (!committed) {
+                            Log.e("BOOK_AVAILABILITY_UPDATE_ERROR", "postTransaction:onComplete:" + databaseError);
+                        }
                     }
                 });
     }

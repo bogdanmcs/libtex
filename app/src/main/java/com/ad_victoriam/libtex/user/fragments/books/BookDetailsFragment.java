@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,8 +36,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -72,6 +76,9 @@ public class BookDetailsFragment extends Fragment {
     // dialogs
     private boolean areTermsAccepted = false;
     private String location;
+
+    // transaction
+    private boolean isAvailable;
 
     public BookDetailsFragment() {
         // Required empty public constructor
@@ -396,66 +403,72 @@ public class BookDetailsFragment extends Fragment {
                 String libraryUid = getLibraryUid(location);
                 Reservation reservation = createNewReservation(libraryUid);
 
+                isAvailable = false;
+
                 databaseReference
                         .child(activity.getString(R.string.n_books))
-                        .child(libraryUid)
+                        .child(reservation.getLibraryUid())
                         .child(reservation.getBookUid())
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
+                        .child(activity.getString(R.string.p_book_available_quantity))
+                        .runTransaction(new Transaction.Handler() {
 
-                                DataSnapshot dataSnapshot = task.getResult();
-                                Book book = dataSnapshot.getValue(Book.class);
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
 
-                                if (book != null) {
-                                    if (book.getAvailableQuantity() == 0) {
-                                        getLibrariesAndBooks();
-                                        setDetails();
-                                        Snackbar.make(activity, mainView, activity.getString(R.string.out_of_stock), Snackbar.LENGTH_SHORT).show();
-                                    } else {
-                                        Map<String, Object> availableQuantityUpdate =  new HashMap<>();
-                                        availableQuantityUpdate.put(
-                                                activity.getString(R.string.n_books) + "/" +
-                                                libraryUid + "/" +
-                                                reservation.getBookUid() + "/" +
-                                                activity.getString(R.string.p_book_available_quantity),
+                                Integer bookAvailableQuantity = mutableData.getValue(Integer.class);
 
-                                                book.getAvailableQuantity() - 1
-                                        );
-                                        setUserReservation(reservation, availableQuantityUpdate);
-                                    }
+                                if (bookAvailableQuantity == null) {
+                                    return Transaction.success(mutableData);
                                 }
 
-                            } else {
-                                System.out.println(task.getResult());
-                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                                if (bookAvailableQuantity == 0) {
+                                    getLibrariesAndBooks();
+                                    setDetails();
+                                    Snackbar.make(activity, mainView, activity.getString(R.string.out_of_stock), Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    bookAvailableQuantity -= 1;
+                                    isAvailable = true;
+                                }
+
+                                // Set value and report transaction success
+                                mutableData.setValue(bookAvailableQuantity);
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean committed,
+                                                   DataSnapshot currentData) {
+                                // Transaction completed
+                                if (committed) {
+
+                                    if (isAvailable) {
+                                        setUserReservation(reservation);
+                                    } else {
+                                        Snackbar.make(activity, mainView, activity.getString(R.string.out_of_stock), Snackbar.LENGTH_SHORT).show();
+                                    }
+
+                                } else {
+                                    Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
+                                    Log.e("BOOK_AVAILABILITY_UPDATE_ERROR", "postTransaction:onComplete:" + databaseError);
+                                }
                             }
                         });
             }
 
-            private void setUserReservation(Reservation reservation, Map<String, Object> availableQuantityUpdate) {
+            private void setUserReservation(Reservation reservation) {
                 databaseReference
-                        .updateChildren(availableQuantityUpdate)
-                        .addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-
-                                databaseReference
-                                        .child(activity.getString(R.string.n_reservations_2))
-                                        .push()
-                                        .setValue(reservation)
-                                        .addOnCompleteListener(task2 -> {
-                                            if (task2.isSuccessful()) {
-                                                setReservationStatus();
-                                                getLibrariesAndBooks();
-                                                setDetails();
-                                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
-                                            } else {
-                                                System.out.println(task2.getResult());
-                                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
-                                            }
-                                        });
+                        .child(activity.getString(R.string.n_reservations_2))
+                        .push()
+                        .setValue(reservation)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                setReservationStatus();
+                                getLibrariesAndBooks();
+                                setDetails();
+                                Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
                             } else {
-                                System.out.println(task1.getResult());
+                                Log.e("RESERVATION_CREATE_ERROR", String.valueOf(task.getResult()));
                                 Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
                             }
                         });
