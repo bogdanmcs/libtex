@@ -41,8 +41,8 @@ public class BookFav {
     }
 
     public boolean isSame (Book book) {
-        return title.equals(book.getTitle())
-                && authorName.equals(book.getAuthorName())
-                && publisher.equals(book.getPublisher());
+        return title.equals(book.getTitle()) &&
+                authorName.equals(book.getAuthorName()) &&
+                publisher.equals(book.getPublisher());
     }
 }

@@ -4,6 +4,7 @@
     <string name="app_name">Libtex</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="firebase_url">https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/</string>
 
     <!-- nodes -->
     <string name="n_admins">admins</string>
