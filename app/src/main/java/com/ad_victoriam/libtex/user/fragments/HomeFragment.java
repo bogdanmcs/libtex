@@ -5,18 +5,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.user.adapters.RecommendationsAdapter;
+import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,11 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
@@ -39,7 +42,11 @@ public class HomeFragment extends Fragment {
     private View mainView;
     private FragmentActivity activity;
 
-    private MaterialButton bRec;
+    private RecyclerView recyclerView;
+    private RecommendationsAdapter recommendationsAdapter;
+    private TextView tNoRecommendations;
+
+    private List<Book> recommendedBooks = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,13 +69,20 @@ public class HomeFragment extends Fragment {
 
         findViews();
         setTopAppBar();
+        getRecommendations();
 
         return mainView;
     }
 
     private void findViews() {
-        bRec = mainView.findViewById(R.id.bRec);
-        bRec.setOnClickListener(this::getRecs);
+        recyclerView = mainView.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager
+                (activity, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recommendationsAdapter = new RecommendationsAdapter(activity, recommendedBooks);
+        recyclerView.setAdapter(recommendationsAdapter);
+
+        tNoRecommendations = mainView.findViewById(R.id.tNoRecommendations);
     }
 
     private void setTopAppBar() {
@@ -77,7 +91,7 @@ public class HomeFragment extends Fragment {
         TopAppBar.get().setTitleMode(activity, topAppBar, "Home");
     }
 
-    private void getRecs(View view) {
+    private void getRecommendations() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         List<String> bookUids = new ArrayList<>();
 
@@ -109,7 +123,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void getBooks(List<String> bookUids) {
-        List<Book> books = new ArrayList<>();
+        recommendedBooks.clear();
+        List<Book> books = recommendedBooks;
         List<Book> userBooks = new ArrayList<>();
 
         databaseReference
@@ -162,8 +177,6 @@ public class HomeFragment extends Fragment {
 
                     categoryAppearances.replace(entry.getKey().size(), entry.getValue());
                     categoryTypes.replace(entry.getKey().size(), entry.getKey());
-                } else {
-                    Log.e("SET_RECOM_HIGHEST_CATEG_USE", "Pyramid get value - null Integer");
                 }
             } else {
                 categoryAppearances.put(entry.getKey().size(), entry.getValue());
@@ -176,14 +189,19 @@ public class HomeFragment extends Fragment {
         for (Map.Entry<Integer, List<String>> entry: categoryTypes.entrySet()) {
             mostPreferredCategories.add(entry.getValue());
         }
+        mostPreferredCategories = mostPreferredCategories.stream()
+                .sorted(Comparator.comparing(List::size))
+                .collect(Collectors.toList());
+
+        List<String> primaryCategory = mostPreferredCategories.remove(0);
 
         List<Book> toRemove = new ArrayList<>();
         for (Book book: books) {
 
             boolean isRecommendable = false;
 
-            if (mostPreferredCategories.size() == 1) {
-                if (book.getChosenCategories().containsAll(mostPreferredCategories.get(0))) {
+            if (mostPreferredCategories.size() == 0) {
+                if (book.getChosenCategories().containsAll(primaryCategory)) {
                     isRecommendable = true;
                 }
             } else {
@@ -199,7 +217,7 @@ public class HomeFragment extends Fragment {
             }
         }
         books.removeAll(toRemove);
-        updateRecommendationsUi(books);
+        updateRecommendationsUi(recommendedBooks);
     }
 
     @NonNull
@@ -270,7 +288,6 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -291,9 +308,10 @@ public class HomeFragment extends Fragment {
 
     private void updateRecommendationsUi(List<Book> books) {
         if (books.size() == 0) {
-            // no recommendations yet, keep reading
+            recyclerView.setVisibility(View.GONE);
+            tNoRecommendations.setVisibility(View.VISIBLE);
         } else {
-            // show recommended books
+            recommendationsAdapter.notifyDataSetChanged();
         }
     }
 }

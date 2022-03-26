@@ -96,5 +96,7 @@
     <string name="reservation_status_approved">Ready for pickup</string>
     <string name="reservation_status_cancelled">Cancelled</string>
     <string name="reservation_status_completed">Completed</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="no_recommendations">Not available at this moment.</string>
 
 </resources>

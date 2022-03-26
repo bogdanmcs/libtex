@@ -103,7 +103,6 @@ public class ReservationsFragment extends Fragment {
                             mainView.findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
 
                         } else {
-
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                 Reservation reservation = dataSnapshot.getValue(Reservation.class);
@@ -112,7 +111,6 @@ public class ReservationsFragment extends Fragment {
                                         reservation.getUserUid().equals(currentUser.getUid())) {
 
                                     reservation.setUid(dataSnapshot.getKey());
-
                                     // get book
                                     databaseReference
                                             .child(getString(R.string.n_books))
@@ -161,7 +159,6 @@ public class ReservationsFragment extends Fragment {
                                             });
                                 }
                             }
-
                         }
                     } else {
                         System.out.println(task.getResult());
