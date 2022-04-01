@@ -22,6 +22,7 @@
     <string name="p_location_name">name</string>
     <string name="p_book_available_quantity">availableQuantity</string>
     <string name="p_reservation_status">status</string>
+    <string name="p_reservation_user_uid">userUid</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>

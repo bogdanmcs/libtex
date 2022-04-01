@@ -16,7 +16,9 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.25729166666666664" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_arrow_back_24_royal_blue.xml" value="0.25729166666666664" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_check_circle_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_check_circle_outline_24.xml" value="0.249609375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_flag_circle_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3328125" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_loan_24.xml" value="0.249609375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/drawable/ic_baseline_menu_book_24.xml" value="0.249609375" />
@@ -94,12 +96,13 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_admin_active_loan.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_admin_all_loan.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_admin_book.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_admin_reservation.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_all_loan.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_book.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_book_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_category.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_recommendation.xml" value="0.234375" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation.xml" value="0.33" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_reservation_2.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_user_2.xml" value="0.25" />

@@ -20,11 +20,10 @@ import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +88,12 @@ public class ReservationsActivity extends AppCompatActivity {
         reservationsAdapter = new AdminReservationAdapter(this, reservations, user);
         recyclerView.setAdapter(reservationsAdapter);
 
-        databaseReference
+        Query query = databaseReference
                 .child(getString(R.string.n_reservations_2))
+                .orderByChild(getString(R.string.p_reservation_user_uid))
+                .equalTo(user.getUid());
+
+        query
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
