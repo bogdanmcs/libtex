@@ -81,13 +81,13 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
         if (reservation.getStatus() == ReservationStatus.COMPLETED) {
             holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_check_circle_outline_50));
             holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_completed));
-            holder.bCancel.setVisibility(View.GONE);
+            holder.bCancel.setVisibility(View.INVISIBLE);
 
         } else if (reservation.getStatus() == ReservationStatus.CANCELLED ||
                    reservation.getStatus() == ReservationStatus.APPROVED && reservationEndDate.isBefore(LocalDateTime.now())) {
             holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_50));
             holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
-            holder.bCancel.setVisibility(View.GONE);
+            holder.bCancel.setVisibility(View.INVISIBLE);
 
         } else if (reservation.getStatus() == ReservationStatus.APPROVED) {
             holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_flag_circle_50));
@@ -166,7 +166,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
 
                                         holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_50));
                                         holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
-                                        holder.bCancel.setVisibility(View.GONE);
+                                        holder.bCancel.setVisibility(View.INVISIBLE);
                                         Snackbar.make(view, "Reservation cancelled", Snackbar.LENGTH_SHORT).show();
 
                                     } else {
