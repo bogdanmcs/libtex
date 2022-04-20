@@ -109,7 +109,9 @@ public class AllLoansFragment extends Fragment {
     }
 
     private void attachLoansListener() {
+        loans.clear();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         loansListener = databaseReference
                 .child(getString(R.string.n_users))
                 .child(currentUser.getUid())
