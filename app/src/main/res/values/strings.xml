@@ -17,12 +17,15 @@
     <string name="n_favourite_books">favourite-books</string>
     <string name="n_reservations">reservations</string>
     <string name="n_reservations_2">reservations2</string>
+    <string name="n_general_loans">general-loans</string>
 
     <!-- nodes props -->
     <string name="p_location_name">name</string>
     <string name="p_book_available_quantity">availableQuantity</string>
     <string name="p_reservation_status">status</string>
     <string name="p_reservation_user_uid">userUid</string>
+    <string name="p_book_title">bookTitle</string>
+    <string name="p_counter">counter</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>
