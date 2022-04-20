@@ -90,8 +90,8 @@ public class ActiveLoansActivity extends AppCompatActivity {
         databaseReference
                 .child("users")
                 .child(user.getUid())
-                .child("book-loans")
-                .child("current-loans")
+                .child(this.getString(R.string.n_book_loans))
+                .child(this.getString(R.string.n_current_loans))
                 .child(currentUser.getUid())
                 .addChildEventListener(new ChildEventListener() {
             @Override
@@ -128,6 +128,10 @@ public class ActiveLoansActivity extends AppCompatActivity {
                                                     adminActiveLoanAdapter.notifyItemInserted(adminLoans.size() - 1);
                                                     break;
                                                 }
+                                            }
+                                            if (adminLoans.size() == 0) {
+                                                String noRecordsMessage = getApplicationContext().getString(R.string.no_records_found);
+                                                tRecordsCounter.setText(noRecordsMessage);
                                             }
                                         } else {
                                             System.out.println(task.getResult().getValue());

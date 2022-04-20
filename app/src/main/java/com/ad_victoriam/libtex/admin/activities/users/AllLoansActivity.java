@@ -73,7 +73,9 @@ public class AllLoansActivity extends AppCompatActivity {
 
         tRecordsCounter = findViewById(R.id.tRecordsCounter);
 
-        databaseReference = FirebaseDatabase.getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        databaseReference = FirebaseDatabase
+                .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
 
         user = getIntent().getParcelableExtra("user");
         adminAllLoanAdapter = new AdminAllLoanAdapter(this, adminLoans, user);
@@ -90,8 +92,8 @@ public class AllLoansActivity extends AppCompatActivity {
         databaseReference
                 .child("users")
                 .child(user.getUid())
-                .child("book-loans")
-                .child("loans-history")
+                .child(this.getString(R.string.n_book_loans))
+                .child(this.getString(R.string.n_loans_history))
                 .child(currentUser.getUid())
                 .addChildEventListener(new ChildEventListener() {
                     @Override
@@ -128,6 +130,10 @@ public class AllLoansActivity extends AppCompatActivity {
                                                         adminAllLoanAdapter.notifyItemInserted(adminLoans.size() - 1);
                                                         break;
                                                     }
+                                                }
+                                                if (adminLoans.size() == 0) {
+                                                    String noRecordsMessage = getApplicationContext().getString(R.string.no_records_found);
+                                                    tRecordsCounter.setText(noRecordsMessage);
                                                 }
                                             } else {
                                                 System.out.println(task.getResult().getValue());
