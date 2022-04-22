@@ -17,25 +17,25 @@ import com.ad_victoriam.libtex.user.models.Book;
 
 import java.util.List;
 
-public class RecommendationsAdapter extends RecyclerView.Adapter<RecommendationsAdapter.RecommendationsViewHolder> {
+public class MostPopularAdapter extends RecyclerView.Adapter<MostPopularAdapter.MostPopularViewHolder> {
 
     private final FragmentActivity activity;
     private final List<Book> books;
 
-    public RecommendationsAdapter(FragmentActivity activity, List<Book> books) {
+    public MostPopularAdapter(FragmentActivity activity, List<Book> books) {
         this.activity = activity;
         this.books = books;
     }
 
     @NonNull
     @Override
-    public RecommendationsAdapter.RecommendationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MostPopularAdapter.MostPopularViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_recommendation, parent, false);
-        return new RecommendationsAdapter.RecommendationsViewHolder(view);
+        return new MostPopularAdapter.MostPopularViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecommendationsAdapter.RecommendationsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MostPopularAdapter.MostPopularViewHolder holder, int position) {
         Book book = books.get(position);
         holder.constraintLayout.setOnClickListener(view -> viewBookDetails(book));
         holder.tBookTitle.setText(book.getTitle());
@@ -61,12 +61,12 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
         return books.size();
     }
 
-    public static class RecommendationsViewHolder extends RecyclerView.ViewHolder {
+    public static class MostPopularViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout constraintLayout;
         TextView tBookTitle;
 
-        public RecommendationsViewHolder(@NonNull View itemView) {
+        public MostPopularViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayout = itemView.findViewById(R.id.constraintLayout);
             tBookTitle = itemView.findViewById(R.id.tBookTitle);

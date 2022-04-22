@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.common.models.GeneralLoan;
+import com.ad_victoriam.libtex.user.adapters.MostPopularAdapter;
 import com.ad_victoriam.libtex.user.adapters.RecommendationsAdapter;
 import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,15 +43,21 @@ import java.util.stream.Collectors;
 public class HomeFragment extends Fragment {
 
     private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
 
     private View mainView;
     private FragmentActivity activity;
 
-    private RecyclerView recyclerView;
+    private RecyclerView recommendationsRecyclerView;
     private RecommendationsAdapter recommendationsAdapter;
     private TextView tNoRecommendations;
 
+    private RecyclerView mostPopularRecyclerView;
+    private MostPopularAdapter mostPopularAdapter;
+    private TextView tNoMostPopular;
+
     private List<Book> recommendedBooks = new ArrayList<>();
+    private List<Book> mostPopularBooks = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -66,23 +77,32 @@ public class HomeFragment extends Fragment {
         databaseReference = FirebaseDatabase
                 .getInstance(activity.getString(R.string.firebase_url))
                 .getReference();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         findViews();
         setTopAppBar();
-        getRecommendations();
+        getUserLoansHistory();
+        getGeneralLoans();
 
         return mainView;
     }
 
     private void findViews() {
-        recyclerView = mainView.findViewById(R.id.recyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager
+        recommendationsRecyclerView = mainView.findViewById(R.id.recommendationsRecyclerView);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager
                 (activity, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recommendationsRecyclerView.setLayoutManager(linearLayoutManager1);
         recommendationsAdapter = new RecommendationsAdapter(activity, recommendedBooks);
-        recyclerView.setAdapter(recommendationsAdapter);
-
+        recommendationsRecyclerView.setAdapter(recommendationsAdapter);
         tNoRecommendations = mainView.findViewById(R.id.tNoRecommendations);
+
+        mostPopularRecyclerView = mainView.findViewById(R.id.mostPopularRecyclerView);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager
+                (activity, LinearLayoutManager.HORIZONTAL, false);
+        mostPopularRecyclerView.setLayoutManager(linearLayoutManager2);
+        mostPopularAdapter = new MostPopularAdapter(activity, mostPopularBooks);
+        mostPopularRecyclerView.setAdapter(mostPopularAdapter);
+        tNoMostPopular = mainView.findViewById(R.id.tNoMostPopular);
     }
 
     private void setTopAppBar() {
@@ -91,8 +111,7 @@ public class HomeFragment extends Fragment {
         TopAppBar.get().setTitleMode(activity, topAppBar, "Home");
     }
 
-    private void getRecommendations() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private void getUserLoansHistory() {
         List<String> bookUids = new ArrayList<>();
 
         databaseReference
@@ -114,7 +133,7 @@ public class HomeFragment extends Fragment {
                                 }
                             }
                         }
-                        getBooks(bookUids);
+                        getBooksAndSetRecommendations(bookUids);
 
                     } else {
                         Log.e("GET_USER_LOANS_HISTORY", String.valueOf(task.getResult()));
@@ -122,7 +141,7 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void getBooks(List<String> bookUids) {
+    private void getBooksAndSetRecommendations(List<String> bookUids) {
         recommendedBooks.clear();
         List<Book> books = recommendedBooks;
         List<Book> userBooks = new ArrayList<>();
@@ -308,10 +327,115 @@ public class HomeFragment extends Fragment {
 
     private void updateRecommendationsUi(List<Book> books) {
         if (books.size() == 0) {
-            recyclerView.setVisibility(View.GONE);
+            recommendationsRecyclerView.setVisibility(View.GONE);
             tNoRecommendations.setVisibility(View.VISIBLE);
         } else {
             recommendationsAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void getGeneralLoans() {
+        Query query = databaseReference
+                .child(activity.getString(R.string.n_general_loans))
+                .orderByChild("counter")
+                .limitToLast(20);
+        List<GeneralLoan> generalLoans = new ArrayList<>();
+        query
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                            GeneralLoan generalLoan = dataSnapshot.getValue(GeneralLoan.class);
+
+                            if (generalLoan != null) {
+                                generalLoans.add(generalLoan);
+                            }
+                        }
+                        getBooksAndSetMostPopular(generalLoans);
+
+                    } else {
+                        Log.e("GET_GENERAL_LOANS_DB", String.valueOf(task.getResult()));
+                    }
+                });
+//        updateMostPopularUi();
+    }
+
+    private void getBooksAndSetMostPopular(List<GeneralLoan> generalLoans) {
+        List<Book> books = new ArrayList<>();
+
+        databaseReference
+                .child(activity.getString(R.string.n_books))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+
+                                Book book = dataSnapshot1.getValue(Book.class);
+
+                                if (book != null) {
+                                    book.setUid(dataSnapshot1.getKey());
+                                    books.add(book);
+                                }
+                            }
+                        }
+                        setMostPopular(generalLoans, books);
+
+                    } else {
+                        Log.e("GET_BOOKS", String.valueOf(task.getResult()));
+                    }
+                });
+    }
+
+    private void setMostPopular(List<GeneralLoan> generalLoans, List<Book> books) {
+//        filterNMostPopularBooks(generalLoans);
+        for (Book book: books) {
+            if (isBookInGeneralLoans(book, generalLoans) &&
+                isNotDuplicated(book)) {
+
+                mostPopularBooks.add(book);
+            }
+        }
+        updateMostPopularUi();
+    }
+
+    private boolean isBookInGeneralLoans(Book book, List<GeneralLoan> generalLoans) {
+        for (GeneralLoan generalLoan: generalLoans) {
+            if (isSameBook(book, generalLoan)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isNotDuplicated(Book book) {
+        for (Book b: mostPopularBooks) {
+            if (b.isSame(book)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isSameBook(Book book, GeneralLoan generalLoan) {
+        return book.getTitle().equals(generalLoan.getBookTitle()) &&
+                book.getAuthorName().equals(generalLoan.getBookAuthor()) &&
+                book.getPublisher().equals(generalLoan.getBookPublisher());
+    }
+
+    private void filterNMostPopularBooks(List<GeneralLoan> generalLoans) {
+        List<GeneralLoan> gs = new ArrayList<>();
+//        for ()
+    }
+
+    private void updateMostPopularUi() {
+        if (mostPopularBooks.size() == 0) {
+            mostPopularRecyclerView.setVisibility(View.GONE);
+            tNoMostPopular.setVisibility(View.VISIBLE);
+        } else {
+            mostPopularAdapter.notifyDataSetChanged();
         }
     }
 }

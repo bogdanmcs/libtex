@@ -18,11 +18,8 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.books.AdminBookDetailsActivity;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.admin.models.AdminLoan;
-import com.ad_victoriam.libtex.admin.models.GeneralLoan;
-import com.ad_victoriam.libtex.common.models.Reservation;
+import com.ad_victoriam.libtex.common.models.GeneralLoan;
 import com.ad_victoriam.libtex.common.models.User;
-import com.ad_victoriam.libtex.common.utils.ReservationStatus;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,10 +32,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.StreamSupport;
 
 public class AdminBookAdapter extends RecyclerView.Adapter<AdminBookAdapter.BookViewHolder> {

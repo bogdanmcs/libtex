@@ -102,5 +102,6 @@
     <string name="reservation_status_completed">Completed</string>
     <string name="recommendations">Recommendations</string>
     <string name="no_recommendations">Not available at this moment.</string>
+    <string name="most_popular">Most popular</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.models;
+package com.ad_victoriam.libtex.common.models;
 
 public class GeneralLoan {
 
