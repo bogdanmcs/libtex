@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        android:name="com.ad_victoriam.libtex.user.fragments.HomeFragment"
+        android:name="com.ad_victoriam.libtex.user.fragments.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

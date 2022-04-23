@@ -78,19 +78,21 @@
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation_1.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_reservation_2.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/dialog_what_to_read_result.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_account.xml" value="0.1" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_active_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_all_loans.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_book_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_books.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_favourite_books.xml" value="0.234375" />
-        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home.xml" value="0.21" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_home2.xml" value="0.1390625" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loan_details.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_loans.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_reservations.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_temp.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_user_loans.xml" value="0.234375" />
+        <entry key="..\:/coding/Libtex/app/src/main/res/layout/fragment_what_to_read.xml" value="0.234375" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/loan_adapter_row.xml" value="0.22" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_active_loan.xml" value="0.25" />
         <entry key="..\:/coding/Libtex/app/src/main/res/layout/row_admin_active_loan.xml" value="0.234375" />

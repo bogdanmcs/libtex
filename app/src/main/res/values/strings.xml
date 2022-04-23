@@ -60,17 +60,6 @@
     <string name="co_children">Children</string>
     <string name="co_biography">Biography</string>
 
-    <!-- descriptions -->
-    <string name="d_terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
-    <string name="d_reserve_1_alert">Please choose the library which you would like to reserve the book from.</string>
-    <string name="d_reserve_2_alert_part_3">
-        This reservation is available for no more than 24 hours.
-        Before confirming your reservation, please hold the button down below in order to accept our terms and policy regarding book reservations.
-    </string>
-    <string name="d_reservation_read_more">
-        Open know age use whom him than lady was. On lasted uneasy exeter my itself effect spirit. At design he vanity at cousin longer looked ye. Design praise me father an favour. As greatly replied it windows of an minuter behaved passage. Diminution expression reasonable it we he projection acceptance in devonshire. Perpetual it described at he applauded. Depart do be so he enough talent. Sociable formerly six but handsome. Up do view time they shot. He concluded disposing provision by questions as situation. Its estimating are motionless day sentiments end. Calling an imagine at forbade. At name no an what like spot. Pressed my by do affixed he studied. Ye on properly handsome returned throwing am no whatever. In without wishing he of picture no exposed talking minutes. Curiosity continual belonging offending so explained it exquisite. Do remember to followed yourself material mr recurred carriage. High drew west we no or at john. About or given on witty event. Or sociable up material bachelor bringing landlord confined. Busy so many in hung easy find well up. So of exquisite my an explained remainder. Dashwood denoting securing be on perceive my laughing so. In on announcing if of comparison pianoforte projection. Maids hoped gay yet bed asked blind dried point. On abroad danger likely regret twenty edward do. Too horrible consider followed may differed age. An rest if more five mr of. Age just her rank met down way. Attended required so in cheerful an. Domestic replying she resolved him for did. Rather in lasted no within no. Excited him now natural saw passage offices you minuter. At by asked being court hopes. Farther so friends am to detract. Forbade concern do private be. Offending residence but men engrossed shy. Pretend am earnest offered arrived company so on. Felicity informed yet had admitted strictly how you. Ferrars all spirits his imagine effects amongst neither. It bachelor cheerful of mistaken. Tore has sons put upon wife use bred seen. Its dissimilar invitation ten has discretion unreserved. Had you him humoured jointure ask expenses learning. Blush on in jokes sense do do. Brother hundred he assured reached on up no. On am nearer missed lovers. To it mother extent temper figure better. Surrounded affronting favourable no mr. Lain knew like half she yet joy. Be than dull as seen very shot. Attachment ye so am travelling estimating projecting is. Off fat address attacks his besides. Suitable settling mr attended no doubtful feelings. Any over for say bore such sold five but hung. Inhabiting discretion the her dispatched decisively boisterous joy. So form were wish open is able of mile of. Waiting express if prevent it we an musical. Especially reasonable travelling she son. Resources resembled forfeited no to zealously. Has procured daughter how friendly followed repeated who surprise. Great asked oh under on voice downs. Law together prospect kindness securing six. Learning why get hastened smallest cheerful.
-    </string>
-
     <!-- texts -->
     <string name="records_found">Records found:</string>
     <string name="no_records_found">No records found.</string>
@@ -91,6 +80,15 @@
     <string name="reservation_unsuccessful">Reservation denied</string>
     <string name="reservation_duplicated">Already reserved</string>
     <string name="reservation_accept_terms_first">Please accept the terms first</string>
+    <string name="d_terms_and_privacy">I agree to the Libtex Terms of Service and Privacy Policy</string>
+    <string name="d_reserve_1_alert">Please choose the library which you would like to reserve the book from.</string>
+    <string name="d_reserve_2_alert_part_3">
+        This reservation is available for no more than 24 hours.
+        Before confirming your reservation, please hold the button down below in order to accept our terms and policy regarding book reservations.
+    </string>
+    <string name="d_reservation_read_more">
+        Open know age use whom him than lady was. On lasted uneasy exeter my itself effect spirit. At design he vanity at cousin longer looked ye. Design praise me father an favour. As greatly replied it windows of an minuter behaved passage. Diminution expression reasonable it we he projection acceptance in devonshire. Perpetual it described at he applauded. Depart do be so he enough talent. Sociable formerly six but handsome. Up do view time they shot. He concluded disposing provision by questions as situation. Its estimating are motionless day sentiments end. Calling an imagine at forbade. At name no an what like spot. Pressed my by do affixed he studied. Ye on properly handsome returned throwing am no whatever. In without wishing he of picture no exposed talking minutes. Curiosity continual belonging offending so explained it exquisite. Do remember to followed yourself material mr recurred carriage. High drew west we no or at john. About or given on witty event. Or sociable up material bachelor bringing landlord confined. Busy so many in hung easy find well up. So of exquisite my an explained remainder. Dashwood denoting securing be on perceive my laughing so. In on announcing if of comparison pianoforte projection. Maids hoped gay yet bed asked blind dried point. On abroad danger likely regret twenty edward do. Too horrible consider followed may differed age. An rest if more five mr of. Age just her rank met down way. Attended required so in cheerful an. Domestic replying she resolved him for did. Rather in lasted no within no. Excited him now natural saw passage offices you minuter. At by asked being court hopes. Farther so friends am to detract. Forbade concern do private be. Offending residence but men engrossed shy. Pretend am earnest offered arrived company so on. Felicity informed yet had admitted strictly how you. Ferrars all spirits his imagine effects amongst neither. It bachelor cheerful of mistaken. Tore has sons put upon wife use bred seen. Its dissimilar invitation ten has discretion unreserved. Had you him humoured jointure ask expenses learning. Blush on in jokes sense do do. Brother hundred he assured reached on up no. On am nearer missed lovers. To it mother extent temper figure better. Surrounded affronting favourable no mr. Lain knew like half she yet joy. Be than dull as seen very shot. Attachment ye so am travelling estimating projecting is. Off fat address attacks his besides. Suitable settling mr attended no doubtful feelings. Any over for say bore such sold five but hung. Inhabiting discretion the her dispatched decisively boisterous joy. So form were wish open is able of mile of. Waiting express if prevent it we an musical. Especially reasonable travelling she son. Resources resembled forfeited no to zealously. Has procured daughter how friendly followed repeated who surprise. Great asked oh under on voice downs. Law together prospect kindness securing six. Learning why get hastened smallest cheerful.
+    </string>
     <string name="read_more">Read more</string>
     <string name="reserve_2_alert_part_1">You are about to reserve</string>
     <string name="reserve_2_alert_part_2">Location:</string>
@@ -103,5 +101,11 @@
     <string name="recommendations">Recommendations</string>
     <string name="no_recommendations">Not available at this moment.</string>
     <string name="most_popular">Most popular</string>
+    <string name="what_to_read">I don\'t know what to read!</string>
+    <string name="what_to_read_description_part_1">Don\'t know what to read? We got you!</string>
+    <string name="what_to_read_description_part_2">Just specify whatever categories you would like to explore (or don\'t) and we\'ll randomly pick a book for you.</string>
+    <string name="no_categories_selected">No categories selected</string>
+    <string name="what_to_read_not_found">We\'re sorry, but nothing seems to match your choices.</string>
+    <string name="still_processing_books">Still processing books, please wait</string>
 
 </resources>

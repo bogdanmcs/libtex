@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.activities.AdminHomeActivity;
-import com.ad_victoriam.libtex.admin.utils.CategoryDialog;
+import com.ad_victoriam.libtex.admin.fragments.CategoryDialog;
 import com.ad_victoriam.libtex.admin.models.AdminBook;
 import com.ad_victoriam.libtex.admin.utils.TopAppBarAdmin;
 import com.google.android.material.appbar.MaterialToolbar;

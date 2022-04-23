@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.user.fragments;
+package com.ad_victoriam.libtex.user.fragments.home;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,12 +17,9 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.common.models.GeneralLoan;
 import com.ad_victoriam.libtex.user.adapters.MostPopularAdapter;
 import com.ad_victoriam.libtex.user.adapters.RecommendationsAdapter;
-import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +34,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
@@ -103,6 +99,9 @@ public class HomeFragment extends Fragment {
         mostPopularAdapter = new MostPopularAdapter(activity, mostPopularBooks);
         mostPopularRecyclerView.setAdapter(mostPopularAdapter);
         tNoMostPopular = mainView.findViewById(R.id.tNoMostPopular);
+
+        MaterialButton bWhatToRead = mainView.findViewById(R.id.bWhatToRead);
+        bWhatToRead.setOnClickListener(this::goWhatToRead);
     }
 
     private void setTopAppBar() {
@@ -358,7 +357,6 @@ public class HomeFragment extends Fragment {
                         Log.e("GET_GENERAL_LOANS_DB", String.valueOf(task.getResult()));
                     }
                 });
-//        updateMostPopularUi();
     }
 
     private void getBooksAndSetMostPopular(List<GeneralLoan> generalLoans) {
@@ -390,7 +388,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setMostPopular(List<GeneralLoan> generalLoans, List<Book> books) {
-//        filterNMostPopularBooks(generalLoans);
         for (Book book: books) {
             if (isBookInGeneralLoans(book, generalLoans) &&
                 isNotDuplicated(book)) {
@@ -425,11 +422,6 @@ public class HomeFragment extends Fragment {
                 book.getPublisher().equals(generalLoan.getBookPublisher());
     }
 
-    private void filterNMostPopularBooks(List<GeneralLoan> generalLoans) {
-        List<GeneralLoan> gs = new ArrayList<>();
-//        for ()
-    }
-
     private void updateMostPopularUi() {
         if (mostPopularBooks.size() == 0) {
             mostPopularRecyclerView.setVisibility(View.GONE);
@@ -437,5 +429,14 @@ public class HomeFragment extends Fragment {
         } else {
             mostPopularAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void goWhatToRead(View view) {
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, new WhatToReadFragment())
+                .addToBackStack("homeFragment")
+                .commit();
     }
 }

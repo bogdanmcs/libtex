@@ -1,4 +1,4 @@
-package com.ad_victoriam.libtex.admin.utils;
+package com.ad_victoriam.libtex.admin.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.admin.adapters.CategoryAdapter;
+import com.ad_victoriam.libtex.admin.utils.Category;
 
 import java.util.ArrayList;
 import java.util.List;

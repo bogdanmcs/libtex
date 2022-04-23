@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.user.fragments.HomeFragment;
 import com.ad_victoriam.libtex.user.fragments.account.AccountFragment;
 import com.ad_victoriam.libtex.user.fragments.books.BooksFragment;
+import com.ad_victoriam.libtex.user.fragments.home.HomeFragment;
 import com.ad_victoriam.libtex.user.fragments.loans.ActiveLoansFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
