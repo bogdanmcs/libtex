@@ -1,11 +1,13 @@
 package com.ad_victoriam.libtex.user.fragments.account;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -13,8 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.user.adapters.FavouriteBooksAdapter;
+import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
+import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
+import com.ad_victoriam.libtex.user.models.LibtexLibrary;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +44,10 @@ public class FavouriteBooksFragment extends Fragment {
     private RecyclerView recyclerView;
     private FavouriteBooksAdapter favouriteBooksAdapter;
 
-    private final List<BookFav> favouriteBooks = new ArrayList<>();
+    private final List<Book> favouriteBooks = new ArrayList<>();
+
+    private String searchQueryText = "";
+    private boolean searchFilter;
 
     public FavouriteBooksFragment() {
         // Required empty public constructor
@@ -56,17 +65,16 @@ public class FavouriteBooksFragment extends Fragment {
         databaseReference = FirebaseDatabase
                 .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference();
-
         mainView = inflater.inflate(R.layout.fragment_favourite_books, container, false);
         activity = requireActivity();
 
+        searchFilter = false;
         setTopAppBar();
+        setSearchView();
         setFavouriteBooks();
 
         return mainView;
     }
-
-
 
     private void setTopAppBar() {
         MaterialToolbar topAppBar = activity.findViewById(R.id.topAppBar);
@@ -99,6 +107,7 @@ public class FavouriteBooksFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (task.isSuccessful()) {
+                            List<BookFav> favouriteBooks = new ArrayList<>();
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                 BookFav bookFav = dataSnapshot.getValue(BookFav.class);
@@ -107,11 +116,127 @@ public class FavouriteBooksFragment extends Fragment {
                                     favouriteBooks.add(bookFav);
                                 }
                             }
-                            favouriteBooksAdapter.notifyDataSetChanged();
+                            getBooks(favouriteBooks);
+
                         } else {
-                            System.out.println(task.getResult());
+                            Log.e("GET_USER_FAV_BOOKS_DB", String.valueOf(task.getException()));
                         }
                     }
+
+                    private void getBooks(List<BookFav> favouriteBooks) {
+                        databaseReference
+                                .child(activity.getString(R.string.n_books))
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (task.isSuccessful()) {
+
+                                            List<LibtexLibrary> libraries = new ArrayList<>();
+                                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+
+                                                LibtexLibrary libtexLibrary = new LibtexLibrary();
+                                                libtexLibrary.setUid(dataSnapshot.getKey());
+
+                                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+
+                                                    Book book = dataSnapshot1.getValue(Book.class);
+
+                                                    if (book != null &&
+                                                        isBookInFavourites(favouriteBooks, book)) {
+
+                                                        book.setUid(dataSnapshot1.getKey());
+                                                        libtexLibrary.addBook(book);
+                                                    }
+                                                }
+                                                libraries.add(libtexLibrary);
+                                            }
+                                            setBooks(libraries);
+
+                                        } else {
+                                            Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
+                                        }
+                                    }
+                                });
+                    }
+
+                    private boolean isBookInFavourites(List<BookFav> favouriteBooks, Book book) {
+                        for (BookFav bookFav: favouriteBooks) {
+                            if (bookFav.isSame(book)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+
+                    private void setBooks(List<LibtexLibrary> libraries) {
+                        for (LibtexLibrary library: libraries) {
+                            for (Book book: library.getBooks()) {
+                                if (!isDuplicate(book)) {
+                                    favouriteBooks.add(book);
+                                    if (!searchFilter) {
+                                        favouriteBooksAdapter.notifyItemInserted(favouriteBooks.size() - 1);
+                                    } else {
+                                        executeSearchQueryFilter(searchQueryText);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    private boolean isDuplicate(Book book) {
+                        for (Book b: favouriteBooks) {
+                            if (b.isSame(book)) {
+                                // if the new duplicated book is in stock (and the original one isn't),
+                                // then replace it - stock status should always try to be positive
+                                if (b.getAvailableQuantity() == 0 && book.getAvailableQuantity() > 0) {
+                                    b.setUniqueDetails(book);
+                                }
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
                 });
+    }
+
+    private void setSearchView() {
+        SearchView searchView = mainView.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                executeSearchQueryFilter(newText);
+                return true;
+            }
+        });
+    }
+
+    private void executeSearchQueryFilter(String newText) {
+        searchQueryText = newText;
+        List<Book> filteredFavouriteBooks = new ArrayList<>();
+
+        if (newText.isEmpty()) {
+            searchFilter = false;
+            filteredFavouriteBooks = favouriteBooks;
+        } else {
+            searchFilter = true;
+            for (Book book: favouriteBooks) {
+                if (isNewTextSubstringOfBookDetails(book, newText)) {
+                    filteredFavouriteBooks.add(book);
+                }
+            }
+        }
+        favouriteBooksAdapter = new FavouriteBooksAdapter(activity, filteredFavouriteBooks);
+        recyclerView.setAdapter(favouriteBooksAdapter);
+    }
+
+    private boolean isNewTextSubstringOfBookDetails(Book book, String newText) {
+        return book.getTitle().toLowerCase().contains(newText.toLowerCase()) ||
+                book.getAuthorName().toLowerCase().contains(newText.toLowerCase());
     }
 }

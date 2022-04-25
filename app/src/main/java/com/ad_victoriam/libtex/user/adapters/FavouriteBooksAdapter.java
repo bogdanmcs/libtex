@@ -1,6 +1,7 @@
 package com.ad_victoriam.libtex.user.adapters;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.activities.BookDetailsActivity;
+import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Book;
-import com.ad_victoriam.libtex.user.models.BookFav;
 
 import java.util.List;
 
 public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAdapter.BookViewHolder> {
 
     private final FragmentActivity activity;
-    private final List<BookFav> favouriteBooks;
+    private final List<Book> favouriteBooks;
 
 
-    public FavouriteBooksAdapter(FragmentActivity activity, List<BookFav> favouriteBooks) {
+    public FavouriteBooksAdapter(FragmentActivity activity, List<Book> favouriteBooks) {
         this.activity = activity;
         this.favouriteBooks = favouriteBooks;
     }
@@ -50,14 +51,18 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
     }
 
     private void viewBookDetails(View view, int position) {
-        Book book = getBook(favouriteBooks.get(position));
-        Intent intent = new Intent(activity, BookDetailsActivity.class);
-        intent.putExtra("book", book);
-        activity.startActivity(intent);
-    }
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("book", favouriteBooks.get(position));
 
-    private Book getBook(BookFav bookFav) {
-        return null;
+        BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
+        bookDetailsFragment.setArguments(bundle);
+
+        activity
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, bookDetailsFragment)
+                .addToBackStack("booksFragment")
+                .commit();
     }
 
     @Override
