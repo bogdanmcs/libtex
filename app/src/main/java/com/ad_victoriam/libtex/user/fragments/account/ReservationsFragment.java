@@ -1,6 +1,7 @@
 package com.ad_victoriam.libtex.user.fragments.account;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
-import com.ad_victoriam.libtex.user.adapters.BooksAdapter;
+import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
-import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,9 +42,7 @@ public class ReservationsFragment extends Fragment {
     private ReservationsAdapter reservationsAdapter;
     private final List<Reservation> reservations = new ArrayList<>();
 
-    private boolean initReservations;
     private String searchQueryText = "";
-
     private boolean searchFilter;
 
     public ReservationsFragment() {
@@ -67,9 +65,7 @@ public class ReservationsFragment extends Fragment {
         mainView = inflater.inflate(R.layout.fragment_reservations, container, false);
         activity = requireActivity();
 
-        initReservations = false;
         searchFilter = false;
-
         setTopAppBar();
         setReservations();
         setSearchView();
@@ -164,19 +160,19 @@ public class ReservationsFragment extends Fragment {
                                                                             }
                                                                         }
                                                                     } else {
-                                                                        System.out.println(task2.getResult());
+                                                                        Log.e("GET_ADMINS_LOCATION_NAME_DB", String.valueOf(task2.getException()));
                                                                     }
                                                                 });
                                                     }
                                                 } else {
-                                                    System.out.println(task1.getResult());
+                                                    Log.e("GET_BOOK_BY_UID_DB", String.valueOf(task1.getException()));
                                                 }
                                             });
                                 }
                             }
                         }
                     } else {
-                        System.out.println(task.getResult());
+                        Log.e("GET_RESERVATIONS_DB", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -214,7 +210,7 @@ public class ReservationsFragment extends Fragment {
         }
         reservationsAdapter = new ReservationsAdapter(activity, filteredReservations);
         recyclerView.setAdapter(reservationsAdapter);
-        reservationsAdapter.notifyDataSetChanged();
+//        reservationsAdapter.notifyDataSetChanged();
     }
 
     private boolean isNewTextSubstringOfReservationDetails(Reservation reservation, String newText) {
@@ -224,12 +220,4 @@ public class ReservationsFragment extends Fragment {
                 reservation.getEndDate().toLowerCase().contains(newText.toLowerCase()) ||
                 reservation.getStatus().toString().toLowerCase().contains(newText.toLowerCase());
     }
-
-//    private void doPostDataOperations() {
-//        initReservations = true;
-//        if (!searchQueryText.isEmpty()) {
-//            executeSearchQueryFilter(searchQueryText);
-//        }
-//        reservationsAdapter.notifyDataSetChanged();
-//    }
 }
