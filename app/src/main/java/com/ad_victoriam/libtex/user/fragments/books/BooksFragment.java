@@ -108,7 +108,6 @@ public class BooksFragment extends Fragment {
             @Override
             public void onRefresh() {
                 getLibrariesAndBooks();
-
             }
         });
     }
@@ -176,13 +175,11 @@ public class BooksFragment extends Fragment {
                                         libtexLibrary.addBook(book);
                                     }
                                 }
-
                                 libraries.add(libtexLibrary);
                             }
                             setBooks();
 
                         } else {
-                            System.out.println(task.getResult());
                             Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
                         }
                     }
