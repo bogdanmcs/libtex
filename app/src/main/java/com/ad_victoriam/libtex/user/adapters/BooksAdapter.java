@@ -21,7 +21,7 @@ import java.util.List;
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
     private final FragmentActivity activity;
-    private final List<Book> books;
+    private List<Book> books;
 
     public BooksAdapter(FragmentActivity activity, List<Book> books) {
         this.activity = activity;
@@ -62,6 +62,10 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     @Override
     public int getItemCount() {
         return books.size();
+    }
+
+    public void setBooks(List<Book> filteredBooks) {
+        this.books = filteredBooks;
     }
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
