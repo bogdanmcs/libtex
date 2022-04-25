@@ -45,6 +45,8 @@ public class ReservationsFragment extends Fragment {
     private boolean initReservations;
     private String searchQueryText = "";
 
+    private boolean searchFilter;
+
     public ReservationsFragment() {
         // Required empty public constructor
     }
@@ -66,6 +68,8 @@ public class ReservationsFragment extends Fragment {
         activity = requireActivity();
 
         initReservations = false;
+        searchFilter = false;
+
         setTopAppBar();
         setReservations();
         setSearchView();
@@ -153,7 +157,11 @@ public class ReservationsFragment extends Fragment {
                                                                             mainView.findViewById(R.id.tNoReservations).setVisibility(View.INVISIBLE);
 
                                                                             reservations.add(reservation);
-                                                                            reservationsAdapter.notifyItemInserted(reservations.size() - 1);
+                                                                            if (!searchFilter) {
+                                                                                reservationsAdapter.notifyItemInserted(reservations.size() - 1);
+                                                                            } else {
+                                                                                executeSearchQueryFilter(searchQueryText);
+                                                                            }
                                                                         }
                                                                     } else {
                                                                         System.out.println(task2.getResult());
@@ -166,7 +174,6 @@ public class ReservationsFragment extends Fragment {
                                             });
                                 }
                             }
-                            doPostDataOperations();
                         }
                     } else {
                         System.out.println(task.getResult());
@@ -185,7 +192,6 @@ public class ReservationsFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 executeSearchQueryFilter(newText);
-                reservationsAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -193,17 +199,22 @@ public class ReservationsFragment extends Fragment {
 
     private void executeSearchQueryFilter(String newText) {
         searchQueryText = newText;
-        if (initReservations) {
-            List<Reservation> filteredReservations = new ArrayList<>();
+        List<Reservation> filteredReservations = new ArrayList<>();
 
+        if (newText.isEmpty()) {
+            searchFilter = false;
+            filteredReservations = reservations;
+        } else {
+            searchFilter = true;
             for (Reservation reservation: reservations) {
                 if (isNewTextSubstringOfReservationDetails(reservation, newText)) {
                     filteredReservations.add(reservation);
                 }
             }
-            reservationsAdapter = new ReservationsAdapter(activity, filteredReservations);
-            recyclerView.setAdapter(reservationsAdapter);
         }
+        reservationsAdapter = new ReservationsAdapter(activity, filteredReservations);
+        recyclerView.setAdapter(reservationsAdapter);
+        reservationsAdapter.notifyDataSetChanged();
     }
 
     private boolean isNewTextSubstringOfReservationDetails(Reservation reservation, String newText) {
@@ -214,11 +225,11 @@ public class ReservationsFragment extends Fragment {
                 reservation.getStatus().toString().toLowerCase().contains(newText.toLowerCase());
     }
 
-    private void doPostDataOperations() {
-        initReservations = true;
-        if (!searchQueryText.isEmpty()) {
-            executeSearchQueryFilter(searchQueryText);
-        }
-        reservationsAdapter.notifyDataSetChanged();
-    }
+//    private void doPostDataOperations() {
+//        initReservations = true;
+//        if (!searchQueryText.isEmpty()) {
+//            executeSearchQueryFilter(searchQueryText);
+//        }
+//        reservationsAdapter.notifyDataSetChanged();
+//    }
 }
