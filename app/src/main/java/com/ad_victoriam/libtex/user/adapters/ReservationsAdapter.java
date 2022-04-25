@@ -92,6 +92,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
         } else if (reservation.getStatus() == ReservationStatus.APPROVED) {
             holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_flag_circle_50));
             holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_approved));
+            holder.bCancel.setVisibility(View.VISIBLE);
             holder.bCancel.setOnClickListener(view -> confirmReservationCancellation(view, reservation, holder));
         }
         holder.bViewBookDetails.setOnClickListener(view -> viewBookDetails(reservation));
@@ -164,6 +165,7 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
 
+                                        reservation.setStatus(ReservationStatus.CANCELLED);
                                         holder.iReservationStatus.setImageDrawable(ContextCompat.getDrawable(activity, R.drawable.ic_baseline_cancel_50));
                                         holder.tReservationStatus.setText(activity.getString(R.string.reservation_status_cancelled));
                                         holder.bCancel.setVisibility(View.INVISIBLE);
@@ -203,9 +205,8 @@ public class ReservationsAdapter extends RecyclerView.Adapter<ReservationsAdapte
                                     .addToBackStack("reservationsFragment")
                                     .commit();
                         }
-
                     } else {
-                        System.out.println(task.getResult());
+                        Log.e("GET_BOOK_BY_UID_DB", String.valueOf(task.getException()));
                     }
                 });
     }
