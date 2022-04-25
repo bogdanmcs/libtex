@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.user.adapters.BooksAdapter;
 import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.common.models.Reservation;
@@ -36,9 +38,12 @@ public class ReservationsFragment extends Fragment {
     private FragmentActivity activity;
 
     private RecyclerView recyclerView;
-    private ReservationsAdapter reservationsAdapter;
 
+    private ReservationsAdapter reservationsAdapter;
     private final List<Reservation> reservations = new ArrayList<>();
+
+    private boolean initReservations;
+    private String searchQueryText = "";
 
     public ReservationsFragment() {
         // Required empty public constructor
@@ -60,8 +65,10 @@ public class ReservationsFragment extends Fragment {
         mainView = inflater.inflate(R.layout.fragment_reservations, container, false);
         activity = requireActivity();
 
+        initReservations = false;
         setTopAppBar();
         setReservations();
+        setSearchView();
 
         return mainView;
     }
@@ -159,10 +166,59 @@ public class ReservationsFragment extends Fragment {
                                             });
                                 }
                             }
+                            doPostDataOperations();
                         }
                     } else {
                         System.out.println(task.getResult());
                     }
                 });
+    }
+
+    private void setSearchView() {
+        SearchView searchView = mainView.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                executeSearchQueryFilter(newText);
+                reservationsAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+    }
+
+    private void executeSearchQueryFilter(String newText) {
+        searchQueryText = newText;
+        if (initReservations) {
+            List<Reservation> filteredReservations = new ArrayList<>();
+
+            for (Reservation reservation: reservations) {
+                if (isNewTextSubstringOfReservationDetails(reservation, newText)) {
+                    filteredReservations.add(reservation);
+                }
+            }
+            reservationsAdapter = new ReservationsAdapter(activity, filteredReservations);
+            recyclerView.setAdapter(reservationsAdapter);
+        }
+    }
+
+    private boolean isNewTextSubstringOfReservationDetails(Reservation reservation, String newText) {
+        return reservation.getBook().getTitle().toLowerCase().contains(newText.toLowerCase()) ||
+                reservation.getBook().getAuthorName().toLowerCase().contains(newText.toLowerCase()) ||
+                reservation.getLocationName().toLowerCase().contains(newText.toLowerCase()) ||
+                reservation.getEndDate().toLowerCase().contains(newText.toLowerCase()) ||
+                reservation.getStatus().toString().toLowerCase().contains(newText.toLowerCase());
+    }
+
+    private void doPostDataOperations() {
+        initReservations = true;
+        if (!searchQueryText.isEmpty()) {
+            executeSearchQueryFilter(searchQueryText);
+        }
+        reservationsAdapter.notifyDataSetChanged();
     }
 }
