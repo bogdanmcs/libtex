@@ -2,12 +2,14 @@ package com.ad_victoriam.libtex.user.fragments.loans;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.user.adapters.ActiveLoansAdapter;
+import com.ad_victoriam.libtex.user.adapters.ReservationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Loan;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
@@ -33,10 +37,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ActiveLoansFragment extends Fragment {
 
     private DatabaseReference databaseReference;
+    private View mainView;
+    private FragmentActivity activity;
 
     private MaterialButton bActiveLoans;
     private MaterialButton bAllLoans;
@@ -45,10 +52,10 @@ public class ActiveLoansFragment extends Fragment {
     private ActiveLoansAdapter activeLoansAdapter;
     private final List<Loan> loans = new ArrayList<>();
 
-    private View mainView;
-    private FragmentActivity activity;
-
     private ChildEventListener loansListener;
+
+    private String searchQueryText = "";
+    private boolean searchFilter;
 
     public ActiveLoansFragment() {
         // Required empty public constructor
@@ -70,10 +77,19 @@ public class ActiveLoansFragment extends Fragment {
         mainView = inflater.inflate(R.layout.fragment_active_loans, container, false);
         activity = requireActivity();
 
+        searchFilter = false;
+        findViews();
+        setSearchView();
         setTopAppBar();
         setLoans();
 
         return mainView;
+    }
+
+    private void findViews() {
+        bActiveLoans = mainView.findViewById(R.id.bActiveLoans);
+        bAllLoans = mainView.findViewById(R.id.bAllLoans);
+        recyclerView = mainView.findViewById(R.id.recyclerView);
     }
 
     private void setTopAppBar() {
@@ -83,11 +99,8 @@ public class ActiveLoansFragment extends Fragment {
     }
 
     private void setLoans() {
-        bActiveLoans = mainView.findViewById(R.id.bActiveLoans);
-        bAllLoans = mainView.findViewById(R.id.bAllLoans);
         bAllLoans.setOnClickListener(this::switchToAll);
 
-        recyclerView = mainView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         activeLoansAdapter = new ActiveLoansAdapter(activity, loans);
         recyclerView.setAdapter(activeLoansAdapter);
@@ -130,7 +143,7 @@ public class ActiveLoansFragment extends Fragment {
                                 loan.setBookLoanUid(dataSnapshot.getKey());
 
                                 databaseReference
-                                        .child("books")
+                                        .child(activity.getString(R.string.n_books))
                                         .child(libraryUid)
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -152,13 +165,17 @@ public class ActiveLoansFragment extends Fragment {
                                                                 if (!loans.contains(loan)) {
                                                                     loans.add(loan);
                                                                 }
-                                                                activeLoansAdapter.notifyItemInserted(loans.size() - 1);
+                                                                if (!searchFilter) {
+                                                                    activeLoansAdapter.notifyItemInserted(loans.size() - 1);
+                                                                } else {
+                                                                    executeSearchQueryFilter(searchQueryText);
+                                                                }
                                                                 break;
                                                             }
                                                         }
                                                     }
                                                 } else {
-                                                    System.out.println(task.getResult().getValue());
+                                                    Log.e("GET_BOOKS_BY_LIBRARY_UID", String.valueOf(task.getException()));
                                                 }
                                             }
                                         });
@@ -185,10 +202,14 @@ public class ActiveLoansFragment extends Fragment {
                                         break;
                                     }
                                 }
-                                if (indexOfChangedLoan != -1) {
-                                    activeLoansAdapter.notifyItemChanged(indexOfChangedLoan);
+                                if (!searchFilter) {
+                                    if (indexOfChangedLoan != -1) {
+                                        activeLoansAdapter.notifyItemChanged(indexOfChangedLoan);
+                                    } else {
+                                        activeLoansAdapter.notifyDataSetChanged();
+                                    }
                                 } else {
-                                    activeLoansAdapter.notifyDataSetChanged();
+                                    executeSearchQueryFilter(searchQueryText);
                                 }
                             }
                         }
@@ -232,6 +253,49 @@ public class ActiveLoansFragment extends Fragment {
                         return isAdded() & activity != null;
                     }
                 });
+    }
+
+    private void setSearchView() {
+        SearchView searchView = mainView.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                executeSearchQueryFilter(newText);
+                return true;
+            }
+        });
+    }
+
+    private void executeSearchQueryFilter(String newText) {
+        searchQueryText = newText;
+        List<Loan> filteredLoans = new ArrayList<>();
+
+        if (newText.isEmpty()) {
+            searchFilter = false;
+            filteredLoans = loans;
+        } else {
+            searchFilter = true;
+            for (Loan loan: loans) {
+                if (isNewTextSubstringOfLoanDetails(loan, newText)) {
+                    filteredLoans.add(loan);
+                }
+            }
+        }
+        activeLoansAdapter = new ActiveLoansAdapter(activity, filteredLoans);
+        recyclerView.setAdapter(activeLoansAdapter);
+    }
+
+    private boolean isNewTextSubstringOfLoanDetails(Loan loan, String newText) {
+        return loan.getBook().getTitle().toLowerCase().contains(newText.toLowerCase()) ||
+                loan.getBook().getAuthorName().toLowerCase().contains(newText.toLowerCase()) ||
+                loan.getBook().getPublisher().toLowerCase().contains(newText.toLowerCase()) ||
+                loan.getLoanTimestamp().toLowerCase().contains(newText.toLowerCase()) ||
+                loan.getDeadlineTimestamp().toLowerCase().contains(newText.toLowerCase());
     }
 
     @Override
