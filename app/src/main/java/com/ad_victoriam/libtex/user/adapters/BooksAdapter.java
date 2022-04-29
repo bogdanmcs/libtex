@@ -15,17 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Book;
+import com.ad_victoriam.libtex.user.models.Rating;
 
 import java.util.List;
+import java.util.Map;
+
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
     private final FragmentActivity activity;
     private List<Book> books;
+    private final Map<Book, Double> bookRatings;
 
-    public BooksAdapter(FragmentActivity activity, List<Book> books) {
+    public BooksAdapter(FragmentActivity activity, List<Book> books, Map<Book, Double> bookRatings) {
         this.activity = activity;
         this.books = books;
+        this.bookRatings = bookRatings;
     }
 
 
@@ -38,13 +44,26 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
     @Override
     public void onBindViewHolder(@NonNull BooksAdapter.BookViewHolder holder, int position) {
-        holder.constraintLayout.setOnClickListener(view -> viewDetails(view, position));
-        holder.tBookTitle.setText(books.get(position).getTitle());
-        String text = "by " + books.get(position).getAuthorName();
-        holder.tBookAuthorName.setText(text);
-        holder.tBookPublisher.setText(books.get(position).getPublisher());
+        Book book = books.get(position);
 
-        if (books.get(position).getAvailableQuantity() > 0) {
+        Double rating;
+        if (bookRatings.containsKey(book) &&
+            bookRatings.get(book) != null) {
+
+            rating = bookRatings.get(book);
+            holder.ratingBar.setProgress((int) (rating * 2));
+        } else {
+            rating = 0.0;
+        }
+
+        Double finalRating = rating;
+        holder.constraintLayout.setOnClickListener(view -> viewDetails(book, finalRating));
+        holder.tBookTitle.setText(book.getTitle());
+        String text = "by " + book.getAuthorName();
+        holder.tBookAuthorName.setText(text);
+        holder.tBookPublisher.setText(book.getPublisher());
+
+        if (book.getAvailableQuantity() > 0) {
             holder.tStockStatus.setText(activity.getString(R.string.in_stock));
             int color = ContextCompat.getColor(activity, R.color.green);
             holder.tStockStatus.setTextColor(color);
@@ -52,10 +71,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             holder.tStockStatus.setText(activity.getString(R.string.out_of_stock));
             int color = ContextCompat.getColor(activity, R.color.red);
             holder.tStockStatus.setTextColor(color);
-        }
-
-        if (position == books.size() - 1) {
-            holder.div.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -75,7 +90,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         TextView tBookAuthorName;
         TextView tBookPublisher;
         TextView tStockStatus;
-        View div;
+        MaterialRatingBar ratingBar;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,16 +99,17 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
             tStockStatus = itemView.findViewById(R.id.tStockStatus);
-            div = itemView.findViewById(R.id.div);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
         }
     }
 
-    private void viewDetails(View view, int position) {
-        Bundle book = new Bundle();
-        book.putParcelable("book", books.get(position));
+    private void viewDetails(Book book, Double rating) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("book", book);
+        bundle.putDouble("rating", rating);
 
         BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
-        bookDetailsFragment.setArguments(book);
+        bookDetailsFragment.setArguments(bundle);
 
         activity
                 .getSupportFragmentManager()

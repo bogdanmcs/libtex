@@ -48,16 +48,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 public class BookDetailsFragment extends Fragment {
 
-    FirebaseUser currentUser;
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
+    private View mainView;
+    private FragmentActivity activity;
 
     private Book book;
-
-    private View mainView;
-
-    private FragmentActivity activity;
+    private Double rating;
 
     private TextView tTitle;
     private TextView tAuthor;
@@ -68,6 +69,7 @@ public class BookDetailsFragment extends Fragment {
     private TextView tLocations;
     private TextView tLocationsOutOfStock;
     private TextView tStockStatus;
+    private MaterialRatingBar ratingBar;
     private MaterialButton bReserve;
 
     private boolean isFav = false;
@@ -89,6 +91,7 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             book = getArguments().getParcelable("book");
+            rating = getArguments().getDouble("rating");
         }
     }
 
@@ -122,6 +125,7 @@ public class BookDetailsFragment extends Fragment {
         tLocations = mainView.findViewById(R.id.tLocations);
         tLocationsOutOfStock = mainView.findViewById(R.id.tLocationsOutOfStock);
         tStockStatus = mainView.findViewById(R.id.tStockStatus);
+        ratingBar = mainView.findViewById(R.id.ratingBar);
         bReserve = mainView.findViewById(R.id.bReserve);
         bReserve.setOnClickListener(this::reserveBookPickLibrary);
     }
@@ -236,6 +240,7 @@ public class BookDetailsFragment extends Fragment {
                 int color = ContextCompat.getColor(activity, R.color.red);
                 tStockStatus.setTextColor(color);
             }
+            ratingBar.setProgress((int) (rating * 2));
         }
     }
 
@@ -540,7 +545,7 @@ public class BookDetailsFragment extends Fragment {
                             }
                         }
                     } else {
-                        System.out.println(task.getResult());
+                        Log.e("GET_USERS_FAV_BOOK_BY_UID", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -570,7 +575,7 @@ public class BookDetailsFragment extends Fragment {
                                     libraryNames.put(dataSnapshot.getKey(), libraryName);
                                 }
                             } else {
-                                System.out.println(task.getResult());
+                                Log.e("GET_ADMINS_DB", String.valueOf(task.getException()));
                             }
                         }
                     });
@@ -604,7 +609,7 @@ public class BookDetailsFragment extends Fragment {
                                 setLocations(libraries);
                                 setDetails();
                             } else {
-                                System.out.println(task.getResult());
+                                Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
                             }
                         }
                     });

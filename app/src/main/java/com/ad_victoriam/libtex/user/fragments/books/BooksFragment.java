@@ -18,6 +18,7 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.adapters.BooksAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
+import com.ad_victoriam.libtex.user.models.Rating;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class BooksFragment extends Fragment {
@@ -46,6 +46,8 @@ public class BooksFragment extends Fragment {
 
     private final List<LibtexLibrary> libraries = new ArrayList<>();
     private final List<Book> books = new ArrayList<>();
+    private final List<Rating> ratings = new ArrayList<>();
+    private final Map<Book, Double> bookRatings = new HashMap<>();
     private BooksAdapter booksAdapter;
 
     private boolean initBooks;
@@ -77,7 +79,7 @@ public class BooksFragment extends Fragment {
         setSearchView();
         setRecyclerView();
         setSwipeRefreshLayout();
-        getLibrariesAndBooks();
+        getRatings();
 
         return mainView;
     }
@@ -99,7 +101,7 @@ public class BooksFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        booksAdapter = new BooksAdapter(activity, books);
+        booksAdapter = new BooksAdapter(activity, books, bookRatings);
         recyclerView.setAdapter(booksAdapter);
     }
 
@@ -107,7 +109,7 @@ public class BooksFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getLibrariesAndBooks();
+                getRatings();
             }
         });
     }
@@ -138,7 +140,7 @@ public class BooksFragment extends Fragment {
                     filteredBooks.add(book);
                 }
             }
-            booksAdapter = new BooksAdapter(activity, filteredBooks);
+            booksAdapter = new BooksAdapter(activity, filteredBooks, bookRatings);
             recyclerView.setAdapter(booksAdapter);
         }
     }
@@ -146,6 +148,30 @@ public class BooksFragment extends Fragment {
     private boolean isNewTextSubstringOfBookDetails(Book book, String newText) {
         return book.getTitle().toLowerCase().contains(newText.toLowerCase()) ||
                 book.getAuthorName().toLowerCase().contains(newText.toLowerCase());
+    }
+
+    private void getRatings() {
+        ratings.clear();
+
+        databaseReference
+                .child(activity.getString(R.string.n_ratings))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+
+                            Rating rating = dataSnapshot.getValue(Rating.class);
+
+                            if (rating != null) {
+                                ratings.add(rating);
+                            }
+                        }
+                        getLibrariesAndBooks();
+
+                    } else {
+                        Log.e("GET_RATINGS_DB", String.valueOf(task.getException()));
+                    }
+                });
     }
 
     private void getLibrariesAndBooks() {
@@ -191,6 +217,12 @@ public class BooksFragment extends Fragment {
             for (Book book: library.getBooks()) {
                 if (!isDuplicate(book)) {
                     books.add(book);
+//                    booksAdapter.notifyItemInserted(books.size() - 1);
+                }
+                for (Rating rating: ratings) {
+                    if (rating.isBook(book)) {
+                        bookRatings.put(book, rating.getRating());
+                    }
                 }
             }
         }
