@@ -18,7 +18,7 @@ import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.adapters.BooksAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
-import com.ad_victoriam.libtex.user.models.Rating;
+import com.ad_victoriam.libtex.user.models.Review;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,8 +46,8 @@ public class BooksFragment extends Fragment {
 
     private final List<LibtexLibrary> libraries = new ArrayList<>();
     private final List<Book> books = new ArrayList<>();
-    private final List<Rating> ratings = new ArrayList<>();
-    private final Map<Book, Double> bookRatings = new HashMap<>();
+    private final List<Review> reviews = new ArrayList<>();
+    private final Map<Book, Double> bookReviews = new HashMap<>();
     private BooksAdapter booksAdapter;
 
     private boolean initBooks;
@@ -101,7 +101,7 @@ public class BooksFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        booksAdapter = new BooksAdapter(activity, books, bookRatings);
+        booksAdapter = new BooksAdapter(activity, books, reviews);
         recyclerView.setAdapter(booksAdapter);
     }
 
@@ -140,7 +140,7 @@ public class BooksFragment extends Fragment {
                     filteredBooks.add(book);
                 }
             }
-            booksAdapter = new BooksAdapter(activity, filteredBooks, bookRatings);
+            booksAdapter = new BooksAdapter(activity, filteredBooks, reviews);
             recyclerView.setAdapter(booksAdapter);
         }
     }
@@ -151,19 +151,19 @@ public class BooksFragment extends Fragment {
     }
 
     private void getRatings() {
-        ratings.clear();
+        reviews.clear();
 
         databaseReference
-                .child(activity.getString(R.string.n_ratings))
+                .child(activity.getString(R.string.n_reviews))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
-                            Rating rating = dataSnapshot.getValue(Rating.class);
+                            Review review = dataSnapshot.getValue(Review.class);
 
-                            if (rating != null) {
-                                ratings.add(rating);
+                            if (review != null) {
+                                reviews.add(review);
                             }
                         }
                         getLibrariesAndBooks();
@@ -219,11 +219,15 @@ public class BooksFragment extends Fragment {
                     books.add(book);
 //                    booksAdapter.notifyItemInserted(books.size() - 1);
                 }
-                for (Rating rating: ratings) {
-                    if (rating.isBook(book)) {
-                        bookRatings.put(book, rating.getRating());
-                    }
-                }
+//                for (Review review: reviews) {
+//                    if (review.isBook(book)) {
+//                        if (bookReviews.containsKey(book)) {
+//                            // ???????????????????????
+//                        }
+//                        bookReviews.get(book);
+//                        bookReviews.put(book, review.getRating());
+//                    }
+//                }
             }
         }
         doPostDataOperations();

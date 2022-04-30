@@ -211,30 +211,34 @@ public class HomeFragment extends Fragment {
                 .sorted(Comparator.comparing(List::size))
                 .collect(Collectors.toList());
 
-        List<String> primaryCategory = mostPreferredCategories.remove(0);
+        if (!mostPreferredCategories.isEmpty()) {
+            List<String> primaryCategory = mostPreferredCategories.remove(0);
 
-        List<Book> toRemove = new ArrayList<>();
-        for (Book book: books) {
+            List<Book> toRemove = new ArrayList<>();
+            for (Book book: books) {
 
-            boolean isRecommendable = false;
+                boolean isRecommendable = false;
 
-            if (mostPreferredCategories.size() == 0) {
-                if (book.getChosenCategories().containsAll(primaryCategory)) {
-                    isRecommendable = true;
-                }
-            } else {
-                for (List<String> categories: mostPreferredCategories) {
-                    if (book.getChosenCategories().containsAll(categories)) {
+                if (mostPreferredCategories.size() == 0) {
+                    if (book.getChosenCategories().containsAll(primaryCategory)) {
                         isRecommendable = true;
-                        break;
+                    }
+                } else {
+                    for (List<String> categories: mostPreferredCategories) {
+                        if (book.getChosenCategories().containsAll(categories)) {
+                            isRecommendable = true;
+                            break;
+                        }
                     }
                 }
+                if (!isRecommendable) {
+                    toRemove.add(book);
+                }
             }
-            if (!isRecommendable) {
-                toRemove.add(book);
-            }
+            books.removeAll(toRemove);
+        } else {
+            recommendedBooks.clear();
         }
-        books.removeAll(toRemove);
         updateRecommendationsUi(recommendedBooks);
     }
 
@@ -327,8 +331,8 @@ public class HomeFragment extends Fragment {
     private void updateRecommendationsUi(List<Book> books) {
         if (books.size() == 0) {
             recommendationsRecyclerView.setVisibility(View.GONE);
-            tNoRecommendations.setVisibility(View.VISIBLE);
         } else {
+            tNoRecommendations.setVisibility(View.GONE);
             recommendationsAdapter.notifyDataSetChanged();
         }
     }
@@ -425,8 +429,8 @@ public class HomeFragment extends Fragment {
     private void updateMostPopularUi() {
         if (mostPopularBooks.size() == 0) {
             mostPopularRecyclerView.setVisibility(View.GONE);
-            tNoMostPopular.setVisibility(View.VISIBLE);
         } else {
+            tNoMostPopular.setVisibility(View.GONE);
             mostPopularAdapter.notifyDataSetChanged();
         }
     }

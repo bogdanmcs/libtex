@@ -19,20 +19,27 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ad_victoriam.libtex.R;
+import com.ad_victoriam.libtex.admin.adapters.UserAdapter;
+import com.ad_victoriam.libtex.common.models.Reservation;
+import com.ad_victoriam.libtex.common.utils.ReservationStatus;
 import com.ad_victoriam.libtex.user.activities.ReservationDetailsActivity;
+import com.ad_victoriam.libtex.user.adapters.ReviewsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.BookFav;
 import com.ad_victoriam.libtex.user.models.LibtexLibrary;
-import com.ad_victoriam.libtex.common.models.Reservation;
-import com.ad_victoriam.libtex.common.utils.ReservationStatus;
+import com.ad_victoriam.libtex.user.models.Loan;
+import com.ad_victoriam.libtex.user.models.Review;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +47,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 
 import java.time.LocalDateTime;
@@ -58,8 +66,8 @@ public class BookDetailsFragment extends Fragment {
     private FragmentActivity activity;
 
     private Book book;
-    private Double rating;
 
+    private MaterialRatingBar ratingBar;
     private TextView tTitle;
     private TextView tAuthor;
     private TextView tDescription;
@@ -69,8 +77,11 @@ public class BookDetailsFragment extends Fragment {
     private TextView tLocations;
     private TextView tLocationsOutOfStock;
     private TextView tStockStatus;
-    private MaterialRatingBar ratingBar;
     private MaterialButton bReserve;
+    private MaterialRatingBar ratingBarEditable;
+    private TextInputLayout layoutYourReviewDescription;
+    private MaterialButton bSaveReview;
+    private RecyclerView recyclerView;
 
     private boolean isFav = false;
     private String favKey = null;
@@ -82,6 +93,12 @@ public class BookDetailsFragment extends Fragment {
     // transaction
     private boolean isAvailable;
 
+    // reviews
+    private Review yourReview = new Review();
+    private Double rating;
+    private List<Review> reviews = new ArrayList<>();
+    private ReviewsAdapter reviewsAdapter;
+
     public BookDetailsFragment() {
         // Required empty public constructor
     }
@@ -91,7 +108,6 @@ public class BookDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             book = getArguments().getParcelable("book");
-            rating = getArguments().getDouble("rating");
         }
     }
 
@@ -111,6 +127,7 @@ public class BookDetailsFragment extends Fragment {
         setFavouriteKeyValue();
         getLibrariesAndBooks();
         setDetails();
+        getReviews();
 
         return mainView;
     }
@@ -128,8 +145,11 @@ public class BookDetailsFragment extends Fragment {
         ratingBar = mainView.findViewById(R.id.ratingBar);
         bReserve = mainView.findViewById(R.id.bReserve);
         bReserve.setOnClickListener(this::reserveBookPickLibrary);
+        ratingBarEditable = mainView.findViewById(R.id.ratingBarEditable);
+        layoutYourReviewDescription = mainView.findViewById(R.id.layoutYourReviewDescription);
+        bSaveReview = mainView.findViewById(R.id.bSaveReview);
+        bSaveReview.setOnClickListener(this::saveReview);
     }
-
 
     private void setTopAppBar() {
         if (favKey != null) {
@@ -170,7 +190,7 @@ public class BookDetailsFragment extends Fragment {
                                             Snackbar.make(mainView, "Book removed from favourites", Snackbar.LENGTH_SHORT).show();
 
                                         } else {
-                                            System.out.println(task.getResult());
+                                            Log.e("REMOVE_USER_FAV_BOOK_BY_UID_DB", String.valueOf(task.getException()));
                                         }
                                     });
                         }
@@ -196,7 +216,7 @@ public class BookDetailsFragment extends Fragment {
                                         Snackbar.make(mainView, "Book added to favourites", Snackbar.LENGTH_SHORT).show();
 
                                     } else {
-                                        System.out.println(task.getResult());
+                                        Log.e("SET_USER_FAV_BOOK_BY_UID_DB", String.valueOf(task.getException()));
                                     }
                                 });
                     }
@@ -240,7 +260,6 @@ public class BookDetailsFragment extends Fragment {
                 int color = ContextCompat.getColor(activity, R.color.red);
                 tStockStatus.setTextColor(color);
             }
-            ratingBar.setProgress((int) (rating * 2));
         }
     }
 
@@ -278,7 +297,7 @@ public class BookDetailsFragment extends Fragment {
                                 }
                             }
                         } else {
-                            System.out.println(task.getResult());
+                            Log.e("GET_RESERVATIONS_DB", String.valueOf(task.getException()));
                         }
                     }
 
@@ -446,16 +465,14 @@ public class BookDetailsFragment extends Fragment {
                                                    DataSnapshot currentData) {
                                 // Transaction completed
                                 if (committed) {
-
                                     if (isAvailable) {
                                         setUserReservation(reservation);
                                     } else {
                                         Snackbar.make(activity, mainView, activity.getString(R.string.out_of_stock), Snackbar.LENGTH_SHORT).show();
                                     }
-
                                 } else {
                                     Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
-                                    Log.e("BOOK_AVAILABILITY_UPDATE_ERROR", "postTransaction:onComplete:" + databaseError);
+                                    Log.e("BOOK_AVAILABILITY_UPDATE_DB", "postTransaction:onComplete:" + databaseError);
                                 }
                             }
                         });
@@ -473,7 +490,7 @@ public class BookDetailsFragment extends Fragment {
                                 setDetails();
                                 Snackbar.make(activity, mainView, activity.getString(R.string.reservation_successful), Snackbar.LENGTH_SHORT).show();
                             } else {
-                                Log.e("RESERVATION_CREATE_ERROR", String.valueOf(task.getResult()));
+                                Log.e("RESERVATION_CREATE_DB", String.valueOf(task.getResult()));
                                 Snackbar.make(activity, mainView, activity.getString(R.string.reservation_unsuccessful), Snackbar.LENGTH_SHORT).show();
                             }
                         });
@@ -545,75 +562,72 @@ public class BookDetailsFragment extends Fragment {
                             }
                         }
                     } else {
-                        Log.e("GET_USERS_FAV_BOOK_BY_UID", String.valueOf(task.getException()));
+                        Log.e("GET_USERS_FAV_BOOK_BY_UID_DB", String.valueOf(task.getException()));
                     }
                 });
     }
 
     private void getLibrariesAndBooks() {
-        if (book.getLocations().isEmpty()) {
+        List<LibtexLibrary> libraries = new ArrayList<>();
+        Map<String, String> libraryNames = new HashMap<>();
 
-            List<LibtexLibrary> libraries = new ArrayList<>();
-            Map<String, String> libraryNames = new HashMap<>();
+        // get libraries details
+        databaseReference
+                .child(activity.getString(R.string.n_admins))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
 
-            // get libraries details
-            databaseReference
-                    .child(activity.getString(R.string.n_admins))
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
-                            if (task.isSuccessful()) {
-                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                                String libraryName = dataSnapshot
+                                        .child(activity.getString(R.string.n_location))
+                                        .child(activity.getString(R.string.p_location_name))
+                                        .getValue(String.class);
 
-                                    String libraryName = dataSnapshot
-                                            .child(activity.getString(R.string.n_location))
-                                            .child(activity.getString(R.string.p_location_name))
-                                            .getValue(String.class);
-
-                                    libraryNames.put(dataSnapshot.getKey(), libraryName);
-                                }
-                            } else {
-                                Log.e("GET_ADMINS_DB", String.valueOf(task.getException()));
+                                libraryNames.put(dataSnapshot.getKey(), libraryName);
                             }
-                        }
-                    });
+                            // get all books
+                            databaseReference
+                                    .child(activity.getString(R.string.n_books))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                            if (task.isSuccessful()) {
 
-            // get all books
-            databaseReference
-                    .child(activity.getString(R.string.n_books))
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()) {
+                                                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
 
-                                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                                    LibtexLibrary libtexLibrary = new LibtexLibrary();
+                                                    libtexLibrary.setUid(dataSnapshot.getKey());
+                                                    libtexLibrary.setName(libraryNames.get(dataSnapshot.getKey()));
 
-                                    LibtexLibrary libtexLibrary = new LibtexLibrary();
-                                    libtexLibrary.setUid(dataSnapshot.getKey());
-                                    libtexLibrary.setName(libraryNames.get(dataSnapshot.getKey()));
+                                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
 
-                                    for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+                                                        Book book = dataSnapshot1.getValue(Book.class);
 
-                                        Book book = dataSnapshot1.getValue(Book.class);
-
-                                        if (book != null) {
-                                            book.setUid(dataSnapshot1.getKey());
-                                            libtexLibrary.addBook(book);
+                                                        if (book != null) {
+                                                            book.setUid(dataSnapshot1.getKey());
+                                                            libtexLibrary.addBook(book);
+                                                        }
+                                                    }
+                                                    libraries.add(libtexLibrary);
+                                                }
+                                                setLocations(libraries);
+                                                setDetails();
+                                            } else {
+                                                Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
+                                            }
                                         }
-                                    }
-                                    libraries.add(libtexLibrary);
-                                }
-                                setLocations(libraries);
-                                setDetails();
-                            } else {
-                                Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
-                            }
+                                    });
+
+                        } else {
+                            Log.e("GET_ADMINS_DB", String.valueOf(task.getException()));
                         }
-                    });
-        }
+                    }
+                });
     }
 
     private void setLocations(List<LibtexLibrary> libraries) {
@@ -629,6 +643,202 @@ public class BookDetailsFragment extends Fragment {
                 }
             }
         }
+        setYourRating();
+        getReviews();
         setReservationStatus();
+    }
+
+    private void setYourRating() {
+        databaseReference
+                .child(activity.getString(R.string.n_users))
+                .child(currentUser.getUid())
+                .child(activity.getString(R.string.n_book_loans))
+                .child(activity.getString(R.string.n_loans_history))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        boolean found = false;
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                            if (found) break;
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+
+                                Loan loan = dataSnapshot1.getValue(Loan.class);
+
+                                if (loan != null &&
+                                    book.getSameBookUids().containsValue(loan.getBookUid())) {
+
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                        TextView tInfoText = mainView.findViewById(R.id.tInfoText);
+                        if (found) {
+                            tInfoText.setVisibility(View.GONE);
+                            // check if not already reviewed
+                            Query query = databaseReference
+                                    .child(activity.getString(R.string.n_reviews))
+                                    .orderByChild(activity.getString(R.string.p_review_user_uid))
+                                    .equalTo(currentUser.getUid());
+                            query
+                                    .get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            boolean found1 = false;
+                                            for (DataSnapshot dataSnapshot: task1.getResult().getChildren()) {
+
+                                                Review review = dataSnapshot.getValue(Review.class);
+
+                                                if (review != null &&
+                                                    review.isBook(book)) {
+
+                                                    found1 = true;
+                                                    yourReview.setUid(dataSnapshot.getKey());
+                                                    yourReview.setRating(review.getRating());
+                                                    yourReview.setDescription(review.getDescription());
+                                                    break;
+                                                }
+                                            }
+                                            if (found1) {
+                                                updateSavedReview(yourReview.getRating(), yourReview.getDescription());
+                                            }
+                                        } else {
+                                            Log.e("GET_REVIEW_BY_USER_UID_DB", String.valueOf(task1.getException()));
+                                        }
+                                    });
+                        } else {
+                            tInfoText.setVisibility(View.VISIBLE);
+                            tInfoText.setText(activity.getString(R.string.loan_before_review));
+                            mainView.findViewById(R.id.yourRating).setVisibility(View.GONE);
+                            mainView.findViewById(R.id.yourDescription).setVisibility(View.GONE);
+                            ratingBarEditable.setVisibility(View.GONE);
+                            layoutYourReviewDescription.setVisibility(View.GONE);
+                            bSaveReview.setVisibility(View.GONE);
+                        }
+                    } else {
+                        Log.e("GET_USER_LOANS_HISTORY_BY_UID_DB", String.valueOf(task.getException()));
+                    }
+                });
+    }
+
+    private void updateSavedReview(double yourRating, String yourReviewDescription) {
+        ratingBarEditable.setProgress((int) (yourRating * 2));
+        layoutYourReviewDescription.getEditText().setText(yourReviewDescription);
+        for (Review review: reviews) {
+            if (review.getUserUid().equals(currentUser.getUid())) {
+                review.setRating(yourRating);
+                review.setDescription(yourReviewDescription);
+                break;
+            }
+        }
+        calculateRating();
+    }
+
+    private void saveReview(View view) {
+        String yourReviewDescription = layoutYourReviewDescription.getEditText().getText().toString();
+        double yourRating = ratingBarEditable.getRating();
+
+        Review yourReviewUpdated = new Review(
+                book.getTitle(),
+                book.getAuthorName(),
+                book.getPublisher(),
+                currentUser.getUid(),
+                yourRating,
+                yourReviewDescription
+        );
+        if (isReviewValid(yourReviewUpdated)) {
+            if (yourReview.getUid() == null || yourReview.getUid().isEmpty()) {
+                String reviewUid = databaseReference
+                        .child(activity.getString(R.string.n_reviews))
+                        .push()
+                        .getKey();
+                yourReview.setUid(reviewUid);
+                databaseReference
+                        .child(activity.getString(R.string.n_reviews))
+                        .child(yourReview.getUid())
+                        .setValue(yourReviewUpdated)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
+                                updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
+                            } else {
+                                Log.e("POST_REVIEW_DB", String.valueOf(task.getException()));
+                            }
+                        });
+            } else {
+                Map<String, Object> yourReviewUpdate =  new HashMap<>();
+                String path = activity.getString(R.string.n_reviews) + "/" + yourReview.getUid() + "/";
+                yourReviewUpdate.put(path + activity.getString(R.string.p_review_rating), yourReviewUpdated.getRating());
+                yourReviewUpdate.put(path + activity.getString(R.string.p_review_description), yourReviewUpdated.getDescription());
+                databaseReference
+                        .updateChildren(yourReviewUpdate)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
+                                updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
+                            } else {
+                                Log.e("UPDATE_REVIEW_DB", String.valueOf(task.getException()));
+                            }
+                        });
+            }
+        }
+    }
+
+    private boolean isReviewValid(Review yourReview) {
+        if (yourReview.getDescription().length() > 250) {
+            layoutYourReviewDescription.setError("Max length of characters is 250");
+            layoutYourReviewDescription.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void getReviews() {
+        reviews.clear();
+        Query query = databaseReference
+                .child(activity.getString(R.string.n_reviews))
+                .orderByChild("bookTitle")
+                .equalTo(book.getTitle());
+        query
+                .get()
+                .addOnSuccessListener(task -> {
+                    for (DataSnapshot dataSnapshot: task.getChildren()) {
+
+                        Review review = dataSnapshot.getValue(Review.class);
+
+                        if (review != null &&
+                            review.getBookAuthor().equals(book.getAuthorName()) &&
+                            review.getBookPublisher().equals(book.getPublisher())) {
+
+                            reviews.add(review);
+                        }
+                    }
+                    calculateRating();
+                    setReviews();
+                })
+                .addOnFailureListener(e -> {
+                   Log.e("GET_REVIEWS_FOR_BOOK", String.valueOf(e));
+                });
+    }
+
+    private void calculateRating() {
+        rating = 0.0;
+        for (Review review: reviews) {
+            rating += review.getRating();
+        }
+        rating /= reviews.size();
+        setRatingBarProgress();
+    }
+
+    private void setRatingBarProgress() {
+        ratingBar.setProgress((int) (rating * 2));
+    }
+
+    private void setReviews() {
+        recyclerView = mainView.findViewById(R.id.recyclerView);
+        reviewsAdapter = new ReviewsAdapter(activity, reviews);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setAdapter(reviewsAdapter);
     }
 }

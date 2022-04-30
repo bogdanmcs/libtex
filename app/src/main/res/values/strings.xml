@@ -18,7 +18,7 @@
     <string name="n_reservations">reservations</string>
     <string name="n_reservations_2">reservations2</string>
     <string name="n_general_loans">general-loans</string>
-    <string name="n_ratings">ratings</string>
+    <string name="n_reviews">reviews</string>
 
     <!-- nodes props -->
     <string name="p_location_name">name</string>
@@ -28,6 +28,9 @@
     <string name="p_book_title">bookTitle</string>
     <string name="p_counter">counter</string>
     <string name="p_rating">rating</string>
+    <string name="p_review_user_uid">userUid</string>
+    <string name="p_review_rating">rating</string>
+    <string name="p_review_description">description</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>
@@ -109,5 +112,7 @@
     <string name="no_categories_selected">No categories selected</string>
     <string name="what_to_read_not_found">We\'re sorry, but nothing seems to match your choices.</string>
     <string name="still_processing_books">Still processing books, please wait</string>
+    <string name="loan_before_review">You must loan a book before you can review it.</string>
+    <string name="no_loans">You do not have any loans.</string>
 
 </resources>

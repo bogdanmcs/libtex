@@ -15,10 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ad_victoriam.libtex.R;
 import com.ad_victoriam.libtex.user.fragments.books.BookDetailsFragment;
 import com.ad_victoriam.libtex.user.models.Book;
-import com.ad_victoriam.libtex.user.models.Rating;
+import com.ad_victoriam.libtex.user.models.Review;
 
 import java.util.List;
-import java.util.Map;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -26,14 +25,13 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
     private final FragmentActivity activity;
     private List<Book> books;
-    private final Map<Book, Double> bookRatings;
+    private List<Review> reviews;
 
-    public BooksAdapter(FragmentActivity activity, List<Book> books, Map<Book, Double> bookRatings) {
+    public BooksAdapter(FragmentActivity activity, List<Book> books, List<Review> reviews) {
         this.activity = activity;
         this.books = books;
-        this.bookRatings = bookRatings;
+        this.reviews = reviews;
     }
-
 
     @NonNull
     @Override
@@ -46,18 +44,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     public void onBindViewHolder(@NonNull BooksAdapter.BookViewHolder holder, int position) {
         Book book = books.get(position);
 
-        Double rating;
-        if (bookRatings.containsKey(book) &&
-            bookRatings.get(book) != null) {
-
-            rating = bookRatings.get(book);
-            holder.ratingBar.setProgress((int) (rating * 2));
-        } else {
-            rating = 0.0;
+        double rating = 0.0;
+        for (Review review: reviews) {
+            if (review.isBook(book)) {
+                rating += review.getRating();
+            }
         }
-
-        Double finalRating = rating;
-        holder.constraintLayout.setOnClickListener(view -> viewDetails(book, finalRating));
+        holder.ratingBar.setProgress((int) (rating * 2));
+        holder.constraintLayout.setOnClickListener(view -> viewDetails(book));
         holder.tBookTitle.setText(book.getTitle());
         String text = "by " + book.getAuthorName();
         holder.tBookAuthorName.setText(text);
@@ -103,10 +97,9 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         }
     }
 
-    private void viewDetails(Book book, Double rating) {
+    private void viewDetails(Book book) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("book", book);
-        bundle.putDouble("rating", rating);
 
         BookDetailsFragment bookDetailsFragment = new BookDetailsFragment();
         bookDetailsFragment.setArguments(bundle);
