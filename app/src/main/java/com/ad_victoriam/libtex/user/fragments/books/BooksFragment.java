@@ -219,15 +219,6 @@ public class BooksFragment extends Fragment {
                     books.add(book);
 //                    booksAdapter.notifyItemInserted(books.size() - 1);
                 }
-//                for (Review review: reviews) {
-//                    if (review.isBook(book)) {
-//                        if (bookReviews.containsKey(book)) {
-//                            // ???????????????????????
-//                        }
-//                        bookReviews.get(book);
-//                        bookReviews.put(book, review.getRating());
-//                    }
-//                }
             }
         }
         doPostDataOperations();

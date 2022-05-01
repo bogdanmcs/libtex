@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +47,14 @@ public class AllLoansFragment extends Fragment {
 
     private MaterialButton bActiveLoans;
     private MaterialButton bAllLoans;
+    private TextView tNoLoans;
+    private SearchView searchView;
     private RecyclerView recyclerView;
 
     private AllLoansAdapter allLoansAdapter;
     private final List<Loan> loans = new ArrayList<>();
 
-    private ChildEventListener loansListener;
+    private ValueEventListener loansListener;
 
     private String searchQueryText = "";
     private boolean searchFilter;
@@ -85,8 +89,10 @@ public class AllLoansFragment extends Fragment {
     }
 
     private void findViews() {
+        searchView = mainView.findViewById(R.id.searchView);
         bActiveLoans = mainView.findViewById(R.id.bActiveLoans);
         bAllLoans = mainView.findViewById(R.id.bAllLoans);
+        tNoLoans = mainView.findViewById(R.id.tNoLoans);
         recyclerView = mainView.findViewById(R.id.recyclerView);
     }
 
@@ -120,7 +126,6 @@ public class AllLoansFragment extends Fragment {
     }
 
     private void attachLoansListener() {
-        loans.clear();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         loansListener = databaseReference
@@ -128,135 +133,74 @@ public class AllLoansFragment extends Fragment {
                 .child(currentUser.getUid())
                 .child(getString(R.string.n_book_loans))
                 .child(getString(R.string.n_loans_history))
-                .addChildEventListener(new ChildEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        loans.clear();
+                        updateUi(snapshot.hasChildren());
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                             Loan loan = dataSnapshot.getValue(Loan.class);
-//                            if (!isFragmentAttached()) {
-//                                return;
-//                            }
                             // get the book
                             if (loan != null) {
                                 String libraryUid = snapshot.getKey();
                                 loan.setBookLoanUid(dataSnapshot.getKey());
 
                                 databaseReference
-                                        .child("books")
+                                        .child(activity.getString(R.string.n_books))
                                         .child(libraryUid)
                                         .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        .addOnSuccessListener(task -> {
+                                            for (DataSnapshot dataSnapshot1 : task.getChildren()) {
 
-                                                if (task.isSuccessful()) {
-                                                    for (DataSnapshot dataSnapshot1: task.getResult().getChildren()) {
+                                                Book book = dataSnapshot1.getValue(Book.class);
 
-                                                        Book book = dataSnapshot1.getValue(Book.class);
+                                                if (book != null) {
+                                                    book.setUid(dataSnapshot1.getKey());
 
-                                                        if (book != null) {
-                                                            book.setUid(dataSnapshot1.getKey());
+                                                    if (book.getUid().equals(loan.getBookUid())) {
+                                                        loan.setBook(book);
+                                                        loan.setLibraryUid(libraryUid);
 
-                                                            if (book.getUid().equals(loan.getBookUid())) {
-                                                                loan.setBook(book);
-                                                                loan.setLibraryUid(libraryUid);
-
-                                                                if (!loans.contains(loan)) {
-                                                                    loans.add(loan);
-                                                                }
-                                                                if (!searchFilter) {
-                                                                    allLoansAdapter.notifyItemInserted(loans.size() - 1);
-                                                                } else {
-                                                                    executeSearchQueryFilter(searchQueryText);
-                                                                }
-                                                                break;
-                                                            }
+                                                        if (!loans.contains(loan)) {
+                                                            loans.add(loan);
                                                         }
+                                                        if (!searchFilter) {
+                                                            allLoansAdapter.notifyItemInserted(loans.size() - 1);
+                                                        } else {
+                                                            executeSearchQueryFilter(searchQueryText);
+                                                        }
+                                                        break;
                                                     }
-                                                } else {
-                                                    Log.e("GET_BOOKS_BY_LIBRARY_UID", String.valueOf(task.getException()));
                                                 }
                                             }
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("GET_BOOKS_BY_LIBRARY_UID_DB", e.toString());
                                         });
                             }
                         }
                     }
 
                     @Override
-                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                        for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                            Loan loan = dataSnapshot.getValue(Loan.class);
-
-                            if (loan != null) {
-                                loan.setBookLoanUid(dataSnapshot.getKey());
-                                int indexOfChangedLoan = -1;
-
-                                for (Loan b: loans) {
-                                    if (b.getBookLoanUid().equals(loan.getBookLoanUid())) {
-                                        indexOfChangedLoan = loans.indexOf(b);
-                                        loan.setBook(b.getBook());
-                                        loans.set(indexOfChangedLoan, loan);
-                                        break;
-                                    }
-                                }
-                                if (!searchFilter) {
-                                    if (indexOfChangedLoan != -1) {
-                                        allLoansAdapter.notifyItemChanged(indexOfChangedLoan);
-                                    } else {
-                                        allLoansAdapter.notifyDataSetChanged();
-                                    }
-                                } else {
-                                    executeSearchQueryFilter(searchQueryText);
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-//                        BookLoan bookLoan = snapshot.getValue(BookLoan.class);
-//
-//                        if (bookLoan != null) {
-//                            bookLoan.setBookLoanUid(snapshot.getKey());
-//
-//                            int indexOfRemovedBookLoan = -1;
-//                            for (BookLoan b: bookLoans) {
-//                                if (b.getBookLoanUid().equals(bookLoan.getBookLoanUid())) {
-//                                    indexOfRemovedBookLoan = bookLoans.indexOf(b);
-//                                    bookLoans.remove(indexOfRemovedBookLoan);
-//                                }
-//                            }
-//
-//                            if (indexOfRemovedBookLoan != -1) {
-//                                bookLoanAdapter.notifyItemChanged(indexOfRemovedBookLoan);
-//                            } else {
-//                                bookLoanAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                    }
-
-                    @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.e("GET_USER_LOANS_HISTORY", error.toString());
                     }
 
-                    private boolean isFragmentAttached() {
-                        return isAdded() & activity != null;
+                    private void updateUi(boolean isData) {
+                        if (isData) {
+                            tNoLoans.setVisibility(View.INVISIBLE);
+                            searchView.setVisibility(View.VISIBLE);
+                        } else {
+                            tNoLoans.setVisibility(View.VISIBLE);
+                            searchView.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
     }
 
     private void setSearchView() {
-        SearchView searchView = mainView.findViewById(R.id.searchView);
+        searchView = mainView.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
