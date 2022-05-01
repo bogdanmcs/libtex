@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class ReservationsFragment extends Fragment {
     private FragmentActivity activity;
 
     private RecyclerView recyclerView;
+    private TextView tNoReservations;
+    private SearchView searchView;
 
     private ReservationsAdapter reservationsAdapter;
     private final List<Reservation> reservations = new ArrayList<>();
@@ -66,6 +70,7 @@ public class ReservationsFragment extends Fragment {
         activity = requireActivity();
 
         searchFilter = false;
+        findViews();
         setTopAppBar();
         setReservations();
         setSearchView();
@@ -88,6 +93,11 @@ public class ReservationsFragment extends Fragment {
         });
     }
 
+    private void findViews() {
+        tNoReservations = mainView.findViewById(R.id.tNoReservations);
+        searchView = mainView.findViewById(R.id.searchView);
+    }
+
     private void setReservations() {
         recyclerView = mainView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
@@ -97,19 +107,22 @@ public class ReservationsFragment extends Fragment {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        databaseReference
+        Query query = databaseReference
                 .child(getString(R.string.n_reservations_2))
+                .orderByChild(activity.getString(R.string.p_reservation_user_uid))
+                .equalTo(currentUser.getUid());
+
+        query
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
 
-                        Iterable<DataSnapshot> dataSnapshots = task.getResult().getChildren();
-                        long reservationsSize = StreamSupport.stream(dataSnapshots.spliterator(), false).count();
-
-                        if (reservationsSize == 0) {
+                        updateUi(task.getResult().hasChildren());
+                        if (!task.getResult().hasChildren()) {
                             mainView.findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
 
                         } else {
+                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.INVISIBLE);
                             for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
                                 Reservation reservation = dataSnapshot.getValue(Reservation.class);
@@ -150,8 +163,6 @@ public class ReservationsFragment extends Fragment {
                                                                         if (locationName != null) {
                                                                             reservation.setLocationName(locationName);
 
-                                                                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.INVISIBLE);
-
                                                                             reservations.add(reservation);
                                                                             if (!searchFilter) {
                                                                                 reservationsAdapter.notifyItemInserted(reservations.size() - 1);
@@ -177,8 +188,17 @@ public class ReservationsFragment extends Fragment {
                 });
     }
 
+    private void updateUi(boolean hasChildren) {
+        if (hasChildren) {
+            tNoReservations.setVisibility(View.INVISIBLE);
+            searchView.setVisibility(View.VISIBLE);
+        } else {
+            tNoReservations.setVisibility(View.VISIBLE);
+            searchView.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void setSearchView() {
-        SearchView searchView = mainView.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

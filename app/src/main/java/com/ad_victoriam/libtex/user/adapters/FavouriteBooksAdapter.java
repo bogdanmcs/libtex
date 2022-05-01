@@ -19,6 +19,8 @@ import com.ad_victoriam.libtex.user.models.Book;
 
 import java.util.List;
 
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAdapter.BookViewHolder> {
 
     private final FragmentActivity activity;
@@ -43,7 +45,8 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
         holder.tBookTitle.setText(favouriteBooks.get(position).getTitle());
         holder.tBookAuthorName.setText(favouriteBooks.get(position).getAuthorName());
         holder.tBookPublisher.setText(favouriteBooks.get(position).getPublisher());
-        holder.tStockStatus.setVisibility(View.INVISIBLE);
+        holder.tStockStatus.setVisibility(View.GONE);
+        holder.ratingBar.setVisibility(View.GONE);
 
         if (position == favouriteBooks.size() - 1) {
             holder.div.setVisibility(View.INVISIBLE);
@@ -77,6 +80,7 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
         TextView tBookAuthorName;
         TextView tBookPublisher;
         TextView tStockStatus;
+        MaterialRatingBar ratingBar;
         View div;
 
         public BookViewHolder(@NonNull View itemView) {
@@ -86,6 +90,7 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
             tBookAuthorName = itemView.findViewById(R.id.tBookAuthorName);
             tBookPublisher = itemView.findViewById(R.id.tBookPublisher);
             tStockStatus = itemView.findViewById(R.id.tStockStatus);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
             div = itemView.findViewById(R.id.div);
         }
     }

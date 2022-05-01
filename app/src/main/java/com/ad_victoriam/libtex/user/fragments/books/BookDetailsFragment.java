@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -81,6 +82,7 @@ public class BookDetailsFragment extends Fragment {
     private MaterialRatingBar ratingBarEditable;
     private TextInputLayout layoutYourReviewDescription;
     private MaterialButton bSaveReview;
+    private MaterialCardView cardViewNoReviews;
     private RecyclerView recyclerView;
 
     private boolean isFav = false;
@@ -149,6 +151,8 @@ public class BookDetailsFragment extends Fragment {
         layoutYourReviewDescription = mainView.findViewById(R.id.layoutYourReviewDescription);
         bSaveReview = mainView.findViewById(R.id.bSaveReview);
         bSaveReview.setOnClickListener(this::saveReview);
+        recyclerView = mainView.findViewById(R.id.recyclerView);
+        cardViewNoReviews = mainView.findViewById(R.id.cardViewNoReviews);
     }
 
     private void setTopAppBar() {
@@ -803,6 +807,7 @@ public class BookDetailsFragment extends Fragment {
         query
                 .get()
                 .addOnSuccessListener(task -> {
+                    updateUi(task.hasChildren());
                     for (DataSnapshot dataSnapshot: task.getChildren()) {
 
                         Review review = dataSnapshot.getValue(Review.class);
@@ -822,6 +827,15 @@ public class BookDetailsFragment extends Fragment {
                 });
     }
 
+    private void updateUi(boolean hasChildren) {
+        if (hasChildren) {
+            cardViewNoReviews.setVisibility(View.INVISIBLE);
+        } else {
+            recyclerView.setVisibility(View.INVISIBLE);
+            cardViewNoReviews.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void calculateRating() {
         rating = 0.0;
         for (Review review: reviews) {
@@ -836,7 +850,6 @@ public class BookDetailsFragment extends Fragment {
     }
 
     private void setReviews() {
-        recyclerView = mainView.findViewById(R.id.recyclerView);
         reviewsAdapter = new ReviewsAdapter(activity, reviews);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(reviewsAdapter);

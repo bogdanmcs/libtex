@@ -114,5 +114,7 @@
     <string name="still_processing_books">Still processing books, please wait</string>
     <string name="loan_before_review">You must loan a book before you can review it.</string>
     <string name="no_loans">You do not have any loans.</string>
+    <string name="no_fav_books">You do not have any favourite books.</string>
+    <string name="no_reviews">No reviews yet.</string>
 
 </resources>
