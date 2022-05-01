@@ -107,6 +107,10 @@ public class ActiveLoansAdapter extends RecyclerView.Adapter<ActiveLoansAdapter.
         }
     }
 
+    public void clearLoans() {
+        loans.clear();
+    }
+
     public static class LoanViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout constraintLayout;

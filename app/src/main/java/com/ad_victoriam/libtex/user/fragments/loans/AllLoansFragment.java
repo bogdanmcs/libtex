@@ -52,7 +52,7 @@ public class AllLoansFragment extends Fragment {
     private RecyclerView recyclerView;
 
     private AllLoansAdapter allLoansAdapter;
-    private final List<Loan> loans = new ArrayList<>();
+    private List<Loan> loans;
 
     private ValueEventListener loansListener;
 
@@ -106,6 +106,7 @@ public class AllLoansFragment extends Fragment {
         bActiveLoans.setOnClickListener(this::switchToActive);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        loans = new ArrayList<>();
         allLoansAdapter = new AllLoansAdapter(activity, loans);
         recyclerView.setAdapter(allLoansAdapter);
 
@@ -136,48 +137,49 @@ public class AllLoansFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        loans.clear();
                         updateUi(snapshot.hasChildren());
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        for (DataSnapshot dataSnapshot0: snapshot.getChildren()) {
+                            for (DataSnapshot dataSnapshot : dataSnapshot0.getChildren()) {
 
-                            Loan loan = dataSnapshot.getValue(Loan.class);
-                            // get the book
-                            if (loan != null) {
-                                String libraryUid = snapshot.getKey();
-                                loan.setBookLoanUid(dataSnapshot.getKey());
+                                Loan loan = dataSnapshot.getValue(Loan.class);
+                                // get the book
+                                if (loan != null) {
+                                    String libraryUid = dataSnapshot0.getKey();
+                                    loan.setBookLoanUid(dataSnapshot.getKey());
 
-                                databaseReference
-                                        .child(activity.getString(R.string.n_books))
-                                        .child(libraryUid)
-                                        .get()
-                                        .addOnSuccessListener(task -> {
-                                            for (DataSnapshot dataSnapshot1 : task.getChildren()) {
+                                    databaseReference
+                                            .child(activity.getString(R.string.n_books))
+                                            .child(libraryUid)
+                                            .get()
+                                            .addOnSuccessListener(task -> {
+                                                for (DataSnapshot dataSnapshot1 : task.getChildren()) {
 
-                                                Book book = dataSnapshot1.getValue(Book.class);
+                                                    Book book = dataSnapshot1.getValue(Book.class);
 
-                                                if (book != null) {
-                                                    book.setUid(dataSnapshot1.getKey());
+                                                    if (book != null) {
+                                                        book.setUid(dataSnapshot1.getKey());
 
-                                                    if (book.getUid().equals(loan.getBookUid())) {
-                                                        loan.setBook(book);
-                                                        loan.setLibraryUid(libraryUid);
+                                                        if (book.getUid().equals(loan.getBookUid())) {
+                                                            loan.setBook(book);
+                                                            loan.setLibraryUid(libraryUid);
 
-                                                        if (!loans.contains(loan)) {
-                                                            loans.add(loan);
+                                                            if (!loans.contains(loan)) {
+                                                                loans.add(loan);
+                                                            }
+                                                            if (!searchFilter) {
+                                                                allLoansAdapter.notifyItemInserted(loans.size() - 1);
+                                                            } else {
+                                                                executeSearchQueryFilter(searchQueryText);
+                                                            }
+                                                            break;
                                                         }
-                                                        if (!searchFilter) {
-                                                            allLoansAdapter.notifyItemInserted(loans.size() - 1);
-                                                        } else {
-                                                            executeSearchQueryFilter(searchQueryText);
-                                                        }
-                                                        break;
                                                     }
                                                 }
-                                            }
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e("GET_BOOKS_BY_LIBRARY_UID_DB", e.toString());
-                                        });
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("GET_BOOKS_BY_LIBRARY_UID_DB", e.toString());
+                                            });
+                                }
                             }
                         }
                     }
