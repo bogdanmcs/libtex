@@ -43,10 +43,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     @Override
     public void onBindViewHolder(@NonNull ReviewsAdapter.ReviewViewHolder holder, int position) {
         Review review = reviews.get(position);
-        if (review.getUserUid().equals(currentUser.getUid())) {
-            holder.cardViewReview.setVisibility(View.GONE);
+        holder.ratingBarUser.setProgress((int) (review.getRating() * 2));
+        if (review.getDescription().isEmpty()) {
+            holder.tUserReviewDescription.setVisibility(View.GONE);
         } else {
-            holder.ratingBarUser.setProgress((int) (review.getRating() * 2));
             holder.tUserReviewDescription.setText(review.getDescription());
         }
     }

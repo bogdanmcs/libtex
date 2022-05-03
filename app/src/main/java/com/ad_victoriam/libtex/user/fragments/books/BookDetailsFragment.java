@@ -148,9 +148,11 @@ public class BookDetailsFragment extends Fragment {
         bReserve = mainView.findViewById(R.id.bReserve);
         bReserve.setOnClickListener(this::reserveBookPickLibrary);
         ratingBarEditable = mainView.findViewById(R.id.ratingBarEditable);
+        ratingBarEditable.setOnRatingChangeListener(this::changeYourRating);
         layoutYourReviewDescription = mainView.findViewById(R.id.layoutYourReviewDescription);
         bSaveReview = mainView.findViewById(R.id.bSaveReview);
         bSaveReview.setOnClickListener(this::saveReview);
+        bSaveReview.setEnabled(false);
         recyclerView = mainView.findViewById(R.id.recyclerView);
         cardViewNoReviews = mainView.findViewById(R.id.cardViewNoReviews);
     }
@@ -726,65 +728,68 @@ public class BookDetailsFragment extends Fragment {
                 });
     }
 
+    private void changeYourRating(MaterialRatingBar materialRatingBar, float v) {
+        if (v == 0.0) {
+            bSaveReview.setEnabled(false);
+        } else {
+            bSaveReview.setEnabled(true);
+        }
+    }
+
     private void updateSavedReview(double yourRating, String yourReviewDescription) {
         ratingBarEditable.setProgress((int) (yourRating * 2));
         layoutYourReviewDescription.getEditText().setText(yourReviewDescription);
-        for (Review review: reviews) {
-            if (review.getUserUid().equals(currentUser.getUid())) {
-                review.setRating(yourRating);
-                review.setDescription(yourReviewDescription);
-                break;
-            }
-        }
-        calculateRating();
+        getReviews();
     }
 
     private void saveReview(View view) {
-        String yourReviewDescription = layoutYourReviewDescription.getEditText().getText().toString();
-        double yourRating = ratingBarEditable.getRating();
+        if (ratingBarEditable.getRating() > 0.0) {
+            String yourReviewDescription = layoutYourReviewDescription.getEditText().getText().toString();
+            double yourRating = ratingBarEditable.getRating();
 
-        Review yourReviewUpdated = new Review(
-                book.getTitle(),
-                book.getAuthorName(),
-                book.getPublisher(),
-                currentUser.getUid(),
-                yourRating,
-                yourReviewDescription
-        );
-        if (isReviewValid(yourReviewUpdated)) {
-            if (yourReview.getUid() == null || yourReview.getUid().isEmpty()) {
-                String reviewUid = databaseReference
-                        .child(activity.getString(R.string.n_reviews))
-                        .push()
-                        .getKey();
-                yourReview.setUid(reviewUid);
-                databaseReference
-                        .child(activity.getString(R.string.n_reviews))
-                        .child(yourReview.getUid())
-                        .setValue(yourReviewUpdated)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
-                                updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
-                            } else {
-                                Log.e("POST_REVIEW_DB", String.valueOf(task.getException()));
-                            }
-                        });
-            } else {
-                Map<String, Object> yourReviewUpdate =  new HashMap<>();
-                String path = activity.getString(R.string.n_reviews) + "/" + yourReview.getUid() + "/";
-                yourReviewUpdate.put(path + activity.getString(R.string.p_review_rating), yourReviewUpdated.getRating());
-                yourReviewUpdate.put(path + activity.getString(R.string.p_review_description), yourReviewUpdated.getDescription());
-                databaseReference
-                        .updateChildren(yourReviewUpdate)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
-                                updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
-                            } else {
-                                Log.e("UPDATE_REVIEW_DB", String.valueOf(task.getException()));
-                            }
-                        });
+            Review yourReviewUpdated = new Review(
+                    book.getTitle(),
+                    book.getAuthorName(),
+                    book.getPublisher(),
+                    currentUser.getUid(),
+                    yourRating,
+                    yourReviewDescription
+            );
+            if (isReviewValid(yourReviewUpdated)) {
+                if (yourReview.getUid() == null || yourReview.getUid().isEmpty()) {
+                    String reviewUid = databaseReference
+                            .child(activity.getString(R.string.n_reviews))
+                            .push()
+                            .getKey();
+                    yourReview.setUid(reviewUid);
+                    databaseReference
+                            .child(activity.getString(R.string.n_reviews))
+                            .child(yourReview.getUid())
+                            .setValue(yourReviewUpdated)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
+                                    updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
+                                } else {
+                                    Log.e("POST_REVIEW_DB", String.valueOf(task.getException()));
+                                }
+                            });
+                } else {
+                    Map<String, Object> yourReviewUpdate =  new HashMap<>();
+                    String path = activity.getString(R.string.n_reviews) + "/" + yourReview.getUid() + "/";
+                    yourReviewUpdate.put(path + activity.getString(R.string.p_review_rating), yourReviewUpdated.getRating());
+                    yourReviewUpdate.put(path + activity.getString(R.string.p_review_description), yourReviewUpdated.getDescription());
+                    databaseReference
+                            .updateChildren(yourReviewUpdate)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Snackbar.make(view, "Review saved", Snackbar.LENGTH_SHORT).show();
+                                    updateSavedReview(yourReviewUpdated.getRating(), yourReviewUpdated.getDescription());
+                                } else {
+                                    Log.e("UPDATE_REVIEW_DB", String.valueOf(task.getException()));
+                                }
+                            });
+                }
             }
         }
     }
@@ -807,7 +812,6 @@ public class BookDetailsFragment extends Fragment {
         query
                 .get()
                 .addOnSuccessListener(task -> {
-                    updateUi(task.hasChildren());
                     for (DataSnapshot dataSnapshot: task.getChildren()) {
 
                         Review review = dataSnapshot.getValue(Review.class);
@@ -819,6 +823,7 @@ public class BookDetailsFragment extends Fragment {
                             reviews.add(review);
                         }
                     }
+                    updateUi();
                     calculateRating();
                     setReviews();
                 })
@@ -827,12 +832,13 @@ public class BookDetailsFragment extends Fragment {
                 });
     }
 
-    private void updateUi(boolean hasChildren) {
-        if (hasChildren) {
-            cardViewNoReviews.setVisibility(View.INVISIBLE);
-        } else {
+    private void updateUi() {
+        if (reviews.isEmpty()) {
             recyclerView.setVisibility(View.INVISIBLE);
             cardViewNoReviews.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            cardViewNoReviews.setVisibility(View.INVISIBLE);
         }
     }
 
