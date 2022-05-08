@@ -19,6 +19,8 @@ import com.ad_victoriam.libtex.user.adapters.MostPopularAdapter;
 import com.ad_victoriam.libtex.user.adapters.RecommendationsAdapter;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.ad_victoriam.libtex.user.models.Loan;
+import com.ad_victoriam.libtex.user.models.RatedBook;
+import com.ad_victoriam.libtex.user.models.Review;
 import com.ad_victoriam.libtex.user.utils.TopAppBar;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -32,6 +34,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,8 +55,13 @@ public class HomeFragment extends Fragment {
     private MostPopularAdapter mostPopularAdapter;
     private TextView tNoMostPopular;
 
+    private RecyclerView highestRatedRecyclerView;
+    private MostPopularAdapter highestRatedAdapter;
+    private TextView tNoHighestRated;
+
     private List<Book> recommendedBooks = new ArrayList<>();
     private List<Book> mostPopularBooks = new ArrayList<>();
+    private List<Book> highestRatedBooks = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -85,20 +93,28 @@ public class HomeFragment extends Fragment {
 
     private void findViews() {
         recommendationsRecyclerView = mainView.findViewById(R.id.recommendationsRecyclerView);
-        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager
                 (activity, LinearLayoutManager.HORIZONTAL, false);
-        recommendationsRecyclerView.setLayoutManager(linearLayoutManager1);
+        recommendationsRecyclerView.setLayoutManager(linearLayoutManager);
         recommendationsAdapter = new RecommendationsAdapter(activity, recommendedBooks);
         recommendationsRecyclerView.setAdapter(recommendationsAdapter);
         tNoRecommendations = mainView.findViewById(R.id.tNoRecommendations);
 
         mostPopularRecyclerView = mainView.findViewById(R.id.mostPopularRecyclerView);
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager
+        linearLayoutManager = new LinearLayoutManager
                 (activity, LinearLayoutManager.HORIZONTAL, false);
-        mostPopularRecyclerView.setLayoutManager(linearLayoutManager2);
+        mostPopularRecyclerView.setLayoutManager(linearLayoutManager);
         mostPopularAdapter = new MostPopularAdapter(activity, mostPopularBooks);
         mostPopularRecyclerView.setAdapter(mostPopularAdapter);
         tNoMostPopular = mainView.findViewById(R.id.tNoMostPopular);
+
+        highestRatedRecyclerView = mainView.findViewById(R.id.highestRatedRecyclerView);
+        linearLayoutManager = new LinearLayoutManager
+                (activity, LinearLayoutManager.HORIZONTAL, false);
+        highestRatedRecyclerView.setLayoutManager(linearLayoutManager);
+        highestRatedAdapter = new MostPopularAdapter(activity, highestRatedBooks);
+        highestRatedRecyclerView.setAdapter(highestRatedAdapter);
+        tNoHighestRated = mainView.findViewById(R.id.tNoHighestRated);
 
         MaterialButton bWhatToRead = mainView.findViewById(R.id.bWhatToRead);
         bWhatToRead.setOnClickListener(this::goWhatToRead);
@@ -127,12 +143,14 @@ public class HomeFragment extends Fragment {
 
                                 Loan loan = dataSnapshot1.getValue(Loan.class);
 
-                                if (loan != null) {
+                                if (loan != null &&
+                                    !bookUids.contains(loan.getBookUid())) {
+
                                     bookUids.add(loan.getBookUid());
                                 }
                             }
                         }
-                        getBooksAndSetRecommendations(bookUids);
+                        getBooks(bookUids);
 
                     } else {
                         Log.e("GET_USER_LOANS_HISTORY", String.valueOf(task.getResult()));
@@ -140,9 +158,9 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void getBooksAndSetRecommendations(List<String> bookUids) {
+    private void getBooks(List<String> bookUids) {
         recommendedBooks.clear();
-        List<Book> books = recommendedBooks;
+        List<Book> recommendableBooks = recommendedBooks;
         List<Book> userBooks = new ArrayList<>();
 
         databaseReference
@@ -162,12 +180,16 @@ public class HomeFragment extends Fragment {
                                     if (bookUids.contains(book.getUid())) {
                                         userBooks.add(book);
                                     } else {
-                                        books.add(book);
+                                        recommendableBooks.add(book);
                                     }
                                 }
                             }
                         }
-                        setRecommendations(books, userBooks);
+                        setRecommendations(recommendableBooks, userBooks);
+                        List<Book> books = new ArrayList<>();
+                        books.addAll(recommendableBooks);
+                        books.addAll(userBooks);
+                        getReviews(books);
 
                     } else {
                         Log.e("GET_BOOKS", String.valueOf(task.getResult()));
@@ -432,6 +454,90 @@ public class HomeFragment extends Fragment {
         } else {
             tNoMostPopular.setVisibility(View.GONE);
             mostPopularAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void getReviews(List<Book> books) {
+        Map<Book, Double> ratedBooks = new HashMap<>();
+        databaseReference
+                .child(activity.getString(R.string.n_reviews))
+                .get()
+                .addOnSuccessListener(task -> {
+                    updateHighestRatedUi(task.hasChildren());
+//                    Map<Book, List<>>
+                    for (DataSnapshot dataSnapshot: task.getChildren()) {
+
+                        Review review = dataSnapshot.getValue(Review.class);
+
+                        if (review != null) {
+                            Book reviewBook = getBookOfReview(books, review);
+
+                            if (reviewBook != null) {
+                                Book ratedBook = getContainedRatedBook(ratedBooks, reviewBook);
+
+                                if (ratedBook != null) {
+                                    Double newRating = ratedBooks.get(ratedBook);
+                                    newRating += review.getRating();
+                                    ratedBooks.replace(ratedBook, newRating);
+                                } else {
+                                    ratedBooks.put(reviewBook, review.getRating());
+                                }
+                            }
+                        }
+                    }
+                    setHighestRated(ratedBooks);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("GET_REVIEWS_DB", e.toString());
+                });
+    }
+
+    private Book getContainedRatedBook(Map<Book, Double> ratedBooks, Book reviewBook) {
+       for (Map.Entry<Book, Double> entry: ratedBooks.entrySet()) {
+           if (entry.getKey().isSame(reviewBook)) {
+               return entry.getKey();
+           }
+       }
+       return null;
+    }
+
+    private Book getBookOfReview(List<Book> books, Review review) {
+        for (Book book: books) {
+            if (isSameBook(book, review)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    private void setHighestRated(Map<Book, Double> books) {
+        List<RatedBook> ratedBooks = new ArrayList<>();
+        for (Map.Entry<Book, Double> entry: books.entrySet()) {
+            ratedBooks.add(new RatedBook(entry.getKey(), entry.getValue()));
+        }
+        ratedBooks = ratedBooks.stream()
+                .sorted(Comparator.comparing(RatedBook::getRating).reversed())
+                .limit(50)
+                .collect(Collectors.toList());
+        highestRatedBooks.clear();
+        for (RatedBook ratedBook: ratedBooks) {
+            highestRatedBooks.add(ratedBook.getBook());
+        }
+        highestRatedAdapter.notifyDataSetChanged();
+    }
+
+    private boolean isSameBook(Book book, Review review) {
+        return book.getTitle().equals(review.getBookTitle()) &&
+                book.getAuthorName().equals(review.getBookAuthor()) &&
+                book.getPublisher().equals(review.getBookPublisher());
+    }
+
+    private void updateHighestRatedUi(boolean hasChildren) {
+        if (!hasChildren) {
+            highestRatedRecyclerView.setVisibility(View.GONE);
+        } else {
+            tNoHighestRated.setVisibility(View.GONE);
+            highestRatedAdapter.notifyDataSetChanged();
         }
     }
 
