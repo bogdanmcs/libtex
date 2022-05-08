@@ -20,6 +20,8 @@ import com.ad_victoriam.libtex.common.models.Reservation;
 import com.ad_victoriam.libtex.common.models.User;
 import com.ad_victoriam.libtex.user.models.Book;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -92,7 +94,7 @@ public class ReservationsActivity extends AppCompatActivity {
                 .child(getString(R.string.n_reservations_2))
                 .orderByChild(getString(R.string.p_reservation_user_uid))
                 .equalTo(user.getUid());
-
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         query
                 .get()
                 .addOnCompleteListener(task -> {
@@ -109,9 +111,10 @@ public class ReservationsActivity extends AppCompatActivity {
 
                                 Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
-                                if (reservation != null) {
-                                    reservation.setUid(dataSnapshot.getKey());
+                                if (reservation != null &&
+                                    reservation.getLibraryUid().equals(currentUser.getUid())) {
 
+                                    reservation.setUid(dataSnapshot.getKey());
                                     // get book
                                     databaseReference
                                             .child(getString(R.string.n_books))
