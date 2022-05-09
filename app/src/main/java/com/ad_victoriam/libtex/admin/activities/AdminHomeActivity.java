@@ -27,7 +27,6 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         findViewById(R.id.bViewUsers).setOnClickListener(this::viewUsers);
         findViewById(R.id.bViewBooks).setOnClickListener(this::viewBooks);
-        findViewById(R.id.bViewSettings).setOnClickListener(this::viewSettings);
         findViewById(R.id.bSignOut).setOnClickListener(this::signOut);
     }
 
@@ -36,9 +35,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         mAuth.signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
-    }
-
-    private void viewSettings(View view) {
     }
 
     private void viewBooks(View view) {

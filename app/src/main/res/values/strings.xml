@@ -117,5 +117,7 @@
     <string name="no_fav_books">You do not have any favourite books.</string>
     <string name="no_reviews">No reviews yet.</string>
     <string name="highest_rated">Highest rated</string>
+    <string name="login_help_title">Having difficulties?</string>
+    <string name="login_help_message">For assistance please head to one of the Libtex libraries.</string>
 
 </resources>

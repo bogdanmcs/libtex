@@ -119,7 +119,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/bHelp"
         android:layout_width="53dp"
         android:layout_height="54dp"
         android:layout_marginStart="96dp"

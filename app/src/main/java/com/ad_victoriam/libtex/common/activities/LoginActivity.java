@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -58,8 +59,10 @@ public class LoginActivity extends AppCompatActivity {
 
         final Button bLogIn = findViewById(R.id.bLogIn);
         final Button bCreateAccount = findViewById(R.id.bCreateAccount);
+        final ImageButton bHelp = findViewById(R.id.bHelp);
         bLogIn.setOnClickListener(this::validateCredentials);
         bCreateAccount.setOnClickListener(this::bCreateAccount);
+        bHelp.setOnClickListener(this::bHelp);
     }
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -154,5 +157,13 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, UserHomeActivity.class));
         }
         finish();
+    }
+
+    private void bHelp(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle(this.getString(R.string.login_help_title))
+                .setMessage(this.getString(R.string.login_help_message))
+                .setPositiveButton("Ok", (dialogInterface, i) -> {})
+                .show();
     }
 }
