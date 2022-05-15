@@ -61,96 +61,96 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/div1" />
 
-            <View
-                android:id="@+id/div2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_div"
-                android:background="@color/dark_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bReservations" />
+<!--            <View-->
+<!--                android:id="@+id/div2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/small_div"-->
+<!--                android:background="@color/dark_gray"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/bReservations" />-->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bRecommendations"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/white"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:stateListAnimator="@null"
-                android:text="Recommendations"
-                android:textAlignment="viewStart"
-                android:textColor="@color/grey"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:iconTint="@color/grey"
-                app:iconGravity="end"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/div2" />
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/bRecommendations"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                android:stateListAnimator="@null"-->
+<!--                android:text="Recommendations"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textColor="@color/grey"-->
+<!--                android:textAllCaps="false"-->
+<!--                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"-->
+<!--                app:iconTint="@color/grey"-->
+<!--                app:iconGravity="end"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/div2" />-->
 
-            <View
-                android:id="@+id/div3"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_div"
-                android:background="@color/dark_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bRecommendations" />
+<!--            <View-->
+<!--                android:id="@+id/div3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/small_div"-->
+<!--                android:background="@color/dark_gray"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/bRecommendations" />-->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bHelp"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/white"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:stateListAnimator="@null"
-                android:text="Help"
-                android:textAlignment="viewStart"
-                android:textColor="@color/grey"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:iconTint="@color/grey"
-                app:iconGravity="end"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/div3" />
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/bHelp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                android:stateListAnimator="@null"-->
+<!--                android:text="Help"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textColor="@color/grey"-->
+<!--                android:textAllCaps="false"-->
+<!--                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"-->
+<!--                app:iconTint="@color/grey"-->
+<!--                app:iconGravity="end"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/div3" />-->
 
-            <View
-                android:id="@+id/div4"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_div"
-                android:background="@color/dark_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bHelp" />
+<!--            <View-->
+<!--                android:id="@+id/div4"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/small_div"-->
+<!--                android:background="@color/dark_gray"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/bHelp" />-->
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bSettings"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/white"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:stateListAnimator="@null"
-                android:text="Settings"
-                android:textAlignment="viewStart"
-                android:textColor="@color/grey"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:iconTint="@color/grey"
-                app:iconGravity="end"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/div4" />
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/bSettings"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                android:stateListAnimator="@null"-->
+<!--                android:text="Settings"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textColor="@color/grey"-->
+<!--                android:textAllCaps="false"-->
+<!--                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"-->
+<!--                app:iconTint="@color/grey"-->
+<!--                app:iconGravity="end"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/div4" />-->
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSignOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/light_grey"
@@ -160,7 +160,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bSettings" />
+                app:layout_constraintTop_toBottomOf="@+id/bReservations" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

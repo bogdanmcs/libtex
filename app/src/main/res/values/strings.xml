@@ -106,7 +106,7 @@
     <string name="recommendations">Recommendations</string>
     <string name="no_recommendations">Not available at this moment.</string>
     <string name="most_popular">Most popular</string>
-    <string name="what_to_read">I don\'t know what to read!</string>
+    <string name="what_to_read">I don\'t know what to read</string>
     <string name="what_to_read_description_part_1">Don\'t know what to read? We got you!</string>
     <string name="what_to_read_description_part_2">Just specify whatever categories you would like to explore (or don\'t) and we\'ll randomly pick a book for you.</string>
     <string name="no_categories_selected">No categories selected</string>
