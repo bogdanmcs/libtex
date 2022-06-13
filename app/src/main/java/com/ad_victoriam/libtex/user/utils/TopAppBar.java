@@ -53,6 +53,7 @@ public class TopAppBar {
         int colorResId = context.getResources().getColor(R.color.royal_blue, context.getTheme());
         materialToolbar.setTitle(title);
         materialToolbar.setTitleCentered(true);
+//        materialToolbar.setTitleTextColor(Color.WHITE);
         materialToolbar.setTitleTextColor(colorResId);
     }
 

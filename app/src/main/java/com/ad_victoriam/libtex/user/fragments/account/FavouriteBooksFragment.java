@@ -42,10 +42,10 @@ public class FavouriteBooksFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private TextView tNoFavBooks;
-    private SearchView searchView;
     private FavouriteBooksAdapter favouriteBooksAdapter;
-
     private List<Book> favouriteBooks;
+
+    private SearchView searchView;
 
     private String searchQueryText = "";
     private boolean searchFilter;
@@ -131,11 +131,9 @@ public class FavouriteBooksFragment extends Fragment {
 
     private void updateUi(boolean hasChildren) {
         if (hasChildren) {
-            tNoFavBooks.setVisibility(View.INVISIBLE);
-            searchView.setVisibility(View.VISIBLE);
+            tNoFavBooks.setVisibility(View.GONE);
         } else {
             tNoFavBooks.setVisibility(View.VISIBLE);
-            searchView.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -34,7 +34,6 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,6 +80,7 @@ public class HomeFragment extends Fragment {
         databaseReference = FirebaseDatabase
                 .getInstance(activity.getString(R.string.firebase_url))
                 .getReference();
+
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         findViews();
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
                         getBooks(bookUids);
 
                     } else {
-                        Log.e("GET_USER_LOANS_HISTORY", String.valueOf(task.getResult()));
+                        Log.e("GET_USER_LOANS_HISTORY", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -192,7 +192,7 @@ public class HomeFragment extends Fragment {
                         getReviews(books);
 
                     } else {
-                        Log.e("GET_BOOKS", String.valueOf(task.getResult()));
+                        Log.e("GET_BOOKS", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -380,7 +380,7 @@ public class HomeFragment extends Fragment {
                         getBooksAndSetMostPopular(generalLoans);
 
                     } else {
-                        Log.e("GET_GENERAL_LOANS_DB", String.valueOf(task.getResult()));
+                        Log.e("GET_GENERAL_LOANS_DB", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -408,7 +408,7 @@ public class HomeFragment extends Fragment {
                         setMostPopular(generalLoans, books);
 
                     } else {
-                        Log.e("GET_BOOKS", String.valueOf(task.getResult()));
+                        Log.e("GET_BOOKS", String.valueOf(task.getException()));
                     }
                 });
     }

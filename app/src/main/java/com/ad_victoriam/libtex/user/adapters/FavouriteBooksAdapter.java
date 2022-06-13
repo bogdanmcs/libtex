@@ -29,7 +29,7 @@ public class FavouriteBooksAdapter extends RecyclerView.Adapter<FavouriteBooksAd
 
     public FavouriteBooksAdapter(FragmentActivity activity, List<Book> favouriteBooks) {
         this.activity = activity;
-        this.favouriteBooks = favouriteBooks;
+        this.favouriteBooks = favouriteBooks;   
     }
 
     @NonNull

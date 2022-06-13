@@ -112,7 +112,7 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
     private boolean areBookDetailsValid() {
         boolean errorFlag = false;
 
-        int DESCRIPTION_MAX_LIMIT = 200;
+        int DESCRIPTION_MAX_LIMIT = 1000;
         int STANDARD_MAX_LIMIT = 50;
         int IDX_MAX_LIMIT = 4;
         layoutTitle.setError(null);
@@ -168,7 +168,7 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
             layoutDescription.setError(getString(R.string.empty_field));
             layoutDescription.requestFocus();
             errorFlag = true;
-        } else if (bookDescription.length() > 200) {
+        } else if (bookDescription.length() > DESCRIPTION_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + DESCRIPTION_MAX_LIMIT;
             layoutDescription.setError(fieldMaxLimitMessage);
             errorFlag = true;
@@ -185,7 +185,7 @@ public class AddBookActivity extends AppCompatActivity implements CategoryDialog
                 bookDetail.setError(getString(R.string.empty_field));
                 bookDetail.requestFocus();
                 errorFlag = true;
-            } else if (textToString.length() > 50) {
+            } else if (textToString.length() > STANDARD_MAX_LIMIT) {
                 String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
                 bookDetail.setError(fieldMaxLimitMessage);
                 errorFlag = true;

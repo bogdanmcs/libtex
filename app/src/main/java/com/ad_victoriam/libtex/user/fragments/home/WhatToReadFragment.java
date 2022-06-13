@@ -108,7 +108,7 @@ public class WhatToReadFragment extends Fragment {
                         }
                         areBooksDone = true;
                     } else {
-                        Log.e("GET_BOOKS_DB", String.valueOf(task.getResult()));
+                        Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
                     }
                 });
     }

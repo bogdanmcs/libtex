@@ -105,6 +105,8 @@ public class ReservationsActivity extends AppCompatActivity {
 
                         if (reservationsSize == 0) {
                             findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.tNoReservations).setVisibility(View.GONE);
                         }
 
                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {

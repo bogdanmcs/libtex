@@ -17,18 +17,17 @@
                 android:id="@+id/bFavouriteBooks"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/white"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:stateListAnimator="@null"
                 android:text="Favourite books"
                 android:textAlignment="viewStart"
-                android:textColor="@color/grey"
                 android:textAllCaps="false"
+                android:textColor="@color/grey"
                 app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:iconTint="@color/grey"
                 app:iconGravity="end"
+                app:iconTint="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -145,22 +144,40 @@
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toBottomOf="@id/div4" />-->
 
+            <View
+                android:id="@+id/divSignOut1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/grey2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bReservations" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bSignOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="@color/light_grey"
+                android:backgroundTint="@color/white_smoke"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:text="@string/sign_out"
                 android:textColor="@color/grey2"
-                app:cornerRadius="@dimen/normal_corners"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divSignOut1" />
+
+            <View
+                android:id="@+id/divSignOut2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grey2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bReservations" />
+                app:layout_constraintTop_toBottomOf="@id/bSignOut" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

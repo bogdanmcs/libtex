@@ -183,7 +183,7 @@ public class AdminBookDetailsActivity extends AppCompatActivity implements Categ
         if (bookTotalQuantity.isEmpty()) {
             layoutTotalQuantity.setError(getString(R.string.empty_field));
             errorFlag = true;
-        } else if (bookTotalQuantity.length() > 4) {
+        } else if (bookTotalQuantity.length() > IDX_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
             layoutTotalQuantity.setError(fieldMaxLimitMessage);
             errorFlag = true;
@@ -203,7 +203,7 @@ public class AdminBookDetailsActivity extends AppCompatActivity implements Categ
         if (bookAvailableQuantity.isEmpty()) {
             layoutAvailableQuantity.setError(getString(R.string.empty_field));
             errorFlag = true;
-        } else if (bookAvailableQuantity.length() > 4) {
+        } else if (bookAvailableQuantity.length() > IDX_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
             layoutAvailableQuantity.setError(fieldMaxLimitMessage);
             errorFlag = true;
@@ -226,7 +226,7 @@ public class AdminBookDetailsActivity extends AppCompatActivity implements Categ
         if (bookNoOfPages.isEmpty()) {
             layoutNoOfPages.setError(getString(R.string.empty_field));
             errorFlag = true;
-        } else if (bookNoOfPages.length() > 4) {
+        } else if (bookNoOfPages.length() > IDX_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + IDX_MAX_LIMIT;
             layoutNoOfPages.setError(fieldMaxLimitMessage);
             errorFlag = true;
@@ -247,7 +247,7 @@ public class AdminBookDetailsActivity extends AppCompatActivity implements Categ
             layoutDescription.setError(getString(R.string.empty_field));
             layoutDescription.requestFocus();
             errorFlag = true;
-        } else if (bookDescription.length() > 200) {
+        } else if (bookDescription.length() > DESCRIPTION_MAX_LIMIT) {
             String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + DESCRIPTION_MAX_LIMIT;
             layoutDescription.setError(fieldMaxLimitMessage);
             errorFlag = true;
@@ -264,7 +264,7 @@ public class AdminBookDetailsActivity extends AppCompatActivity implements Categ
                 bookDetail.setError(getString(R.string.empty_field));
                 bookDetail.requestFocus();
                 errorFlag = true;
-            } else if (textToString.length() > 50) {
+            } else if (textToString.length() > STANDARD_MAX_LIMIT) {
                 String fieldMaxLimitMessage = getString(R.string.field_max_limit) + " " + STANDARD_MAX_LIMIT;
                 bookDetail.setError(fieldMaxLimitMessage);
                 errorFlag = true;

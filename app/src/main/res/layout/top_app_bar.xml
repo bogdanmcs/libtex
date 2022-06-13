@@ -6,6 +6,7 @@
     android:id="@+id/topAppBar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    android:background="@color/libtex_primary"
     app:title="Title"
     app:menu="@menu/top_bar_menu"
     style="@style/Widget.MaterialComponents.Toolbar.Primary" />

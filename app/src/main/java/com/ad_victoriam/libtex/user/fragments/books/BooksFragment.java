@@ -177,37 +177,32 @@ public class BooksFragment extends Fragment {
     private void getLibrariesAndBooks() {
         libraries.clear();
         books.clear();
-
-        // get all books
         databaseReference
                 .child(activity.getString(R.string.n_books))
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
 
-                                LibtexLibrary libtexLibrary = new LibtexLibrary();
-                                libtexLibrary.setUid(dataSnapshot.getKey());
+                            LibtexLibrary libtexLibrary = new LibtexLibrary();
+                            libtexLibrary.setUid(dataSnapshot.getKey());
 
-                                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+                            for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
 
-                                    Book book = dataSnapshot1.getValue(Book.class);
+                                Book book = dataSnapshot1.getValue(Book.class);
 
-                                    if (book != null) {
-                                        book.setUid(dataSnapshot1.getKey());
-                                        libtexLibrary.addBook(book);
-                                    }
+                                if (book != null) {
+                                    book.setUid(dataSnapshot1.getKey());
+                                    libtexLibrary.addBook(book);
                                 }
-                                libraries.add(libtexLibrary);
                             }
-                            setBooks();
-
-                        } else {
-                            Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
+                            libraries.add(libtexLibrary);
                         }
+                        setBooks();
+
+                    } else {
+                        Log.e("GET_BOOKS_DB", String.valueOf(task.getException()));
                     }
                 });
     }
@@ -217,11 +212,22 @@ public class BooksFragment extends Fragment {
             for (Book book: library.getBooks()) {
                 if (!isDuplicate(book)) {
                     books.add(book);
-//                    booksAdapter.notifyItemInserted(books.size() - 1);
                 }
             }
         }
         doPostDataOperations();
+    }
+
+    private boolean isDuplicate(Book book) {
+        for (Book b: books) {
+            if (b.isSame(book)) {
+                if (b.getAvailableQuantity() == 0 && book.getAvailableQuantity() > 0) {
+                    b.setUniqueDetails(book);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     private void doPostDataOperations() {
@@ -231,19 +237,5 @@ public class BooksFragment extends Fragment {
         }
         booksAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    private boolean isDuplicate(Book book) {
-        for (Book b: books) {
-            if (b.isSame(book)) {
-                // if the new duplicated book is in stock (and the original one isn't),
-                // then replace it - stock status should always try to be positive
-                if (b.getAvailableQuantity() == 0 && book.getAvailableQuantity() > 0) {
-                    b.setUniqueDetails(book);
-                }
-                return true;
-            }
-        }
-        return false;
     }
 }

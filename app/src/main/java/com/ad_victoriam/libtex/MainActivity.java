@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        turnOnDatabasePersistence();
         /* * * * * * * * * * * * * * * * * * * * */
         new Thread(new RefreshRunnable()).start();
         /* * * * * * * * * * * * * * * * * * * * */
@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
         finish();
+    }
+
+    private void turnOnDatabasePersistence() {
+        FirebaseDatabase.getInstance(this.getString(R.string.firebase_url)).setPersistenceEnabled(true);
     }
 
     class RefreshRunnable implements Runnable {
@@ -74,27 +78,25 @@ public class MainActivity extends AppCompatActivity {
         databaseReference
                 .child(this.getString(R.string.n_reservations_2))
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                .addOnSuccessListener(task -> {
+                    for (DataSnapshot dataSnapshot: task.getChildren()) {
 
-                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                        Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
-                            Reservation reservation = dataSnapshot.getValue(Reservation.class);
+                        if (reservation != null &&
+                                reservation.getStatus() == ReservationStatus.APPROVED) {
 
-                            if (reservation != null &&
-                                    reservation.getStatus() == ReservationStatus.APPROVED) {
+                            reservation.setUid(dataSnapshot.getKey());
+                            LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
 
-                                reservation.setUid(dataSnapshot.getKey());
-                                LocalDateTime reservationEndDate = LocalDateTime.parse(reservation.getEndDate());
-
-                                if (reservationEndDate.isBefore(LocalDateTime.now())) {
-                                    updateReservationStatus(databaseReference, reservation);
-                                }
+                            if (reservationEndDate.isBefore(LocalDateTime.now())) {
+                                updateReservationStatus(databaseReference, reservation);
                             }
                         }
-                    } else {
-                        System.out.println(task.getResult());
                     }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("GET_RESERVATIONS_DB", e.toString());
                 });
     }
 
@@ -127,16 +129,15 @@ public class MainActivity extends AppCompatActivity {
                             );
                             databaseReference
                                     .updateChildren(childrenUpdates)
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            increaseBookAvailability(reference, reservation);
-                                        } else {
-                                            System.out.println(task1.getResult());
-                                        }
+                                    .addOnSuccessListener(task1 -> {
+                                        increaseBookAvailability(reference, reservation);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("UPDATE_RESERVATION_STATUS_DB", e.toString());
                                     });
                         }
                     } else {
-                        System.out.println(task.getResult());
+                        Log.e("GET_BOOK_AVAILABLE_QTY_DB", String.valueOf(task.getException()));
                     }
                 });
     }

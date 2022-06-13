@@ -118,68 +118,62 @@ public class ReservationsFragment extends Fragment {
                     if (task.isSuccessful()) {
 
                         updateUi(task.getResult().hasChildren());
-                        if (!task.getResult().hasChildren()) {
-                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.VISIBLE);
+                        for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
 
-                        } else {
-                            mainView.findViewById(R.id.tNoReservations).setVisibility(View.INVISIBLE);
-                            for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+                            Reservation reservation = dataSnapshot.getValue(Reservation.class);
 
-                                Reservation reservation = dataSnapshot.getValue(Reservation.class);
+                            if (reservation != null &&
+                                    reservation.getUserUid().equals(currentUser.getUid())) {
 
-                                if (reservation != null &&
-                                        reservation.getUserUid().equals(currentUser.getUid())) {
+                                reservation.setUid(dataSnapshot.getKey());
+                                // get book
+                                databaseReference
+                                        .child(getString(R.string.n_books))
+                                        .child(reservation.getLibraryUid())
+                                        .child(reservation.getBookUid())
+                                        .get()
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
 
-                                    reservation.setUid(dataSnapshot.getKey());
-                                    // get book
-                                    databaseReference
-                                            .child(getString(R.string.n_books))
-                                            .child(reservation.getLibraryUid())
-                                            .child(reservation.getBookUid())
-                                            .get()
-                                            .addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
+                                                DataSnapshot dataSnapshot1 = task1.getResult();
+                                                Book book = dataSnapshot1.getValue(Book.class);
 
-                                                    DataSnapshot dataSnapshot1 = task1.getResult();
-                                                    Book book = dataSnapshot1.getValue(Book.class);
+                                                if (book != null) {
+                                                    book.setUid(reservation.getBookUid());
+                                                    reservation.setBook(book);
 
-                                                    if (book != null) {
-                                                        book.setUid(reservation.getBookUid());
-                                                        reservation.setBook(book);
+                                                    // set the location name
+                                                    databaseReference
+                                                            .child(activity.getString(R.string.n_admins))
+                                                            .child(reservation.getLibraryUid())
+                                                            .child(activity.getString(R.string.n_location))
+                                                            .child(activity.getString(R.string.p_location_name))
+                                                            .get()
+                                                            .addOnCompleteListener(task2 -> {
+                                                                if (task2.isSuccessful()) {
 
-                                                        // set the location name
-                                                        databaseReference
-                                                                .child(activity.getString(R.string.n_admins))
-                                                                .child(reservation.getLibraryUid())
-                                                                .child(activity.getString(R.string.n_location))
-                                                                .child(activity.getString(R.string.p_location_name))
-                                                                .get()
-                                                                .addOnCompleteListener(task2 -> {
-                                                                    if (task2.isSuccessful()) {
+                                                                    DataSnapshot dataSnapshot2 = task2.getResult();
+                                                                    String locationName = dataSnapshot2.getValue(String.class);
 
-                                                                        DataSnapshot dataSnapshot2 = task2.getResult();
-                                                                        String locationName = dataSnapshot2.getValue(String.class);
+                                                                    if (locationName != null) {
+                                                                        reservation.setLocationName(locationName);
 
-                                                                        if (locationName != null) {
-                                                                            reservation.setLocationName(locationName);
-
-                                                                            reservations.add(reservation);
-                                                                            if (!searchFilter) {
-                                                                                reservationsAdapter.notifyItemInserted(reservations.size() - 1);
-                                                                            } else {
-                                                                                executeSearchQueryFilter(searchQueryText);
-                                                                            }
+                                                                        reservations.add(reservation);
+                                                                        if (!searchFilter) {
+                                                                            reservationsAdapter.notifyItemInserted(reservations.size() - 1);
+                                                                        } else {
+                                                                            executeSearchQueryFilter(searchQueryText);
                                                                         }
-                                                                    } else {
-                                                                        Log.e("GET_ADMINS_LOCATION_NAME_DB", String.valueOf(task2.getException()));
                                                                     }
-                                                                });
-                                                    }
-                                                } else {
-                                                    Log.e("GET_BOOK_BY_UID_DB", String.valueOf(task1.getException()));
+                                                                } else {
+                                                                    Log.e("GET_ADMINS_LOCATION_NAME_DB", String.valueOf(task2.getException()));
+                                                                }
+                                                            });
                                                 }
-                                            });
-                                }
+                                            } else {
+                                                Log.e("GET_BOOK_BY_UID_DB", String.valueOf(task1.getException()));
+                                            }
+                                        });
                             }
                         }
                     } else {
@@ -190,11 +184,9 @@ public class ReservationsFragment extends Fragment {
 
     private void updateUi(boolean hasChildren) {
         if (hasChildren) {
-            tNoReservations.setVisibility(View.INVISIBLE);
-            searchView.setVisibility(View.VISIBLE);
+            tNoReservations.setVisibility(View.GONE);
         } else {
             tNoReservations.setVisibility(View.VISIBLE);
-            searchView.setVisibility(View.INVISIBLE);
         }
     }
 

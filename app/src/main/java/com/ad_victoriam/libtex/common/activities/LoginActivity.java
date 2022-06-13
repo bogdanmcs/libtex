@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -141,7 +142,16 @@ public class LoginActivity extends AppCompatActivity {
                                         .setPositiveButton("Try again", (dialogInterface, i) -> {})
                                         .show();
 
+                            } catch (FirebaseNetworkException e) {
+                                new AlertDialog.Builder(LoginActivity.this)
+                                        .setMessage("No internet connection.")
+                                        .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                        .show();
                             } catch (Exception e) {
+                                new AlertDialog.Builder(LoginActivity.this)
+                                        .setMessage("Something went wrong.")
+                                        .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                        .show();
                                 e.printStackTrace();
                             }
 

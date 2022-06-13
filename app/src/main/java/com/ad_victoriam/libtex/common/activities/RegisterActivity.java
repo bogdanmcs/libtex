@@ -1,5 +1,6 @@
 package com.ad_victoriam.libtex.common.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -77,12 +79,20 @@ public class RegisterActivity extends AppCompatActivity {
                             setResult(66, intent);
                             finish();
                         } else {
-
                             try {
                                 throw Objects.requireNonNull(task.getException());
                             } catch (FirebaseAuthUserCollisionException e) {
                                 layoutEmail.setError(getString(R.string.email_in_use));
+                            } catch (FirebaseNetworkException e) {
+                                new AlertDialog.Builder(RegisterActivity.this)
+                                        .setMessage("No internet connection.")
+                                        .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                        .show();
                             } catch (Exception e) {
+                                new AlertDialog.Builder(RegisterActivity.this)
+                                        .setMessage("Something went wrong.")
+                                        .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                        .show();
                                 e.printStackTrace();
                             }
                         }

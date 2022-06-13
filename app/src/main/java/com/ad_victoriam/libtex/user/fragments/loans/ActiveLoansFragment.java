@@ -184,11 +184,9 @@ public class ActiveLoansFragment extends Fragment {
 
                     private void updateUi(boolean isData) {
                         if (isData) {
-                            tNoLoans.setVisibility(View.INVISIBLE);
-                            searchView.setVisibility(View.VISIBLE);
+                            tNoLoans.setVisibility(View.GONE);
                         } else {
                             tNoLoans.setVisibility(View.VISIBLE);
-                            searchView.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
