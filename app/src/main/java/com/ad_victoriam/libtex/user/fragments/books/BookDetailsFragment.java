@@ -530,7 +530,7 @@ public class BookDetailsFragment extends Fragment {
     }
 
     private void notifyBookUnavailable() {
-        Snackbar.make(mainView, "ce livre n'est pas disponible", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mainView, "Out of stock", Snackbar.LENGTH_SHORT).show();
     }
 
     public String beautifyList(List<String> list) {
