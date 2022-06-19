@@ -3,6 +3,7 @@ package com.ad_victoriam.libtex.common.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.ad_victoriam.libtex.user.activities.UserHomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseNetworkException;
@@ -30,12 +32,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private View mainView;
 
     private TextInputEditText eEmail;
     private TextInputEditText ePassword;
@@ -122,7 +130,32 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        signIn(email, password);
+        verifyActiveAccount(email, password);
+    }
+
+    private void verifyActiveAccount(String email, String password) {
+        DatabaseReference databaseReference = FirebaseDatabase
+                .getInstance("https://libtex-a007e-default-rtdb.europe-west1.firebasedatabase.app/")
+                .getReference();
+        Query query = databaseReference
+                .child(this.getString(R.string.n_unverified_users))
+                .orderByChild(getString(R.string.p_email))
+                .equalTo(email);
+        query
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (task.hasChildren()) {
+                        new AlertDialog.Builder(LoginActivity.this)
+                                .setMessage("Your account is not verified.")
+                                .setPositiveButton("Try again", (dialogInterface, i) -> {})
+                                .show();
+                    } else {
+                        signIn(email, password);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("GET_UNVERIFIED_USERS_BY_EMAIL_DB", e.toString());
+                });
     }
 
     public void signIn(String email, String password) {

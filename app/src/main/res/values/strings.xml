@@ -19,6 +19,7 @@
     <string name="n_reservations_2">reservations2</string>
     <string name="n_general_loans">general-loans</string>
     <string name="n_reviews">reviews</string>
+    <string name="n_unverified_users">unverified-users</string>
 
     <!-- nodes props -->
     <string name="p_location_name">name</string>
@@ -31,6 +32,7 @@
     <string name="p_review_user_uid">userUid</string>
     <string name="p_review_rating">rating</string>
     <string name="p_review_description">description</string>
+    <string name="p_email">email</string>
 
     <!-- limits -->
     <string name="field_max_limit">Max limit of characters is</string>

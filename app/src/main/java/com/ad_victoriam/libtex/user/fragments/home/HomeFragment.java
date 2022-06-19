@@ -137,7 +137,6 @@ public class HomeFragment extends Fragment {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-
                         for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
                             for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
 
@@ -153,6 +152,7 @@ public class HomeFragment extends Fragment {
                         getBooks(bookUids);
 
                     } else {
+                        System.out.println("--------------WOW2");
                         Log.e("GET_USER_LOANS_HISTORY", String.valueOf(task.getException()));
                     }
                 });
@@ -162,6 +162,7 @@ public class HomeFragment extends Fragment {
         recommendedBooks.clear();
         List<Book> recommendableBooks = recommendedBooks;
         List<Book> userBooks = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
 
         databaseReference
                 .child(activity.getString(R.string.n_books))
@@ -182,13 +183,11 @@ public class HomeFragment extends Fragment {
                                     } else {
                                         recommendableBooks.add(book);
                                     }
+                                    books.add(book);
                                 }
                             }
                         }
                         setRecommendations(recommendableBooks, userBooks);
-                        List<Book> books = new ArrayList<>();
-                        books.addAll(recommendableBooks);
-                        books.addAll(userBooks);
                         getReviews(books);
 
                     } else {
