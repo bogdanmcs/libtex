@@ -847,6 +847,7 @@ public class BookDetailsFragment extends Fragment {
         for (Review review: reviews) {
             rating += review.getRating();
         }
+        System.out.println("---------------------TOTAL: " + rating + " impartit la " + reviews.size());
         rating /= reviews.size();
         setRatingBarProgress();
     }

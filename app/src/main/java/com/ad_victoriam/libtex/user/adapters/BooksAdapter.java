@@ -45,11 +45,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         Book book = books.get(position);
 
         double rating = 0.0;
+        int noOfRelatedReviews = 0;
         for (Review review: reviews) {
             if (review.isBook(book)) {
                 rating += review.getRating();
+                noOfRelatedReviews++;
             }
         }
+        rating /= noOfRelatedReviews;
         holder.ratingBar.setProgress((int) (rating * 2));
         holder.constraintLayout.setOnClickListener(view -> viewDetails(book));
         holder.tBookTitle.setText(book.getTitle());
